@@ -6,12 +6,12 @@ from baralho import Baralho
 
 mesa = Mesa() # Instancia um objeto da classe Mesa
 
-# Adiciona 2 jogadores na mesa:
+# Adiciona jogadores na mesa:
 mesa.adiciona_jogador(Jogador('Arthur'))
-mesa.adiciona_jogador(Jogador('Matheus'))
-mesa.adiciona_jogador(Jogador('Robson'))
-mesa.adiciona_jogador(Jogador('Marcia'))
-mesa.adiciona_jogador(Jogador('Marilene'))
+# mesa.adiciona_jogador(Jogador('Matheus'))
+# mesa.adiciona_jogador(Jogador('Robson'))
+# mesa.adiciona_jogador(Jogador('Marcia'))
+# mesa.adiciona_jogador(Jogador('Marilene'))
 
 opcao = int(input('Qual opcao você deseja?\n1-Realizar uma jogada\n2-Testar cartas especificas\n3-Testar uma mão várias vezes\n4-Testar probabilidade de maos\n5-Testar probabilidade de sorteio de carta\n'))
 
@@ -75,7 +75,7 @@ elif opcao == 3:
                     print(f'\n{i+1}° vez:')
                     mesa.imprimir_mesa()
                     break
-                
+
             mesa.reseta_mesa()
             if num:
                 break
@@ -92,79 +92,54 @@ elif opcao == 3:
     print(f'O programa levou {tempo_medio:.2f} seg para executar!')
 
 elif opcao == 4:
-    mesa.jogadores.clear()
-    mesa.adiciona_jogador(Jogador('Arthur'))
+    mesa.jogadores.clear() # Retira todos os jogadores da mesa
+    mesa.adiciona_jogador(Jogador('Arthur')) # Adiciona o jogador Arthur para calcular para só um jogador
 
-    qtd1 = qtd2 = qtd3 = qtd4 = qtd5 = qtd6 = qtd7 = qtd8 = qtd9 = qtd10 = 0
+    maos = [0] * 10 # Cria um array com 10 posições inicializadas com zero
 
     qtd = int(input('Quantas rodadas você deseja ver? '))
     for i in range(0, qtd):
-
         mesa.sorteia_cartas_mesa()
 
+        # Sorteia as cartas dos jogadores:
         for j in mesa.jogadores:
             j.sorteia_cartas_jogador(mesa.baralho)
 
-        mao = -1
+        # Avalia a mão para cada jogador da mesa:
         for j in mesa.jogadores:
             mao = AvaliadorDeMaos.avalia_mao(mesa.cartas_na_mesa + j.cartas)
-            
-        if mao == 1:
-            qtd1 += 1
-        elif mao == 2:
-            qtd2 += 1
-        elif mao == 3:
-            qtd3 += 1
-        elif mao == 4:
-            qtd4 += 1
-        elif mao == 5:
-            qtd5 += 1
-        elif mao == 6:
-            qtd6 += 1
-        elif mao == 7:
-            qtd7 += 1
-        elif mao == 8:
-            qtd8 += 1
-        elif mao == 9:
-            qtd9 += 1
-        elif mao == 10:
-            qtd10 += 1
-        elif mao == -1:
-            print('Erro! (-1)')
-        else:
-            print('Erro!')
-        
+
+        maos[mao-1] += 1 # Soma um na posição do array referente a mão retirada para efetuar o somatório
+
         mesa.reseta_mesa()
 
-    print(f'Quantidade de mãos com Carta Alta: {qtd1} ({(qtd1/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Par: {qtd2} ({(qtd2/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Dois Pares: {qtd3} ({(qtd3/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Trio: {qtd4} ({(qtd4/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Sequência: {qtd5} ({(qtd5/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Flush: {qtd6} ({(qtd6/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Full House: {qtd7} ({(qtd7/qtd)*100:.2f}%)')
-    print(f'Quantidade de mãos com Quadra: {qtd8} ({(qtd8/qtd)*100:.4f}%)')
-    print(f'Quantidade de mãos com Straight Flush: {qtd9} ({(qtd9/qtd)*100:.4f}%)')
-    print(f'Quantidade de mãos com Royal Flush: {qtd10} ({(qtd10/qtd)*100:.4f}%)')
+    # Imprime a saída:
+    for i in range(0, 10):
+        porcentagem = (maos[i]/qtd)*100
+        if i < 7:
+            print(f'Quantidade de mãos com {AvaliadorDeMaos.imprimir_mao(i+1)}: {maos[i]} ({porcentagem:.2f}%)')
+        else:
+            print(f'Quantidade de mãos com {AvaliadorDeMaos.imprimir_mao(i+1)}: {maos[i]} ({porcentagem:.8f}%)')
 
 elif opcao == 5:
     baralho = Baralho()
 
     sorteios = int(input('Quantas vezes deseja sortear? '))
 
-    qtds = [0] * 52
+    qtds = [0] *  52 # Cria um array com 52 posições e inicializa todas com zero
 
-    start = time.time()
+    start = time.time() # Começa a contar o tempo
 
     for i in range(0, sorteios):
         sort = baralho.sorteia_uma_carta_idx()
 
-        qtds[sort] += 1
+        qtds[sort] += 1 # Soma um na posição do array referente a carta que foi sorteada para efetuar o somatório
         
-        baralho.reseta_baralho()
+        baralho.reseta_baralho() # Fazemos isso para que o baralho possa sortear qualquer uma das 52 cartas novamente
     
-    end = time.time()
+    end = time.time() # Para de contar o tempo
     
+    # Imprime a saída:
     print(f'\nQuantidade de cartas sorteadas:')
     for i in range(52):
         carta = baralho.cartas[i].retornar_carta()

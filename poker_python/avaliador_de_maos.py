@@ -59,19 +59,19 @@ class AvaliadorDeMaos:
 
         # Verifica se existe a maior sequencia do jogo:
         valores = sorted(cartas, key=lambda c: c.valor, reverse=True)
-        val = 10
+        val = 14
         count = -1
         for c in valores:
             if c.naipe == naipe:
                 if count == -1:
                     if c.valor == val:
-                        val += 1
+                        val -= 1
                         count = 1
                     else:
                         count = 0
                 else:
                     if c.valor == val:
-                        val += 1
+                        val -= 1
                         count += 1
                     else:
                         if count == 5:
@@ -121,16 +121,16 @@ class AvaliadorDeMaos:
         for c in valores:
             if c.naipe == naipe:
                 if val == 0:
-                    val = c.valor + 1
+                    val = c.valor - 1
                     count += 1
                 else:
                     if c.valor == val:
-                        val = c.valor + 1
+                        val = c.valor - 1
                         count += 1
                     else:
                         if count == 5:
                             return True
-                        val = c.valor + 1
+                        val = c.valor - 1
                         count = 1
         if count >= 5:
             return True
@@ -228,18 +228,18 @@ class AvaliadorDeMaos:
         count = 0
         for c in valores:
             if val == 0:
-                val = c.valor + 1
+                val = c.valor - 1
                 count += 1
             else:
                 if c.valor == val:
-                    val = c.valor + 1
+                    val = c.valor - 1
                     count += 1
                 elif c.valor == val - 1:
                     continue
                 else:
                     if count == 5:
                         return True
-                    val = c.valor + 1
+                    val = c.valor - 1
                     count = 1
         if count < 5:
             # Analise especial para o caso de A, 2, 3, 4, 5:
@@ -375,6 +375,7 @@ class AvaliadorDeMaos:
                 c.imprimir_carta()
             print('\n')
 
+            # Verifica qual par é e coloca o valor dele sendo o maior valor:
             val = 0
             count = 0
             for c in j.mao:
@@ -394,9 +395,12 @@ class AvaliadorDeMaos:
                 if count == 2:
                     break
         
-        maiores_pares = sorted(jogadores, key=lambda x: x.maior_valor, reverse=True)
-        maior_par = maiores_pares[0].maior_valor
-        jogadores_para_remover = []
+        maiores_pares = sorted(jogadores, key=lambda x: x.maior_valor, reverse=True) # Lista de jogadores ordenados a partir do maior_valor
+
+        maior_par = maiores_pares[0].maior_valor # Define o maior par entre os jogadores como sendo o primeiro da lista de jogadores com maiores pares
+
+        jogadores_para_remover = [] # Lista que vai armazenar jogadores em que seu maior par é menor que o maior_par de todos os jogadores para que depois disso removamos eles.
+
         for j in jogadores:
             if j.maior_valor != maior_par:
                 jogadores_para_remover.append(j)

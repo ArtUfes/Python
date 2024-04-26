@@ -21,7 +21,6 @@ class Mesa:
         for c in self.cartas_na_mesa:
             c.imprimir_carta()
         print()
-        
 
         print()
         for j in self.jogadores:
@@ -47,8 +46,6 @@ class Mesa:
         for j in self.jogadores:
             j.sorteia_cartas_jogador(self.baralho)
         
-        
-
         # Avalia a mão de cada jogador:
         for j in self.jogadores:
             j.classificacao_mao = AvaliadorDeMaos.avalia_mao(self.cartas_na_mesa + j.cartas)
