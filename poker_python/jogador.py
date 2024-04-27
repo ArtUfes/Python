@@ -20,3 +20,7 @@ class Jogador:
 
     def reseta_cartas_jogador(self):
         self.cartas.clear()
+        self.classificacao_mao = 0
+        self.mao.clear()
+        self.melhor_mao.clear()
+        self.maior_valor = 0

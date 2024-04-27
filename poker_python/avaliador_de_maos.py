@@ -401,21 +401,81 @@ class AvaliadorDeMaos:
 
         jogadores_para_remover = [] # Lista que vai armazenar jogadores em que seu maior par é menor que o maior_par de todos os jogadores para que depois disso removamos eles.
 
+        # Verifica se o maior par de cada jogador é igual ao maior_par, se não for, adiciona o jogador na lista de jogadores para remover
         for j in jogadores:
             if j.maior_valor != maior_par:
                 jogadores_para_remover.append(j)
-        
+
+        # Remove os jogadores que não possuem o maior par
         for j in jogadores_para_remover:
             jogadores.remove(j)
         
+        # Imprime os jogadores que possuem o maior par
         for j in jogadores:
             print(f'Jogador: {j.nome} - Par: {j.maior_valor}')
         
+        # Se apenas um jogador possuir o maior par, ele é o vencedor
         if len(jogadores) == 1:
             return jogadores
+        # Se mais de um jogador possuir o maior par, vamos para o desempate
         else:
-            # Implementar desempate
-            return []
+            cartas_para_remover = [] # Lista que vai armazenar as cartas que queremos remover da mao do jogador
+            for j in jogadores:
+                for c in j.mao:
+                    # Se a carta for igual ao maior par do jogador, adicionamos ela na lista de cartas para remover e adicionamos ela na lista de melhor mao do jogador
+                    if c.valor == j.maior_valor:
+                        j.melhor_mao.append(c)
+                        cartas_para_remover.append(c)
+                # Removemos as cartas que não são iguais ao maior par do jogador
+                for c in cartas_para_remover:
+                    j.mao.remove(c)
+                cartas_para_remover.clear()
+
+                # A melhor_mao do jogador já possui o par, então preenchemos a melhor_mao do jogador com as cartas próximas três maiores cartas da mesa
+                # Depois disso, ordenamos a melhor_mao do jogador a partir do valor das cartas
+                for c in j.mao:
+                    if len(j.melhor_mao) < 5:
+                        j.melhor_mao.append(c)
+                    else:
+                        break
+                
+                print(f'Jogador: {j.nome}')
+                print('\nMelhor mao: ')
+                for c in range(len(j.melhor_mao)):
+                    j.melhor_mao[c].imprimir_carta()
+                print('\n')
+
+            jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
+            for i in range(2, 5):
+                for j in range(0, len(jogadores)):
+                    print(f'Após o for -> j: {j}')
+                    if j == 0:
+                        maior = jogadores[j].melhor_mao[i].valor
+                        maior_idx = j
+                    else:
+                        if jogadores[j].melhor_mao[i].valor > maior:
+                            maior = jogadores[j].melhor_mao[i].valor
+                            jogadores.remove(jogadores[maior_idx])
+                            maior_idx = j
+                            j -= 1
+                            print(f'Após remoção -> j: {j}')
+            
+            # jogadores_para_remover_unicos = set(jogadores_para_remover)
+
+            # for j in jogadores_para_remover_unicos:
+            #     jogadores.remove(j)
+            
+            return jogadores
+                    
+
+
+                
+            
+            
+
+
+
+            
 
             
             

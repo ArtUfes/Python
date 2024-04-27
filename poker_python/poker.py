@@ -8,10 +8,10 @@ mesa = Mesa() # Instancia um objeto da classe Mesa
 
 # Adiciona jogadores na mesa:
 mesa.adiciona_jogador(Jogador('Arthur'))
-# mesa.adiciona_jogador(Jogador('Matheus'))
-# mesa.adiciona_jogador(Jogador('Robson'))
-# mesa.adiciona_jogador(Jogador('Marcia'))
-# mesa.adiciona_jogador(Jogador('Marilene'))
+mesa.adiciona_jogador(Jogador('Matheus'))
+mesa.adiciona_jogador(Jogador('Robson'))
+mesa.adiciona_jogador(Jogador('Marcia'))
+mesa.adiciona_jogador(Jogador('Marilene'))
 
 opcao = int(input('Qual opcao você deseja?\n1-Realizar uma jogada\n2-Testar cartas especificas\n3-Testar uma mão várias vezes\n4-Testar probabilidade de maos\n5-Testar probabilidade de sorteio de carta\n'))
 

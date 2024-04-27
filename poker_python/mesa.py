@@ -87,12 +87,15 @@ class Mesa:
                 if len(ganhadores) == 1:
                     print(f'{ganhadores[0].nome} venceu com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!')
                 else:
+                    print('Os jogadores ', end='')
                     for i in range(len(ganhadores)):
-                        print(f'{j.nome}', end='')
-                        if i != len(ganhadores) - 1:
+                        print(f'{ganhadores[i].nome}', end='')
+                        if i != len(ganhadores) - 1 and i != len(ganhadores) - 2:
                             print(end=', ')
+                        if i == len(ganhadores) - 2:
+                            print(end='e ')
                         else:
-                            print(f'venceram com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!')
+                            print(f' venceram com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!')
 
                               
         self.reseta_mesa() # Reseta a mesa para a próxima rodada
