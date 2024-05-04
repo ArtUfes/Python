@@ -439,7 +439,7 @@ class AvaliadorDeMaos:
             for i in range(2, 5): # Começamos o i=2, pois as duas primeiras cartas (i=0 e i=1) são os pares
                 maiores_idx.clear() # Limpamos a lista de idx todo início de nova posição de carta analisada
                 for j in range(0, len(jogadores)): # For para rodar todos os jogadores
-                    # Na primeira iteração definimos o maior valor e adicionamos o idx jo jogador na lista de maiores_idx
+                    # Na primeira iteração definimos o maior valor e adicionamos o idx do jogador na lista de maiores_idx
                     if j == 0:
                         maior = jogadores[j].melhor_mao[i].valor
                         maiores_idx.append(j)
@@ -480,7 +480,158 @@ class AvaliadorDeMaos:
             #         print('\n')
 
             return jogadores # Retorna a lista de jogadores que ganharam o pot
-                    
+
+    @staticmethod
+    def desempata_dois_pares(jogadores):
+        # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
+
+        for j in jogadores:
+            mao = j.mao.copy()
+            cartas_para_remover = []
+            count_pares_achados = 0
+            for c in range(7 - 1): # De inicio, teremos sempre sete cartas
+                if mao[c].valor == mao[c+1].valor:
+                    count_pares_achados += 1 
+                    j.melhor_mao.append(mao[c])
+                    j.melhor_mao.append(mao[c+1])
+                    cartas_para_remover.append(mao[c])
+                    cartas_para_remover.append(mao[c+1])
+                    if count_pares_achados == 2: # Se já achamos dois pares, já podemos sair do loop
+                        break
+
+            # Removendo da mão analisada os dois pares encontrados:
+            for c in cartas_para_remover:
+                mao.remove(c)
+            
+            j.melhor_mao.append(mao[0]) # Adicionando a melhor carta restante na mesa na mão do jogador
+        
+            # Impressao da melhor mao formada pelos jogadores:
+            # print(f'\nJogador: {j.nome}', end='')
+            # for c in j.melhor_mao:
+            #     c.imprimir_carta()
+            # print('\n')
+
+
+
+        # Agora devemos analisar quem tem a melhor mão e ir removendo os jogadores que tem a pior mão da lista de jogadores:
+
+        for qtd_vezes in range(3):
+            jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
+            maior_valor_carta = -1
+            idx_maiores_cartas = [] # Lista que armazena o idx dos jogadores que possuem a maior carta atual
+
+            if qtd_vezes == 0:
+                idx = 0
+            elif qtd_vezes == 1:
+                idx = 2
+            else:
+                idx = 4
+
+            for i in range(len(jogadores)):
+                if i == 0:
+                    maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                    idx_maiores_cartas.append(i)
+                else:
+                    if jogadores[i].melhor_mao[idx].valor > maior_valor_carta:
+                        for j in idx_maiores_cartas:
+                            jogadores_para_remover.append(jogadores[j])
+                        maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                        idx_maiores_cartas.clear()
+                        idx_maiores_cartas.append(i)
+                    elif jogadores[i].melhor_mao[idx].valor < maior_valor_carta:
+                        jogadores_para_remover.append(jogadores[i])
+                    else:
+                        idx_maiores_cartas.append(i)
+            
+            # Criamos um set da lista de jogadores para remover para remover jogadores repetidos
+            jogadores_para_remover_unicos = set(jogadores_para_remover)
+            for j in jogadores_para_remover_unicos:
+                jogadores.remove(j)
+            
+        return jogadores
+
+    @staticmethod
+    def desempata_trio(jogadores):
+        # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
+        for j in jogadores:
+            mao = j.mao.copy()
+            cartas_para_remover = []
+
+            # Procuramos por um trio na mão do jogador e adicionamos ele na melhor mão do jogador:
+            for c in range(7 - 2):
+                if j.mao[c].valor == j.mao[c+1].valor and j.mao[c].valor == j.mao[c+2].valor:
+                    j.melhor_mao.append(j.mao[c])
+                    j.melhor_mao.append(j.mao[c+1])
+                    j.melhor_mao.append(j.mao[c+2])
+                    cartas_para_remover.append(j.mao[c])
+                    cartas_para_remover.append(j.mao[c+1])
+                    cartas_para_remover.append(j.mao[c+2])
+                    break
+            
+            # Removemos as três cartas que formam o trio da mão do jogador:
+            for c in cartas_para_remover:
+                mao.remove(c)
+
+            # Preenche a melhor mão com as duas maiores cartas da mão do jogador (combo de 5 cartas da mesa + 2 do jogador):
+            for c in mao:
+                if len(j.melhor_mao) < 5:
+                    j.melhor_mao.append(c)
+                else:
+                    break
+            
+        # Impressao da melhor mao formada pelos jogadores:
+        for i in range(len(jogadores)):
+            print(f'\n{jogadores[i].nome}: ', end='')
+            for c in jogadores[i].melhor_mao:
+                c.imprimir_carta()
+            print('\n')
+        
+        for qtd_vezes in range(3):
+            jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
+            maior_valor_carta = -1
+            idx_maiores_cartas = [] # Lista que armazena o idx dos jogadores que possuem a maior carta atual
+
+            if qtd_vezes == 0:
+                idx = 0
+            elif qtd_vezes == 1:
+                idx = 3
+            else:
+                idx = 4
+            
+            
+
+            for i in range(len(jogadores)):
+                if i == 0:
+                    maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                    idx_maiores_cartas.append(i)
+                else:
+                    if jogadores[i].melhor_mao[idx].valor > maior_valor_carta:
+                        for j in idx_maiores_cartas:
+                            jogadores_para_remover.append(jogadores[j])
+                        maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                        idx_maiores_cartas.clear()
+                        idx_maiores_cartas.append(i)
+                    elif jogadores[i].melhor_mao[idx].valor < maior_valor_carta:
+                        jogadores_para_remover.append(jogadores[i])
+                    else:
+                        idx_maiores_cartas.append(i)
+            
+            # Criamos um set da lista de jogadores para remover para remover jogadores repetidos
+            jogadores_para_remover_unicos = set(jogadores_para_remover)
+            for j in jogadores_para_remover_unicos:
+                jogadores.remove(j)
+        
+            
+
+        return jogadores
+            
+
+            
+
+
+
+
+
 
 
                 
