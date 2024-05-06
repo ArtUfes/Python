@@ -68,21 +68,27 @@ class Mesa:
             jogadores_com_melhores_maos.remove(j)
 
         # Imprime os jogadores com as melhores mãos:
-        for j in jogadores_com_melhores_maos:
-            # print(f'{j.nome} - {j.classificacao_mao}')
-            pass
+        # for j in jogadores_com_melhores_maos:
+        #     print(f'{j.nome} - {AvaliadorDeMaos.imprimir_mao(j.classificacao_mao)}')
+
         
         # Se houver apenas um jogador com a melhor mão, ele vence:
         if len(jogadores_com_melhores_maos) == 1:
             j = jogadores_com_melhores_maos[0]
-            # print(f'{j.nome} venceu com {AvaliadorDeMaos.imprimir_mao(j.classificacao_mao)}!')
+            print(f'{j.nome} venceu com {AvaliadorDeMaos.imprimir_mao(j.classificacao_mao)}!', end='')
+            for c in j.melhor_mao:
+                c.imprimir_carta()
+            print('\n')
 
         # Se houver mais de um jogador com a melhor mão, implementar desempate:
         else:
             ganhadores = []
             # implementar desempate
-            if jogadores_com_melhores_maos[0].classificacao_mao == 2:
+            if jogadores_com_melhores_maos[0].classificacao_mao == 1:
+                ganhadores = AvaliadorDeMaos.desempata_carta_alta(jogadores_com_melhores_maos)
+            elif jogadores_com_melhores_maos[0].classificacao_mao == 2:
                 ganhadores = AvaliadorDeMaos.desempata_par(jogadores_com_melhores_maos)
+                self.imprimir_mesa()
             elif jogadores_com_melhores_maos[0].classificacao_mao == 3:
                 ganhadores = AvaliadorDeMaos.desempata_dois_pares(jogadores_com_melhores_maos)
             elif jogadores_com_melhores_maos[0].classificacao_mao == 4:
@@ -90,18 +96,24 @@ class Mesa:
             elif jogadores_com_melhores_maos[0].classificacao_mao == 5:
                 ganhadores = AvaliadorDeMaos.desempata_sequencia(jogadores_com_melhores_maos)
             elif jogadores_com_melhores_maos[0].classificacao_mao == 6:
-                self.imprimir_mesa()
                 ganhadores = AvaliadorDeMaos.desempata_flush(jogadores_com_melhores_maos)
+            elif jogadores_com_melhores_maos[0].classificacao_mao == 7:
+                ganhadores = AvaliadorDeMaos.desempata_full_house(jogadores_com_melhores_maos)
+            elif jogadores_com_melhores_maos[0].classificacao_mao == 8:
+                ganhadores = AvaliadorDeMaos.desempata_quadra(jogadores_com_melhores_maos)
+            elif jogadores_com_melhores_maos[0].classificacao_mao == 9:
+                ganhadores = AvaliadorDeMaos.desempata_straight_flush(jogadores_com_melhores_maos)
 
-
+            if jogadores_com_melhores_maos[0].classificacao_mao == 2:
+        
                 if len(ganhadores) != 0:
                     # self.imprimir_mesa() # Verificar se esse método está na melhor posição do código
                     if len(ganhadores) == 1:
-                        pass
-                        print(f'{ganhadores[0].nome} venceu com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!\n')
+                        print(f'{ganhadores[0].nome} venceu com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!', end='')
+                        for c in ganhadores[0].melhor_mao:
+                            c.imprimir_carta()
+                        print('\n')
                     else:
-                        # pass
-
                         print('Os jogadores ', end='')
                         for i in range(len(ganhadores)):
                             print(f'{ganhadores[i].nome}', end='')
@@ -110,7 +122,10 @@ class Mesa:
                             elif i == len(ganhadores) - 2:
                                 print(end=' e ')
                             else:
-                                print(f' venceram com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!\n')
+                                print(f' venceram com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!', end='')
+                        for c in ganhadores[0].melhor_mao:
+                            c.imprimir_carta()
+                        print('\n')
 
                               
         self.reseta_mesa() # Reseta a mesa para a próxima rodada
