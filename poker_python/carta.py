@@ -27,3 +27,19 @@ class Carta:
             return 'J'
         else:
             return self.valor
+    
+    @staticmethod
+    def cria_set_cartas_pelo_valor(cartas):
+        set_cartas = set()
+        for carta in cartas:
+            valor_igual = False
+            if len(set_cartas) == 0:
+                set_cartas.add(carta)
+            else:
+                for carta_set in set_cartas:
+                    if carta_set.valor == carta.valor:
+                        valor_igual = True
+                        break
+                if valor_igual == False:
+                    set_cartas.add(carta)
+        return set_cartas

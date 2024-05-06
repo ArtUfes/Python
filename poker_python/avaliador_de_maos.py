@@ -1,4 +1,5 @@
 from jogador import Jogador
+from carta import Carta
 
 class AvaliadorDeMaos:
     @staticmethod
@@ -234,11 +235,11 @@ class AvaliadorDeMaos:
                 if c.valor == val:
                     val = c.valor - 1
                     count += 1
-                elif c.valor == val - 1:
-                    continue
-                else:
                     if count == 5:
                         return True
+                elif c.valor == val + 1:
+                    continue
+                else:
                     val = c.valor - 1
                     count = 1
         if count < 5:
@@ -580,11 +581,11 @@ class AvaliadorDeMaos:
                     break
             
         # Impressao da melhor mao formada pelos jogadores:
-        for i in range(len(jogadores)):
-            print(f'\n{jogadores[i].nome}: ', end='')
-            for c in jogadores[i].melhor_mao:
-                c.imprimir_carta()
-            print('\n')
+        # for i in range(len(jogadores)):
+        #     print(f'\n{jogadores[i].nome}: ', end='')
+        #     for c in jogadores[i].melhor_mao:
+        #         c.imprimir_carta()
+        #     print('\n')
         
         for qtd_vezes in range(3):
             jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
@@ -598,8 +599,6 @@ class AvaliadorDeMaos:
             else:
                 idx = 4
             
-            
-
             for i in range(len(jogadores)):
                 if i == 0:
                     maior_valor_carta = jogadores[i].melhor_mao[idx].valor
@@ -621,10 +620,62 @@ class AvaliadorDeMaos:
             for j in jogadores_para_remover_unicos:
                 jogadores.remove(j)
         
-            
-
         return jogadores
-            
+
+    @staticmethod
+    def desempata_sequencia(jogadores):
+        # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
+        for j in jogadores:
+            set_cartas = Carta.cria_set_cartas_pelo_valor(j.mao)
+
+            # print(f'\n set do jogador {j.nome}: ', end='')
+            # for c in set_cartas:
+            #     c.imprimir_carta()
+            # print('\n')
+
+            lista_cartas = sorted(set_cartas, key=lambda c: c.valor, reverse=True)
+
+            # print(f'\n lista_cartas do jogador {j.nome}: ', end='')
+            # for c in lista_cartas:
+            #     c.imprimir_carta()
+            # print('\n')
+
+            if len(lista_cartas) == 5:
+                for c in lista_cartas:
+                    j.melhor_mao.append(c)
+            elif len(lista_cartas) == 6:
+                if AvaliadorDeMaos.eh_sequencia(lista_cartas[0:5]):
+                    for c in lista_cartas[0:5]:
+                        j.melhor_mao.append(c)
+                elif AvaliadorDeMaos.eh_sequencia(lista_cartas[1:6]):
+                    for c in lista_cartas[1:6]:
+                        j.melhor_mao.append(c)
+            elif len(lista_cartas) == 7:
+                if AvaliadorDeMaos.eh_sequencia(lista_cartas[0:5]):
+                    for c in lista_cartas[0:5]:
+                        j.melhor_mao.append(c)
+                elif AvaliadorDeMaos.eh_sequencia(lista_cartas[1:6]):
+                    for c in lista_cartas[1:6]:
+                        j.melhor_mao.append(c)
+                elif AvaliadorDeMaos.eh_sequencia(lista_cartas[2:7]):
+                    for c in lista_cartas[2:7]:
+                        j.melhor_mao.append(c)
+            else:
+                print(f'Erro! len(lista_cartas) = {len(lista_cartas)}')
+
+            # Impressao da melhor mao formada pelos jogadores:
+            print(f'\n{j.nome}: ', end='')
+            for c in j.melhor_mao:
+                c.imprimir_carta()
+            print('\n')
+        
+        return []
+
+
+        
+                
+
+    
 
             
 
