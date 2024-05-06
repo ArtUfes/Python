@@ -246,12 +246,11 @@ class AvaliadorDeMaos:
             # Analise especial para o caso de A, 2, 3, 4, 5:
             # Lembrando que essa lista cartas possuem 7 cartas, então precisamos criar um set a partir dos valores das cartas
             # para depois verificar o caso especial A, 2, 3, 4, 5:
-            # vals = set()
-            # for c in valores:
-            #     vals.add(c.valor)
-            # if 14 in vals and 2 in vals and 3 in vals and 4 in vals and 5 in vals:
-            #     return True
-            pass
+            vals = set()
+            for c in valores:
+                vals.add(c.valor)
+            if 14 in vals and 2 in vals and 3 in vals and 4 in vals and 5 in vals:
+                return True
             
         if count >= 5:
             return True
@@ -626,50 +625,168 @@ class AvaliadorDeMaos:
     def desempata_sequencia(jogadores):
         # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
         for j in jogadores:
-            set_cartas = Carta.cria_set_cartas_pelo_valor(j.mao)
+            set_cartas = Carta.cria_set_cartas_pelo_valor(j.mao) # Retiramos a repetição de cartas de mesmo valor
 
-            # print(f'\n set do jogador {j.nome}: ', end='')
-            # for c in set_cartas:
-            #     c.imprimir_carta()
-            # print('\n')
+            lista_cartas = sorted(set_cartas, key=lambda c: c.valor, reverse=True) # Ordenamos as cartas pelo valor e colocamos em uma lista
 
-            lista_cartas = sorted(set_cartas, key=lambda c: c.valor, reverse=True)
+            # A partir disso, teremos três possibilidades: len() == 5, len() == 6 e len() == 7
 
-            # print(f'\n lista_cartas do jogador {j.nome}: ', end='')
-            # for c in lista_cartas:
-            #     c.imprimir_carta()
-            # print('\n')
-
-            if len(lista_cartas) == 5:
-                for c in lista_cartas:
-                    j.melhor_mao.append(c)
+            if len(lista_cartas) == 5: # Se tivermos 5 cartas, então elas obrigatoriamente formam a sequência
+                # Verificamos se a sequência é A, 2, 3, 4, 5
+                if lista_cartas[0].valor == 14 and lista_cartas[1].valor == 5:
+                    j.melhor_mao.append(lista_cartas[1])
+                    j.melhor_mao.append(lista_cartas[2])
+                    j.melhor_mao.append(lista_cartas[3])
+                    j.melhor_mao.append(lista_cartas[4])
+                    j.melhor_mao.append(lista_cartas[0])
+                # Se não for A, 2, 3, 4, 5, então a sequência é normal
+                else:
+                    for c in lista_cartas:
+                        j.melhor_mao.append(c)
+                
+            # Se tivermos 6 cartas então temos que ver se a sequência é formada pelas 5 primeiras cartas, pelas 5 últimas:
             elif len(lista_cartas) == 6:
+                # Analisando se a sequência esta nas 5 primeiras cartas:
                 if AvaliadorDeMaos.eh_sequencia(lista_cartas[0:5]):
                     for c in lista_cartas[0:5]:
                         j.melhor_mao.append(c)
+                # Analisando se a sequência esta nas 5 últimas cartas:
                 elif AvaliadorDeMaos.eh_sequencia(lista_cartas[1:6]):
                     for c in lista_cartas[1:6]:
                         j.melhor_mao.append(c)
+                # Se não for nenhuma das duas, então estamos no caso especial A, 2, 3, 4, 5:
+                else:
+                    for c in lista_cartas[2:6]:
+                        j.melhor_mao.append(c)
+                    j.melhor_mao.append(lista_cartas[0])
+            # Se tivermos 7 cartas então temos que ver se a sequência é formada pelas 5 primeiras cartas, pelas 5 do meio, ou pelas 5 últimas:
             elif len(lista_cartas) == 7:
+                # Analisando se a sequência esta nas 5 primeiras cartas:
                 if AvaliadorDeMaos.eh_sequencia(lista_cartas[0:5]):
                     for c in lista_cartas[0:5]:
                         j.melhor_mao.append(c)
+                # Analisando se a sequência esta nas 5 cartas do meio:
                 elif AvaliadorDeMaos.eh_sequencia(lista_cartas[1:6]):
                     for c in lista_cartas[1:6]:
                         j.melhor_mao.append(c)
+                # Analisando se a sequência esta nas 5 últimas cartas:
                 elif AvaliadorDeMaos.eh_sequencia(lista_cartas[2:7]):
                     for c in lista_cartas[2:7]:
                         j.melhor_mao.append(c)
-            else:
-                print(f'Erro! len(lista_cartas) = {len(lista_cartas)}')
+                # Se não for nenhuma das três, então estamos no caso especial A, 2, 3, 4, 5:
+                else:
+                    for c in lista_cartas[3:7]:
+                        j.melhor_mao.append(c)
+                    j.melhor_mao.append(lista_cartas[0])
 
-            # Impressao da melhor mao formada pelos jogadores:
-            print(f'\n{j.nome}: ', end='')
-            for c in j.melhor_mao:
+            # # Impressao da melhor mao formada pelos jogadores:
+            # print(f'\n{j.nome}: ', end='')
+            # for c in j.melhor_mao:
+            #     c.imprimir_carta()
+            # print('\n')
+        
+        # Agora devemos analisar quem tem a melhor sequência e ir removendo os jogadores que tem a pior mão da lista de jogadores:
+        # Faremos isso apenas analisando a carta mais alta da sequência
+
+        jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
+        maior_valor_carta = -1
+        idx_maiores_cartas = []
+        for j in range(len(jogadores)):
+            if j == 0:
+                maior_valor_carta = jogadores[j].melhor_mao[0].valor
+                idx_maiores_cartas.append(j)
+            else:
+                if jogadores[j].melhor_mao[0].valor > maior_valor_carta:
+                    for i in idx_maiores_cartas:
+                        jogadores_para_remover.append(jogadores[i])
+                    maior_valor_carta = jogadores[j].melhor_mao[0].valor
+                    idx_maiores_cartas.clear()
+                    idx_maiores_cartas.append(j)
+                elif jogadores[j].melhor_mao[0].valor < maior_valor_carta:
+                    jogadores_para_remover.append(jogadores[j])
+                else:
+                    idx_maiores_cartas.append(j)
+        
+        # Criamos um set da lista de jogadores para remover para remover jogadores repetidos
+        jogadores_para_remover_unicos = set(jogadores_para_remover)
+        
+        for j in jogadores_para_remover_unicos:
+            jogadores.remove(j)
+        
+        return jogadores
+    
+    @staticmethod
+    def desempata_flush(jogadores):
+        # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
+        for j in jogadores:
+            naipe = AvaliadorDeMaos.naipe_do_flush(j.mao)
+
+            for c in j.mao:
+                if c.naipe == naipe:
+                    j.melhor_mao.append(c)
+                    if len(j.melhor_mao) == 5:
+                        break
+
+        # Impressao da melhor mao formada pelos jogadores:
+        for i in range(len(jogadores)):
+            print(f'\n{jogadores[i].nome}: ', end='')
+            for c in jogadores[i].melhor_mao:
                 c.imprimir_carta()
             print('\n')
         
-        return []
+        for qtd_vezes in range(5):
+            jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
+            maior_valor_carta = -1
+            idx_maiores_cartas = [] # Lista que armazena o idx dos jogadores que possuem a maior carta atual
+
+            idx = qtd_vezes
+            
+            for i in range(len(jogadores)):
+                if i == 0:
+                    maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                    idx_maiores_cartas.append(i)
+                else:
+                    if jogadores[i].melhor_mao[idx].valor > maior_valor_carta:
+                        for j in idx_maiores_cartas:
+                            jogadores_para_remover.append(jogadores[j])
+                        maior_valor_carta = jogadores[i].melhor_mao[idx].valor
+                        idx_maiores_cartas.clear()
+                        idx_maiores_cartas.append(i)
+                    elif jogadores[i].melhor_mao[idx].valor < maior_valor_carta:
+                        jogadores_para_remover.append(jogadores[i])
+                    else:
+                        idx_maiores_cartas.append(i)
+        
+            # Criamos um set da lista de jogadores para remover para remover jogadores repetidos
+            jogadores_para_remover_unicos = set(jogadores_para_remover)
+            for j in jogadores_para_remover_unicos:
+                jogadores.remove(j)
+    
+        return jogadores
+
+    @staticmethod
+    def naipe_do_flush(cartas):
+        espadas = copas = paus = ouros = 0
+        for c in cartas:
+            if c.naipe == '♠️':
+                espadas += 1
+            elif c.naipe == '♦️':
+                ouros += 1
+            elif c.naipe == '♣️':
+                paus += 1
+            elif c.naipe == '♥️':
+                copas += 1
+            
+        if espadas >= 5:
+            return '♠️'
+        if ouros >= 5:
+            return '♦️'
+        if paus >= 5:
+            return '♣️'
+        if copas >= 5:
+            return '♥️'
+        
+        return False
 
 
         
