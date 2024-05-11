@@ -38,21 +38,15 @@ class Mesa:
         self.cartas_na_mesa.clear()
         for j in self.jogadores:
             j.reseta_cartas_jogador()
-
-    def realiza_uma_jogada(self):
+    
+    def sorteia_jogo(self):
         self.sorteia_cartas_mesa()
 
         # Sorteia as cartas de cada jogador:
         for j in self.jogadores:
             j.sorteia_cartas_jogador(self.baralho)
-
-        # self.imprimir_mesa()
-        
-        # Avalia a mão de cada jogador:
-        for j in self.jogadores:
-            j.classificacao_mao = AvaliadorDeMaos.avalia_mao(self.cartas_na_mesa + j.cartas)
-            j.mao = sorted(self.cartas_na_mesa + j.cartas, key=lambda x: x.valor, reverse=True)
-        
+    
+    def encontra_jogadores_com_melhores_maos(self):
         # Cria lista ordenada de jogadores com as melhores mãos:
         jogadores_com_melhores_maos = sorted(self.jogadores, key=lambda x: x.classificacao_mao, reverse=True)
 
@@ -66,68 +60,40 @@ class Mesa:
         # Remove os jogadores que não possuem a melhor mão da lista de jogadores com as melhores mãos:
         for j in pessoas_para_remover:
             jogadores_com_melhores_maos.remove(j)
+        
+        return jogadores_com_melhores_maos
 
-        # Imprime os jogadores com as melhores mãos:
-        # for j in jogadores_com_melhores_maos:
-        #     print(f'{j.nome} - {AvaliadorDeMaos.imprimir_mao(j.classificacao_mao)}')
+    def avalia_mao_jogadores(self):
+        # Avalia a mão de cada jogador:
+        for j in self.jogadores:
+            j.mao = sorted(self.cartas_na_mesa + j.cartas, key=lambda x: x.valor, reverse=True)
+            j.classificacao_mao = AvaliadorDeMaos.avalia_mao(j.mao)
 
+    def realiza_uma_jogada(self):
+        self.sorteia_jogo() # Sorteia cartas da mesa e dos jogadores
+
+        self.imprimir_mesa()
+        
+        self.avalia_mao_jogadores() # Vê qual mão cada jogador possui (par, trio, flush...)
+        
+        jogadores_com_melhores_maos = self.encontra_jogadores_com_melhores_maos() # Deixa apenas os jogadores com a maior mão
+        
+        AvaliadorDeMaos.encontra_melhor_mao_jogadores(jogadores_com_melhores_maos) # Preenche as melhores 5 cartas de cada jogador
         
         # Se houver apenas um jogador com a melhor mão, ele vence:
         if len(jogadores_com_melhores_maos) == 1:
-            j = jogadores_com_melhores_maos[0]
-            print(f'{j.nome} venceu com {AvaliadorDeMaos.imprimir_mao(j.classificacao_mao)}!', end='')
-            for c in j.melhor_mao:
-                c.imprimir_carta()
-            print('\n')
+            Mesa.imprimir_vencedor_unico(jogadores_com_melhores_maos[0])
 
         # Se houver mais de um jogador com a melhor mão, implementar desempate:
         else:
-            ganhadores = []
-            # implementar desempate
-            if jogadores_com_melhores_maos[0].classificacao_mao == 1:
-                ganhadores = AvaliadorDeMaos.desempata_carta_alta(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 2:
-                ganhadores = AvaliadorDeMaos.desempata_par(jogadores_com_melhores_maos)
-                self.imprimir_mesa()
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 3:
-                ganhadores = AvaliadorDeMaos.desempata_dois_pares(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 4:
-                ganhadores = AvaliadorDeMaos.desempata_trio(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 5:
-                ganhadores = AvaliadorDeMaos.desempata_sequencia(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 6:
-                ganhadores = AvaliadorDeMaos.desempata_flush(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 7:
-                ganhadores = AvaliadorDeMaos.desempata_full_house(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 8:
-                ganhadores = AvaliadorDeMaos.desempata_quadra(jogadores_com_melhores_maos)
-            elif jogadores_com_melhores_maos[0].classificacao_mao == 9:
-                ganhadores = AvaliadorDeMaos.desempata_straight_flush(jogadores_com_melhores_maos)
-
-            if jogadores_com_melhores_maos[0].classificacao_mao == 2:
-        
-                if len(ganhadores) != 0:
-                    # self.imprimir_mesa() # Verificar se esse método está na melhor posição do código
-                    if len(ganhadores) == 1:
-                        print(f'{ganhadores[0].nome} venceu com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!', end='')
-                        for c in ganhadores[0].melhor_mao:
-                            c.imprimir_carta()
-                        print('\n')
-                    else:
-                        print('Os jogadores ', end='')
-                        for i in range(len(ganhadores)):
-                            print(f'{ganhadores[i].nome}', end='')
-                            if i != len(ganhadores) - 1 and i != len(ganhadores) - 2:
-                                print(end=', ')
-                            elif i == len(ganhadores) - 2:
-                                print(end=' e ')
-                            else:
-                                print(f' venceram com {AvaliadorDeMaos.imprimir_mao(ganhadores[0].classificacao_mao)}!', end='')
-                        for c in ganhadores[0].melhor_mao:
-                            c.imprimir_carta()
-                        print('\n')
-
-                              
+            ganhadores = AvaliadorDeMaos.encontra_ganhadores_desempate(jogadores_com_melhores_maos)
+            
+            if len(ganhadores) != 0:
+                if len(ganhadores) == 1:
+                    Mesa.imprimir_vencedor_unico(ganhadores[0])
+                else:
+                    Mesa.imprimir_vencedores_multiplos(ganhadores)
+                                 
         self.reseta_mesa() # Reseta a mesa para a próxima rodada
         
         
@@ -143,11 +109,23 @@ class Mesa:
         self.cartas_na_mesa.append(Carta(10, '♦️'))
         self.cartas_na_mesa.append(Carta(12, '♦️'))
         self.cartas_na_mesa.append(Carta(11, '♦️'))
-
-
-
-
-            
-        
-
-        
+    
+    def imprimir_vencedor_unico(jogador):
+        print(f'{jogador.nome} venceu com {AvaliadorDeMaos.imprimir_mao(jogador.classificacao_mao)}!', end='')
+        for c in jogador.melhor_mao:
+            c.imprimir_carta()
+        print('\n')
+    
+    def imprimir_vencedores_multiplos(jogadores):
+        print('Os jogadores ', end='')
+        for i in range(len(jogadores)):
+            print(f'{jogadores[i].nome}', end='')
+            if i != len(jogadores) - 1 and i != len(jogadores) - 2:
+                print(end=', ')
+            elif i == len(jogadores) - 2:
+                print(end=' e ')
+            else:
+                print(f' venceram com {AvaliadorDeMaos.imprimir_mao(jogadores[0].classificacao_mao)}!', end='')
+        for c in jogadores[0].melhor_mao:
+            c.imprimir_carta()
+        print('\n')
