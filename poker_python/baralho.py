@@ -1,18 +1,11 @@
 from carta import Carta
 from random import randint
-from random import choice
 import random
 
 class Baralho:
     def __init__(self):
         self.cartas = self.inicia_cartas()
         self.cartas_ja_sorteadas = [] # Armazena o idx da carta sorteada na lista de cartas
-        
-        # implementacao para versao 2 de seleção de carta do baralho
-        self.cartas_a_sair = [i for i in range(52)]
-    
-        # implementação para versao 3 de selecao
-        self.qtd_cartas_sorteadas = 0
         
     
     def inicia_cartas(self):
@@ -43,15 +36,6 @@ class Baralho:
                 break
         return self.cartas[i] # Retorna a carta sorteada
 
-    def sorteia_uma_carta_v2(self):
-        carta = choice(self.cartas_a_sair)
-        self.cartas_a_sair.remove(carta)
-        return self.cartas[carta]
-
-    def sorteia_uma_carta_v3(self):
-        self.qtd_cartas_sorteadas += 1
-        return self.cartas[self.qtd_cartas_sorteadas - 1]
-    
     def sorteia_uma_carta_idx(self):
         while True:
             i = randint(0, 51) # Sorteia um número entre 0 e 51
@@ -64,9 +48,3 @@ class Baralho:
     
     def reseta_baralho(self):
         self.cartas_ja_sorteadas.clear()
-    
-    def reseta_baralho_v2(self):
-        self.cartas_a_sair = [i for i in range(52)]
-    
-    def reseta_baralho_v3(self):
-        self.qtd_cartas_sorteadas = 0

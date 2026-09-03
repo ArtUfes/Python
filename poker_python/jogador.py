@@ -13,14 +13,6 @@ class Jogador:
         for i in range(0, 2):
             self.cartas.append(baralho.sorteia_uma_carta())
     
-    def sorteia_cartas_jogador_v2(self, baralho):
-        for i in range(0, 2):
-            self.cartas.append(baralho.sorteia_uma_carta_v2())
-    
-    def sorteia_cartas_jogador_v3(self, baralho):
-        for i in range(0, 2):
-            self.cartas.append(baralho.sorteia_uma_carta_v3())
-    
     def imprimir_jogador(self):
         print(f'{self.nome}')
         for c in self.cartas:
