@@ -133,6 +133,15 @@ class AvaliadorDeMaos:
                     else:
                         val = c.valor - 1
                         count = 1
+
+        if count < 5:
+            vals = set()
+            for c in valores:
+                if c.naipe == naipe: # Só pegamos valores se forem do naipe do flush!
+                    vals.add(c.valor)
+            if 14 in vals and 2 in vals and 3 in vals and 4 in vals and 5 in vals:
+                return True
+
         if count >= 5:
             return True
         return False
@@ -644,6 +653,7 @@ class AvaliadorDeMaos:
         
         return jogadores
 
+    @staticmethod
     def desempata_carta_alta(jogadores):
         for qtd_vezes in range(5):
             jogadores_para_remover = [] # Lista que vai armazenar jogadores que não possuem a melhor mao
@@ -702,19 +712,16 @@ class AvaliadorDeMaos:
 
     @staticmethod
     def remove_cartas_que_nao_sao_do_naipe(cartas, naipe):
-        cartas_para_remover = []
-        for c in cartas:
-            if c.naipe != naipe:
-                cartas_para_remover.append(c)
-        for c in cartas_para_remover:
-            cartas.remove(c)
-        return cartas
+        # Retorna uma nova lista apenas com as cartas do naipe, sem alterar a mão original
+        return [c for c in cartas if c.naipe == naipe]
 
     @staticmethod
     def encontra_melhor_mao_carta_alta(jogadores):
         # A primeira etapa é construir a melhor mão possível de 5 cartas para cada um dos jogadores:
         for j in jogadores:
-            for c in j.mao:
+            cartas_ordenadas = sorted(j.mao, key=lambda c: c.valor, reverse=True)
+
+            for c in cartas_ordenadas:
                 j.melhor_mao.append(c)
                 if len(j.melhor_mao) == 5:
                     break
@@ -749,7 +756,7 @@ class AvaliadorDeMaos:
             cartas_para_remover = []
             count_pares_achados = 0
             # De inicio, teremos sempre sete cartas, (7-1), pois vamos comparar a carta atual com a próxima e não queremos ultrapassar o indice da lista
-            for c in range(7 - 1): 
+            for c in range(len(mao) - 1): 
                 if mao[c].valor == mao[c+1].valor:
                     count_pares_achados += 1 
                     j.melhor_mao.append(mao[c])
@@ -773,7 +780,7 @@ class AvaliadorDeMaos:
             cartas_para_remover = []
 
             # Procuramos por um trio na mão do jogador e adicionamos ele na melhor mão do jogador:
-            for c in range(7 - 2):
+            for c in range(len(mao) - 2):
                 if j.mao[c].valor == j.mao[c+1].valor and j.mao[c].valor == j.mao[c+2].valor:
                     j.melhor_mao.append(j.mao[c])
                     j.melhor_mao.append(j.mao[c+1])
@@ -872,7 +879,7 @@ class AvaliadorDeMaos:
             cartas_para_remover = []
 
             # Procuramos por um trio na mão do jogador e adicionamos ele na melhor mão do jogador:
-            for c in range(7 - 2):
+            for c in range(len(mao) - 2):
                 if j.mao[c].valor == j.mao[c+1].valor and j.mao[c].valor == j.mao[c+2].valor:
                     j.melhor_mao.append(j.mao[c])
                     j.melhor_mao.append(j.mao[c+1])
@@ -909,7 +916,7 @@ class AvaliadorDeMaos:
             cartas_para_remover = []
 
             # Procuramos por uma quadra na mão do jogador e adicionamos ele na melhor mão do jogador:
-            for c in range(7 - 3):
+            for c in range(len(mao) - 3):
                 if j.mao[c].valor == j.mao[c+1].valor and j.mao[c].valor == j.mao[c+2].valor and j.mao[c].valor == j.mao[c+3].valor:
                     j.melhor_mao.append(j.mao[c])
                     j.melhor_mao.append(j.mao[c+1])
@@ -985,9 +992,10 @@ class AvaliadorDeMaos:
     @staticmethod
     def encontra_melhor_mao_royal_flush(jogadores):
         for j in jogadores:
-            naipe = AvaliadorDeMaos.naipe_do_flush(jogadores)
-            for i in range(5):
-                j.melhor_mao[i] = Carta(14-i, naipe)
+            naipe = AvaliadorDeMaos.naipe_do_flush(j.mao)
+            if naipe:
+                for i in range(5):
+                    j.melhor_mao.append(Carta(14-i, naipe))
     
     @staticmethod
     def encontra_melhor_mao_jogadores(jogadores):
@@ -1034,3 +1042,5 @@ class AvaliadorDeMaos:
             return AvaliadorDeMaos.desempata_quadra(jogadores)
         elif jogadores[0].classificacao_mao == 9:
             return AvaliadorDeMaos.desempata_straight_flush(jogadores)
+        elif jogadores[0].classificacao_mao == 10:
+            return jogadores

@@ -2,6 +2,7 @@ from baralho import Baralho
 from avaliador_de_maos import AvaliadorDeMaos
 from jogador import Jogador
 from carta import Carta
+import random
 
 class Mesa:
     def __init__(self):
@@ -12,6 +13,15 @@ class Mesa:
     def sorteia_cartas_mesa(self):
         for i in range(0, 5):
             self.cartas_na_mesa.append(self.baralho.sorteia_uma_carta())
+    
+    def sorteia_cartas_mesa_v2(self):
+        for i in range(0, 5):
+            self.cartas_na_mesa.append(self.baralho.sorteia_uma_carta_v2())
+
+    def sorteia_cartas_mesa_v3(self):
+        random.shuffle(self.baralho.cartas)
+        for i in range(0, 5):
+            self.cartas_na_mesa.append(self.baralho.sorteia_uma_carta_v3())
     
     def imprimir_mesa(self):
         tam = 22
@@ -35,6 +45,18 @@ class Mesa:
     
     def reseta_mesa(self):
         self.baralho.reseta_baralho()
+        self.cartas_na_mesa.clear()
+        for j in self.jogadores:
+            j.reseta_cartas_jogador()
+    
+    def reseta_mesa_v2(self):
+        self.baralho.reseta_baralho_v2()
+        self.cartas_na_mesa.clear()
+        for j in self.jogadores:
+            j.reseta_cartas_jogador()
+
+    def reseta_mesa_v3(self):
+        self.baralho.reseta_baralho_v3()
         self.cartas_na_mesa.clear()
         for j in self.jogadores:
             j.reseta_cartas_jogador()

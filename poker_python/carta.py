@@ -6,15 +6,15 @@ class Carta:
 
     def imprimir_carta(self):
         if self.naipe == '♠️' or self.naipe == '♣️':
-            print(f'[\033[30m{self.simbolo}{self.naipe}\033[0m]', end='')
+            print(f'[\033[30m{self.simbolo}{self.naipe}\033[0m ]', end='')
         elif self.naipe == '♥️' or self.naipe == '♦️':
-            print(f'[\033[31m{self.simbolo}{self.naipe}\033[0m]', end='')
+            print(f'[\033[31m{self.simbolo}{self.naipe}\033[0m ]', end='')
     
     def retornar_carta(self):
         if self.naipe == '♠️' or self.naipe == '♣️':
-            return (f'[\033[30m{self.simbolo}{self.naipe}\033[0m]')
+            return (f'[\033[30m{self.simbolo}{self.naipe}\033[0m ]')
         elif self.naipe == '♥️' or self.naipe == '♦️':
-            return (f'[\033[31m{self.simbolo}{self.naipe}\033[0m]')
+            return (f'[\033[31m{self.simbolo}{self.naipe}\033[0m ]')
     
     def calcula_simbolo(self):
         if self.valor == 14:
