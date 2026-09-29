@@ -1,7 +1,7 @@
 import unittest
-from carta import Carta
-from jogador import Jogador
-from avaliador_de_maos import AvaliadorDeMaos
+from core.carta import Carta
+from core.jogador import Jogador
+from core.avaliador_de_maos import AvaliadorDeMaos
 
 ESP, COP, OUR, PAU = '♠️', '♥️', '♦️', '♣️'
 

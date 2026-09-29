@@ -1,5 +1,5 @@
-from carta import Carta
-from avaliador_de_maos import AvaliadorDeMaos
+from core.carta import Carta
+from core.avaliador_de_maos import AvaliadorDeMaos
 
 print("\n--- TESTE 5: O BUG DO STRAIGHT FLUSH FANTASMA (A-2-3-4-5) ---")
 

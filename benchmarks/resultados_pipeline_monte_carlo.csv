@@ -1,0 +1,9 @@
+Simulacoes;Estrategia;Tempo_Total_Segundos;Simulacoes_Por_Segundo
+10000;Antigo;0.2187;45720.16
+50000;Antigo;1.1325;44148.77
+200000;Antigo;4.4111;45339.89
+1000000;Antigo;24.5434;40744.10
+10000;Otimizado (Tuplas);0.1206;82951.00
+50000;Otimizado (Tuplas);0.6246;80055.54
+200000;Otimizado (Tuplas);2.7478;72785.16
+1000000;Otimizado (Tuplas);13.1109;76272.42

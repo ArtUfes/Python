@@ -1,9 +1,9 @@
 import streamlit as st
 import time
-from carta import Carta
-from jogador import Jogador
-from baralho import Baralho
-from avaliador_de_maos import AvaliadorDeMaos
+from core.carta import Carta
+from core.jogador import Jogador
+from core.baralho import Baralho
+from core.avaliador_de_maos import AvaliadorDeMaos
 
 # ==========================================
 # LÓGICA DE SIMULAÇÃO (MONTE CARLO)

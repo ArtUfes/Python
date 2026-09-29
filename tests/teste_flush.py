@@ -1,8 +1,8 @@
-from carta import Carta
-from jogador import Jogador
-from avaliador_de_maos import AvaliadorDeMaos
-from mesa import Mesa
-from baralho import Baralho
+from core.carta import Carta
+from core.jogador import Jogador
+from core.avaliador_de_maos import AvaliadorDeMaos
+from core.mesa import Mesa
+from core.baralho import Baralho
 
 qtd_flush = rodadas = 0
 

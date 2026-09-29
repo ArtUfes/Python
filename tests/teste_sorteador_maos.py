@@ -1,8 +1,8 @@
 import time
-from mesa import Mesa
-from jogador import Jogador
-from avaliador_de_maos import AvaliadorDeMaos
-from baralho import Baralho
+from core.mesa import Mesa
+from core.jogador import Jogador
+from core.avaliador_de_maos import AvaliadorDeMaos
+from core.baralho import Baralho
 
 
 qtd_rodadas = 100000
