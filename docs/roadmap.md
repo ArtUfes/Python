@@ -2,7 +2,7 @@
 
 Este documento guarda as diretrizes, otimizações e novas funcionalidades que devem ser implementadas no projeto nas futuras atualizações com auxílio de IA.
 
-## 1. Otimização do `AvaliadorDeMaos` (Performance / Monte Carlo)
+## ~~1. Otimização do `AvaliadorDeMaos` (Performance / Monte Carlo)~~
 O avaliador atual possui lógica perfeita para regras e desempates, mas não está otimizado para simulações de milhões de cenários.
 
 **Problema atual:**
@@ -14,7 +14,7 @@ As funções iteram múltiplas vezes pela mesma mão (`O(N)`) e chamam `sorted()
 - **Histograma de Naipes:** Dicionário que conta os naipes, tornando o reconhecimento de Flushes instantâneo em `O(1)`.
 - **Bitmasks / Lookup Tables:** Para simulações ainda mais extremas, migrar para avaliação bit-a-bit (Cactus Kev / TwoPlusTwo).
 
-## 2. Sistema de Apostas e Motor do Jogo
+## ~~2. Sistema de Apostas e Motor do Jogo~~
 Para que o jogo seja completo, precisamos ir além de comparar quem ganha e quem perde, e implementar a "Economia" do jogo.
 - **Estruturas de Apostas:** Lógica para Blind (Small/Big), Call, Raise (com regras matemáticas de tamanho mínimo), Check e Fold.
 - **Gerenciamento do Pote (Pot Management):** Somar fichas e transferir para o ganhador.
