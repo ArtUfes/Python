@@ -183,3 +183,5 @@ class Mesa:
                 
         # Gira o botão do Dealer
         self.posicao_button = (self.posicao_button + 1) % len(self.jogadores)
+        
+        return ranking, pagamentos
