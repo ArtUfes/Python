@@ -1,0 +1,7 @@
+{
+    "forca_open_raise": 1.08,
+    "forca_call_overbet": 2.84,
+    "agressividade_raise": 2.35,
+    "taxa_blefe": 0.19,
+    "taxa_slowplay": 0.31
+}

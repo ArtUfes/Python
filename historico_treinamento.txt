@@ -1,0 +1,1169 @@
+
+========================================
+--- MÃO 1 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 10
+[PRE_FLOP] Nit faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Nit faz FOLD 0
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 480
+[RIVER] Station_1 faz CALL 480
+[RIVER] Station_2 faz CALL 480
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 50000', 'Maniaco: 51220', 'Nit: 49980', 'Station_1: 49400', 'Station_2: 49400']
+
+========================================
+--- MÃO 2 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 770
+[TURN] Station_1 faz CALL 770
+[TURN] Station_2 faz CALL 770
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 50000', 'Maniaco: 51745', 'Nit: 49970', 'Station_1: 48360', 'Station_2: 49925']
+
+========================================
+--- MÃO 3 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 150
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 140
+[PRE_FLOP] Station_2 faz CALL 130
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 550
+[FLOP] Station_1 faz CALL 550
+[FLOP] Station_2 faz CALL 550
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 2200
+[TURN] Station_1 faz CALL 2200
+[TURN] Station_2 faz CALL 2200
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 50000', 'Maniaco: 57645', 'Nit: 49970', 'Station_1: 45410', 'Station_2: 46975']
+
+========================================
+--- MÃO 4 ---
+[PRE_FLOP] Maniaco faz RAISE 150
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 140
+[PRE_FLOP] ProBot faz FOLD 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 870
+[RIVER] Station_1 faz CALL 870
+[RIVER] Station_2 faz CALL 870
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49980', 'Maniaco: 59905', 'Nit: 49970', 'Station_1: 44290', 'Station_2: 45855']
+
+========================================
+--- MÃO 5 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49970', 'Maniaco: 59685', 'Nit: 49970', 'Station_1: 44070', 'Station_2: 46305']
+
+========================================
+--- MÃO 6 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49970', 'Maniaco: 60385', 'Nit: 49950', 'Station_1: 43730', 'Station_2: 45965']
+
+========================================
+--- MÃO 7 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 920
+[RIVER] Station_1 faz CALL 920
+[RIVER] Station_2 faz CALL 920
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49970', 'Maniaco: 62775', 'Nit: 49940', 'Station_1: 42540', 'Station_2: 44775']
+
+========================================
+--- MÃO 8 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 150
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 140
+[PRE_FLOP] Station_2 faz CALL 130
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49970', 'Maniaco: 62475', 'Nit: 49940', 'Station_1: 42240', 'Station_2: 45375']
+
+========================================
+--- MÃO 9 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz CALL 50
+[TURN] Station_2 faz CHECK 0
+[TURN] ProBot faz RAISE 140
+[TURN] Maniaco faz CALL 140
+[TURN] Station_1 faz CALL 140
+[TURN] Station_2 faz CALL 140
+[RIVER] Station_2 faz CHECK 0
+[RIVER] ProBot faz RAISE 420
+[RIVER] Maniaco faz CALL 420
+[RIVER] Station_1 faz CALL 420
+[RIVER] Station_2 faz CALL 420
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49340', 'Maniaco: 61845', 'Nit: 49940', 'Station_1: 44130', 'Station_2: 44745']
+
+========================================
+--- MÃO 10 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49330', 'Maniaco: 61505', 'Nit: 49940', 'Station_1: 44820', 'Station_2: 44405']
+
+========================================
+--- MÃO 11 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 990
+[RIVER] Station_1 faz CALL 990
+[RIVER] Station_2 faz CALL 990
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49330', 'Maniaco: 64085', 'Nit: 49920', 'Station_1: 43540', 'Station_2: 43125']
+
+========================================
+--- MÃO 12 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 320
+[TURN] Station_1 faz CALL 320
+[TURN] Station_2 faz CALL 320
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49330', 'Maniaco: 63645', 'Nit: 49910', 'Station_1: 44430', 'Station_2: 42685']
+
+========================================
+--- MÃO 13 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 310
+[TURN] Station_1 faz CALL 310
+[TURN] Station_2 faz CALL 310
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49330', 'Maniaco: 63215', 'Nit: 49910', 'Station_1: 45290', 'Station_2: 42255']
+
+========================================
+--- MÃO 14 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 330
+[TURN] Station_1 faz CALL 330
+[TURN] Station_2 faz CALL 330
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 49310', 'Maniaco: 62765', 'Nit: 49910', 'Station_1: 44840', 'Station_2: 43175']
+
+========================================
+--- MÃO 15 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz RAISE 45
+[PRE_FLOP] Maniaco faz CALL 25
+[PRE_FLOP] Station_1 faz CALL 25
+[PRE_FLOP] Station_2 faz CALL 25
+[FLOP] ProBot faz RAISE 90
+[FLOP] Maniaco faz CALL 90
+[FLOP] Station_1 faz CALL 90
+[FLOP] Station_2 faz CALL 90
+[TURN] ProBot faz RAISE 270
+[TURN] Maniaco faz RAISE 1180
+[TURN] Station_1 faz CALL 1180
+[TURN] Station_2 faz CALL 1180
+[TURN] ProBot faz RAISE 3455
+[TURN] Maniaco faz CALL 2275
+[TURN] Station_1 faz CALL 2275
+[TURN] Station_2 faz CALL 2275
+[RIVER] ProBot faz RAISE 7180
+[RIVER] Maniaco faz CALL 7180
+[RIVER] Station_1 faz CALL 7180
+[RIVER] Station_2 faz CALL 7180
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81620', 'Maniaco: 51995', 'Nit: 49910', 'Station_1: 34070', 'Station_2: 32405']
+
+========================================
+--- MÃO 16 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 10
+[PRE_FLOP] Nit faz CHECK 0
+[FLOP] Maniaco faz RAISE 180
+[FLOP] Nit faz FOLD 0
+[FLOP] Station_1 faz CALL 180
+[FLOP] Station_2 faz CALL 180
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81620', 'Maniaco: 51695', 'Nit: 49890', 'Station_1: 34690', 'Station_2: 32105']
+
+========================================
+--- MÃO 17 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 320
+[TURN] Station_1 faz CALL 320
+[TURN] Station_2 faz CALL 320
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81620', 'Maniaco: 51255', 'Nit: 49880', 'Station_1: 34250', 'Station_2: 32995']
+
+========================================
+--- MÃO 18 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81620', 'Maniaco: 51085', 'Nit: 49880', 'Station_1: 34590', 'Station_2: 32825']
+
+========================================
+--- MÃO 19 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81600', 'Maniaco: 51445', 'Nit: 49880', 'Station_1: 34420', 'Station_2: 32655']
+
+========================================
+--- MÃO 20 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81590', 'Maniaco: 51895', 'Nit: 49880', 'Station_1: 34200', 'Station_2: 32435']
+
+========================================
+--- MÃO 21 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 10
+[PRE_FLOP] Nit faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Nit faz FOLD 0
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81590', 'Maniaco: 51725', 'Nit: 49860', 'Station_1: 34030', 'Station_2: 32795']
+
+========================================
+--- MÃO 22 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 770
+[TURN] Station_1 faz CALL 770
+[TURN] Station_2 faz CALL 770
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 3080
+[RIVER] Station_1 faz CALL 3080
+[RIVER] Station_2 faz CALL 3080
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81590', 'Maniaco: 47655', 'Nit: 49850', 'Station_1: 29960', 'Station_2: 40945']
+
+========================================
+--- MÃO 23 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 310
+[TURN] Station_1 faz CALL 310
+[TURN] Station_2 faz CALL 310
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81590', 'Maniaco: 48515', 'Nit: 49850', 'Station_1: 29530', 'Station_2: 40515']
+
+========================================
+--- MÃO 24 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81570', 'Maniaco: 48345', 'Nit: 49850', 'Station_1: 29360', 'Station_2: 40875']
+
+========================================
+--- MÃO 25 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 620
+[RIVER] Station_1 faz CALL 620
+[RIVER] Station_2 faz CALL 620
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81560', 'Maniaco: 49935', 'Nit: 49850', 'Station_1: 28570', 'Station_2: 40085']
+
+========================================
+--- MÃO 26 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 10
+[PRE_FLOP] Nit faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Nit faz FOLD 0
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 330
+[TURN] Station_1 faz CALL 330
+[TURN] Station_2 faz CALL 330
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81560', 'Maniaco: 49485', 'Nit: 49830', 'Station_1: 28120', 'Station_2: 41005']
+
+========================================
+--- MÃO 27 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz RAISE 55
+[PRE_FLOP] Maniaco faz CALL 55
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 35
+[PRE_FLOP] Station_2 faz CALL 35
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 480
+[TURN] Station_1 faz CALL 480
+[TURN] Station_2 faz CALL 480
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81505', 'Maniaco: 48850', 'Nit: 49820', 'Station_1: 29455', 'Station_2: 40370']
+
+========================================
+--- MÃO 28 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 160
+[FLOP] Station_1 faz CALL 160
+[FLOP] Station_2 faz CALL 160
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 790
+[RIVER] Station_1 faz CALL 790
+[RIVER] Station_2 faz CALL 790
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81505', 'Maniaco: 47830', 'Nit: 49820', 'Station_1: 31495', 'Station_2: 39350']
+
+========================================
+--- MÃO 29 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 180
+[FLOP] Station_1 faz CALL 180
+[FLOP] Station_2 faz CALL 180
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81485', 'Maniaco: 48450', 'Nit: 49820', 'Station_1: 31195', 'Station_2: 39050']
+
+========================================
+--- MÃO 30 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz CALL 10
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[PRE_FLOP] ProBot faz FOLD 0
+[FLOP] Maniaco faz RAISE 330
+[FLOP] Station_1 faz CALL 330
+[FLOP] Station_2 faz CALL 330
+[TURN] Maniaco faz RAISE 1320
+[TURN] Station_1 faz CALL 1320
+[TURN] Station_2 faz CALL 1320
+[RIVER] Maniaco faz RAISE 5280
+[RIVER] Station_1 faz CALL 5280
+[RIVER] Station_2 faz CALL 5280
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81465', 'Maniaco: 62470', 'Nit: 49820', 'Station_1: 24195', 'Station_2: 32050']
+
+========================================
+--- MÃO 31 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 10
+[PRE_FLOP] Nit faz CHECK 0
+[FLOP] Maniaco faz RAISE 180
+[FLOP] Nit faz FOLD 0
+[FLOP] Station_1 faz CALL 180
+[FLOP] Station_2 faz CALL 180
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81465', 'Maniaco: 63090', 'Nit: 49800', 'Station_1: 23895', 'Station_2: 31750']
+
+========================================
+--- MÃO 32 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81465', 'Maniaco: 62920', 'Nit: 49790', 'Station_1: 24245', 'Station_2: 31580']
+
+========================================
+--- MÃO 33 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 160
+[FLOP] Station_1 faz CALL 160
+[FLOP] Station_2 faz CALL 160
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 640
+[TURN] Station_1 faz CALL 640
+[TURN] Station_2 faz CALL 640
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81465', 'Maniaco: 64660', 'Nit: 49790', 'Station_1: 23375', 'Station_2: 30710']
+
+========================================
+--- MÃO 34 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 330
+[TURN] Station_1 faz CALL 330
+[TURN] Station_2 faz CALL 330
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81445', 'Maniaco: 64210', 'Nit: 49790', 'Station_1: 22925', 'Station_2: 31630']
+
+========================================
+--- MÃO 35 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 470
+[TURN] Station_1 faz CALL 470
+[TURN] Station_2 faz CALL 470
+[RIVER] Maniaco faz RAISE 1880
+[RIVER] Station_1 faz CALL 1880
+[RIVER] Station_2 faz CALL 1880
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81435', 'Maniaco: 69160', 'Nit: 49790', 'Station_1: 20455', 'Station_2: 29160']
+
+========================================
+--- MÃO 36 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 690
+[FLOP] Station_1 faz CALL 690
+[FLOP] Station_2 faz CALL 690
+[TURN] Maniaco faz RAISE 2760
+[TURN] Station_1 faz CALL 2760
+[TURN] Station_2 faz CALL 2760
+[RIVER] Maniaco faz RAISE 11040
+[RIVER] Station_1 faz CALL 11040
+[RIVER] Station_2 faz CALL 11040
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81435', 'Maniaco: 54480', 'Nit: 49770', 'Station_1: 49835', 'Station_2: 14480']
+
+========================================
+--- MÃO 37 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 770
+[TURN] Station_1 faz CALL 770
+[TURN] Station_2 faz CALL 770
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81435', 'Maniaco: 53440', 'Nit: 49760', 'Station_1: 48795', 'Station_2: 16570']
+
+========================================
+--- MÃO 38 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81435', 'Maniaco: 53270', 'Nit: 49760', 'Station_1: 48625', 'Station_2: 16910']
+
+========================================
+--- MÃO 39 ---
+[PRE_FLOP] Maniaco faz RAISE 150
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 140
+[PRE_FLOP] ProBot faz FOLD 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81415', 'Maniaco: 52970', 'Nit: 49760', 'Station_1: 48325', 'Station_2: 17530']
+
+========================================
+--- MÃO 40 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81405', 'Maniaco: 52750', 'Nit: 49760', 'Station_1: 48775', 'Station_2: 17310']
+
+========================================
+--- MÃO 41 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81405', 'Maniaco: 53450', 'Nit: 49740', 'Station_1: 48435', 'Station_2: 16970']
+
+========================================
+--- MÃO 42 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 770
+[TURN] Station_1 faz CALL 770
+[TURN] Station_2 faz CALL 770
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 3080
+[RIVER] Station_1 faz CALL 3080
+[RIVER] Station_2 faz CALL 3080
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81405', 'Maniaco: 49380', 'Nit: 49730', 'Station_1: 44365', 'Station_2: 25120']
+
+========================================
+--- MÃO 43 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 460
+[RIVER] Station_1 faz CALL 460
+[RIVER] Station_2 faz CALL 460
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81405', 'Maniaco: 50540', 'Nit: 49730', 'Station_1: 43785', 'Station_2: 24540']
+
+========================================
+--- MÃO 44 ---
+[PRE_FLOP] Maniaco faz RAISE 150
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 140
+[PRE_FLOP] ProBot faz FOLD 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81385', 'Maniaco: 50700', 'Nit: 49730', 'Station_1: 43485', 'Station_2: 24700']
+
+========================================
+--- MÃO 45 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81375', 'Maniaco: 51390', 'Nit: 49730', 'Station_1: 43145', 'Station_2: 24360']
+
+========================================
+--- MÃO 46 ---
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 190
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 170
+[PRE_FLOP] Station_2 faz CALL 170
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Maniaco faz RAISE 840
+[TURN] Station_1 faz CALL 840
+[TURN] Station_2 faz CALL 840
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81375', 'Maniaco: 50260', 'Nit: 49710', 'Station_1: 42015', 'Station_2: 26640']
+
+========================================
+--- MÃO 47 ---
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz RAISE 170
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 150
+[PRE_FLOP] Station_2 faz CALL 150
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81375', 'Maniaco: 49940', 'Nit: 49700', 'Station_1: 42665', 'Station_2: 26320']
+
+========================================
+--- MÃO 48 ---
+[PRE_FLOP] ProBot faz FOLD 0
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 10
+[PRE_FLOP] Station_2 faz CHECK 0
+[FLOP] Station_1 faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[TURN] Station_1 faz CHECK 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_1 faz CHECK 0
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81375', 'Maniaco: 49770', 'Nit: 49700', 'Station_1: 42495', 'Station_2: 26660']
+
+========================================
+--- MÃO 49 ---
+[PRE_FLOP] Maniaco faz CALL 20
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 10
+[PRE_FLOP] ProBot faz CHECK 0
+[FLOP] Station_2 faz CHECK 0
+[FLOP] ProBot faz CHECK 0
+[FLOP] Maniaco faz RAISE 50
+[FLOP] Station_1 faz CALL 50
+[FLOP] Station_2 faz CALL 50
+[FLOP] ProBot faz FOLD 0
+[TURN] Station_2 faz CHECK 0
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Station_2 faz CHECK 0
+[RIVER] Maniaco faz RAISE 50
+[RIVER] Station_1 faz CALL 50
+[RIVER] Station_2 faz CALL 50
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81355', 'Maniaco: 49865', 'Nit: 49700', 'Station_1: 42590', 'Station_2: 26490']
+
+========================================
+--- MÃO 50 ---
+[PRE_FLOP] Nit faz FOLD 0
+[PRE_FLOP] Station_1 faz CALL 20
+[PRE_FLOP] Station_2 faz CALL 20
+[PRE_FLOP] ProBot faz CALL 10
+[PRE_FLOP] Maniaco faz RAISE 70
+[PRE_FLOP] Station_1 faz CALL 50
+[PRE_FLOP] Station_2 faz CALL 50
+[PRE_FLOP] ProBot faz FOLD 0
+[FLOP] Maniaco faz RAISE 330
+[FLOP] Station_1 faz CALL 330
+[FLOP] Station_2 faz CALL 330
+[TURN] Maniaco faz RAISE 50
+[TURN] Station_1 faz CALL 50
+[TURN] Station_2 faz CALL 50
+[RIVER] Maniaco faz RAISE 1470
+[RIVER] Station_1 faz CALL 1470
+[RIVER] Station_2 faz CALL 1470
+--- FIM DA MÃO ---
+Stacks: ['ProBot: 81335', 'Maniaco: 47945', 'Nit: 49700', 'Station_1: 40670', 'Station_2: 30350']

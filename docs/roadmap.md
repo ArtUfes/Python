@@ -20,7 +20,7 @@ Para que o jogo seja completo, precisamos ir além de comparar quem ganha e quem
 - **Gerenciamento do Pote (Pot Management):** Somar fichas e transferir para o ganhador.
 - **Divisão de Potes (Side Pots e Split Pots):** Esse é um dos maiores desafios lógicos! Lidar com empates (Split Pot) e principalmente com cenários de All-In (Side Pots). Por exemplo: Se o jogador A aposta 100, B paga 100, mas C tem apenas 50 e dá All-in. Precisamos criar o "Pote Principal" de 150 (disputado pelos três) e o "Side Pot" de 100 (disputado apenas por A e B).
 
-## 3. Construção de um "Bot/AI" Adversário
+## ~~3. Construção de um "Bot/AI" Adversário~~
 Implementar um agente inteligente capaz de jogar contra um usuário humano. 
 
 **Como fazer um bot forte no Poker:**
