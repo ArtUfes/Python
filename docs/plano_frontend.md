@@ -45,10 +45,10 @@ No MVP, **não usaremos assets baixados da internet**.
 ## 3. Fase de Polimento (O Produto Profissional)
 **Objetivo:** Transformar o MVP provisório em um jogo com estética de Cassino VIP, áudio e animações imersivas.
 
-### Passo 3.1: Coleta de Assets Oficiais
-- Substituir o CSS de cartas pelas imagens em vetor (SVG) de um baralho oficial de código aberto.
-- Substituir o fundo de cor sólida por uma textura de feltro de mesa de poker real.
-- Adicionar ícones de fichas vetorizados e botões estilizados. O HUD deve ter uma aparência de Glassmorphism (Interface Translúcida).
+### Passo 3.1: Coleta de Assets Oficiais (✅ CONCLUÍDO)
+- Substituir o CSS de cartas pelas imagens em vetor (SVG/PNG) de um baralho oficial (Usando DeckOfCardsAPI).
+- Fundo de feltro e hud glassmorphism aplicados.
+- Adicionar ícones de fichas e botões estilizados (Concluído usando emojis visuais nativos e gradientes modernos CSS).
 
 ### Passo 3.2: O Sistema de Animações (Framer Motion)
 - **Animação de Distribuição:** Quando o servidor avisa que a mão começou, as cartas saem do centro (dealer) e deslizam de forma animada para a mão de cada jogador.

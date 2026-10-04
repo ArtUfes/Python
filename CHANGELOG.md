@@ -55,4 +55,33 @@ Nesta fase avançamos da avaliação matemática de cartas para a criação real
 - `simulador_treinamento.py` (Adicionado)
 - `algoritmo_genetico.py` (Adicionado)
 - `docs/plano_algoritmo_genetico.md` (Adicionado)
+- `docs/plano_frontend.md` (Adicionado)
 - Arquivos de configuração de potes/turnos modificados no pacote `core/`.
+
+## [04/10/2026] - Interface Web, Tempo Real e UX
+
+Nesta etapa, focamos na experiência do usuário (UX) através da aplicação React (Vite) conectada via WebSockets ao servidor Python.
+
+### O que foi feito com detalhes:
+
+1. **Inteligência de Timers e Simulação Humana (Bots):**
+   - Os bots agora não respondem mais instantaneamente. Foi implementado um sistema de *delay* baseado em probabilidades (80% para demorar 2-7s, 15% para 1s e 5% para tankar por 8-10s). 
+   - A partida se tornou muito mais imersiva, parecendo que você joga contra humanos de verdade que param para pensar.
+
+2. **Segurança e Regra de Timeout:**
+   - Adicionada trava de 10 segundos para a jogada do usuário no `servidor.py`. Caso não jogue a tempo, a mesa força um *Auto-Check* ou *Auto-Fold* e passa a vez.
+
+3. **Visual Moderno e Assets Reais:**
+   - Cartas puramente textuais CSS foram substituídas por imagens vetorizadas em alta resolução (Via `DeckOfCardsAPI`). 
+   - Adicionadas animações *Glassmorphism* aos painéis de HUD. 
+   - A borda de tempo dos jogadores foi traduzida em uma bela barra de progresso visual (Timer Bar) que esgota regressivamente em exatos 10s.
+
+4. **Slider de Aposta (Raise):**
+   - Para evitar digitação incorreta de caracteres, substituiu-se o input manual clássico por uma "Barra Deslizante (Slider)". 
+   - Limitado responsivamente para forçar raises dentro das regras (mínimo de 2x a aposta e máximo como All-In do jogador).
+
+### Arquivos Afetados/Criados:
+- `servidor.py` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `docs/plano_frontend.md` (Modificado)

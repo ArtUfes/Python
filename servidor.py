@@ -21,6 +21,7 @@ jogo_rodando = False
 esperando_humano = Event()
 acao_humano = None
 valor_humano = 0
+turno_atual = None
 
 def empacotar_estado():
     if not mesa: return {}
@@ -29,6 +30,7 @@ def empacotar_estado():
         "pote_total": sum(p.valor for p in mesa.gerenciador_pote.potes) + sum(mesa.apostas_rodada.values()),
         "maior_aposta": mesa.maior_aposta_rodada,
         "cartas_na_mesa": [f"{c.simbolo}{c.naipe}" for c in mesa.cartas_na_mesa],
+        "turno_atual": turno_atual,
         "jogadores": []
     }
     for j in mesa.jogadores:
@@ -47,7 +49,7 @@ def emitir_estado():
     socketio.emit('estado_mesa', empacotar_estado())
 
 def loop_do_jogo():
-    global mesa, jogo_rodando, acao_humano, valor_humano
+    global mesa, jogo_rodando, acao_humano, valor_humano, turno_atual
     
     # Inicia a Mesa
     mesa = Mesa(small_blind=10, big_blind=20)
@@ -73,6 +75,7 @@ def loop_do_jogo():
         emitir_estado()
         time.sleep(1.5) # Pausa dramática para o frontend animar as cartas
         
+
         while mesa.estado_atual != "SHOWDOWN":
             rodada_atual = mesa.estado_atual
             ativos_livres = [j for j in mesa.jogadores if j.ativo and not j.is_all_in]
@@ -105,22 +108,40 @@ def loop_do_jogo():
                     mesa.avancar_rodada()
                     break
 
+                turno_atual = j.nome
                 emitir_estado()
                 
                 falta_pagar = mesa.maior_aposta_rodada - mesa.apostas_rodada.get(j.nome, 0)
                 
                 if j.nome == "Você":
                     socketio.emit('pedir_acao', {"falta_pagar": falta_pagar, "maior_aposta": mesa.maior_aposta_rodada})
-                    esperando_humano.wait() # Pausa até o front mandar a ação via botão
-                    acao, valor = acao_humano, valor_humano
-                    esperando_humano.clear()
+                    agiu_no_tempo = esperando_humano.wait(timeout=10.0) # Pausa até o front mandar a ação via botão ou dar timeout de 10s
+                    if agiu_no_tempo:
+                        acao, valor = acao_humano, valor_humano
+                        esperando_humano.clear()
+                    else:
+                        if falta_pagar > 0:
+                            acao, valor = "FOLD", 0
+                        else:
+                            acao, valor = "CHECK", 0
+                        esperando_humano.clear()
+                        socketio.emit('mensagem', "⏳ Tempo esgotado! Ação automática.")
                 else:
-                    # Bot "pensa"
+                    import random
+                    r = random.random()
+                    if r < 0.80:
+                        wait_time = random.uniform(2, 7)
+                    elif r < 0.95:
+                        wait_time = 1.0
+                    else:
+                        wait_time = random.uniform(8, 10)
+                    time.sleep(wait_time)
+                    
                     sys.stdout = open(os.devnull, 'w', encoding='utf-8')
                     acao, valor = j.decidir_acao(mesa)
                     sys.stdout = sys.__stdout__
-                    time.sleep(1) # Tempo pro frontend mostrar de quem é a vez
                     
+                turno_atual = None # Limpa turno após a ação
                 if acao == "CALL" and valor == 0: acao = "CHECK"
                 
                 sucesso = mesa.processar_acao(j.nome, acao, valor) if acao == "RAISE" else mesa.processar_acao(j.nome, acao)
@@ -152,8 +173,8 @@ def loop_do_jogo():
             if valor > 0:
                 socketio.emit('mensagem', f"💰 {nome} recolheu ${valor}")
         
-        socketio.emit('mensagem', "Próxima mão em 10s...")
-        time.sleep(10)
+        socketio.emit('mensagem', "Próxima mão em 5s...")
+        time.sleep(5)
         
         # Limpar jogadores falidos (Rebuy automático)
         for j in mesa.jogadores:
@@ -173,6 +194,8 @@ def handle_iniciar_jogo():
 @socketio.on('enviar_acao')
 def handle_enviar_acao(data):
     global acao_humano, valor_humano
+    if turno_atual != "Você":
+        return
     acao_humano = data.get('acao')
     valor_humano = data.get('valor', 0)
     esperando_humano.set() # Libera a trava do loop principal do jogo

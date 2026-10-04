@@ -45,6 +45,18 @@ export default function Mesa({ socket }) {
     setMinhaVez(false);
   };
 
+  const getCardImage = (cartaStr) => {
+    if (cartaStr === "?" || cartaStr === "??" || cartaStr.includes("?")) return "https://deckofcardsapi.com/static/img/back.png";
+    let valor = cartaStr.replace(/[♠♥️♣♦️]/g, '').trim();
+    if (valor === '10') valor = '0';
+    let naipe = '';
+    if (cartaStr.includes('♥') || cartaStr.includes('♥️')) naipe = 'H';
+    else if (cartaStr.includes('♦') || cartaStr.includes('♦️')) naipe = 'D';
+    else if (cartaStr.includes('♣')) naipe = 'C';
+    else if (cartaStr.includes('♠')) naipe = 'S';
+    return `https://deckofcardsapi.com/static/img/${valor}${naipe}.png`;
+  };
+
   if (!estado) return <div className="poker-table"><h1>Iniciando partida...</h1></div>;
 
   return (
@@ -60,9 +72,7 @@ export default function Mesa({ socket }) {
               <span style={{color: '#ffffff88'}}>[ Sem Cartas ]</span>
             ) : (
               estado.cartas_na_mesa.map((carta, i) => (
-                <div key={i} className={`carta css-carta ${['♥️','♦️'].some(s => carta.includes(s)) ? 'vermelha' : 'preta'}`}>
-                  {carta}
-                </div>
+                <img key={i} className="carta-img css-carta" src={getCardImage(carta)} alt={carta} />
               ))
             )}
           </div>
@@ -71,16 +81,15 @@ export default function Mesa({ socket }) {
 
         {/* JOGADORES SENTADOS */}
         {estado.jogadores.map((j, idx) => (
-          <div key={idx} className={`jogador-box pos-${idx} ${j.ativo ? 'ativo' : 'inativo'}`}>
+          <div key={idx} className={`jogador-box pos-${idx} ${j.ativo ? 'ativo' : 'inativo'} ${estado.turno_atual === j.nome ? 'turno-ativo' : ''}`}>
+            {estado.turno_atual === j.nome && <div className="timer-bar"></div>}
             <h3 className="nome">{j.nome}</h3>
             <p className="stack">💰 ${j.stack}</p>
             <p className="aposta">💵 {j.aposta > 0 ? j.aposta : ''}</p>
             
             <div className="mao-jogador">
               {j.cartas.map((c, i) => (
-                <div key={i} className={`carta mini-carta ${['♥️','♦️'].some(s => c.includes(s)) ? 'vermelha' : 'preta'}`}>
-                  {c}
-                </div>
+                <img key={i} className="carta-img mini-carta" src={getCardImage(c)} alt={c} />
               ))}
             </div>
           </div>
@@ -102,18 +111,25 @@ export default function Mesa({ socket }) {
               <h4>👉 Sua Vez!</h4>
               <p>Falta pagar: ${infoAcao.falta_pagar}</p>
               <div className="botoes-acao">
-                <button className="btn-fold" onClick={() => enviarAcao('FOLD')}>Fold</button>
+                <button className="btn-fold" onClick={() => enviarAcao('FOLD')}>❌ Fold</button>
                 <button className="btn-call" onClick={() => enviarAcao('CALL')}>
-                  {infoAcao.falta_pagar > 0 ? `Call ($${infoAcao.falta_pagar})` : 'Check'}
+                  {infoAcao.falta_pagar > 0 ? `🪙 Call ($${infoAcao.falta_pagar})` : '✔️ Check'}
                 </button>
               </div>
-              <div className="raise-box">
-                <input 
-                  type="number" 
-                  value={valorRaise} 
-                  onChange={e => setValorRaise(e.target.value)}
-                />
-                <button className="btn-raise" onClick={() => enviarAcao('RAISE')}>Raise</button>
+              <div className="raise-container">
+                <div className="raise-inputs">
+                  <input 
+                    type="range" 
+                    min={infoAcao.maior_aposta * 2 || 20} 
+                    max={estado.jogadores.find(j => j.nome === 'Você')?.stack || 1000}
+                    step="10"
+                    value={valorRaise} 
+                    onChange={e => setValorRaise(e.target.value)}
+                    className="slider-raise"
+                  />
+                  <div className="valor-raise-display">${valorRaise}</div>
+                </div>
+                <button className="btn-raise" onClick={() => enviarAcao('RAISE')}>🔥 Raise (${valorRaise})</button>
               </div>
             </>
           ) : (
