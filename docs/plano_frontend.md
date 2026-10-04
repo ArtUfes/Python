@@ -50,7 +50,7 @@ No MVP, **não usaremos assets baixados da internet**.
 - Fundo de feltro e hud glassmorphism aplicados.
 - Adicionar ícones de fichas e botões estilizados (Concluído usando emojis visuais nativos e gradientes modernos CSS).
 
-### Passo 3.2: O Sistema de Animações (Framer Motion)
+### Passo 3.2: O Sistema de Animações (Framer Motion) (✅ CONCLUÍDO)
 - **Animação de Distribuição:** Quando o servidor avisa que a mão começou, as cartas saem do centro (dealer) e deslizam de forma animada para a mão de cada jogador.
 - **Animação de Cartas Comunitárias:** O Flop, Turn e River não devem apenas "aparecer" do nada. Eles devem girar (CSS 3D flip 180º).
 - **Movimento de Fichas:** Quando alguém dá Call, um aglomerado visual de fichas deve pular do jogador para o centro da tela. No final da mão, o pote inteiro desliza para a direção do avatar do vencedor.

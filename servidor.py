@@ -151,6 +151,9 @@ def loop_do_jogo():
                 msg_valor = f" ${valor}" if valor > 0 else ""
                 socketio.emit('mensagem', f"{j.nome} deu {acao}{msg_valor}")
                 
+                if acao in ["CALL", "RAISE"] and valor > 0:
+                    socketio.emit('animar_fichas', {'de': j.nome, 'para': 'centro', 'valor': valor})
+                
                 jogadores_agiram[j.nome] = True
                 if acao == "RAISE":
                     for outro in mesa.jogadores:
@@ -172,6 +175,7 @@ def loop_do_jogo():
         for nome, valor in pagamentos.items():
             if valor > 0:
                 socketio.emit('mensagem', f"💰 {nome} recolheu ${valor}")
+                socketio.emit('animar_fichas', {'de': 'centro', 'para': nome, 'valor': valor})
         
         socketio.emit('mensagem', "Próxima mão em 5s...")
         time.sleep(5)

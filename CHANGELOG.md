@@ -85,3 +85,29 @@ Nesta etapa, focamos na experiência do usuário (UX) através da aplicação Re
 - `frontend/src/components/Mesa.jsx` (Modificado)
 - `frontend/src/index.css` (Modificado)
 - `docs/plano_frontend.md` (Modificado)
+
+## [04/10/2026] - Animações Avançadas e Correções Lógicas (Framer Motion)
+
+Nesta etapa, elevamos o nível da interface implementando o sistema de física visual planejado no Passo 3.2 e corrigimos gargalos de comunicação do estado no React.
+
+### O que foi feito com detalhes:
+
+1. **Implementação de Framer Motion (Física Visual):**
+   - **Distribuição (Dealing):** Cartas da mão agora deslizam fluidamente do centro da tela para a posição dos jogadores com `stagger` direcional.
+   - **Flip 3D Lento:** Cartas comunitárias (Flop/Turn/River) ganharam um *Flip 180º* 3D mais dramático (1.2s de duração).
+   - **Motor Físico de Fichas de Cassino:** Adicionada uma pilha persistente de fichas (`fichasNaMesa`). Apostas deslizam (usando `easeOut` para não rebater) do avatar para o centro e formam um pote dinâmico. No Showdown, a pilha toda desliza até o avatar do vencedor.
+
+2. **Estilização Realista de Fichas em CSS:**
+   - Construímos uma representação visual de ficha de cassino clássica utilizando `repeating-conic-gradient` puro, removendo poluição de texto e otimizando a interface gráfica (Performance CSS).
+
+3. **Correção de Stale Closure no React:**
+   - Foi corrigido um bug invisível onde o `socket.on` perdia a referência viva do estado dos jogadores. Utilizando um `useRef(estado)` conseguimos um túnel direto, garantindo que as fichas saiam exatamente do jogador correto.
+
+4. **Correção de Lógica no Botão de Check:**
+   - Corrigimos a falha onde o React mandava valores incorretos (`CALL 40`) ao invés de `CHECK 0` ao servidor, poupando que fichas indesejadas fossem animadas.
+
+### Arquivos Afetados/Criados:
+- `servidor.py` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `docs/plano_frontend.md` (Modificado)
