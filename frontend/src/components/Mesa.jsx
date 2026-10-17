@@ -188,12 +188,6 @@ export default function Mesa({ socket }) {
       </AnimatePresence>
       {/* MESA PRINCIPAL */}
       <div className="poker-table">
-        {/* DISCLAIMER EDUCACIONAL (CANTO SUPERIOR ESQUERDO) */}
-        <div className="disclaimer-topo-esquerdo">
-          <span className="disclaimer-badge">🎓 PROJETO EDUCACIONAL / DEVLOG</span>
-          <span className="disclaimer-subtext">Simulação de IA em Python • Sem Dinheiro Real</span>
-        </div>
-
         {/* BOTÃO DE CONTROLE DE ÁUDIO (CANTO SUPERIOR DIREITO) */}
         <button 
           className="sound-toggle-btn" 
@@ -264,8 +258,18 @@ export default function Mesa({ socket }) {
         ))}
       </div>
 
-      {/* PAINEL LATERAL (LOG E BOTÕES) */}
+      {/* PAINEL LATERAL (DISCLAIMER, LOG E BOTÕES) */}
       <div className="painel-lateral">
+        {/* CARD DE AVISO EDUCACIONAL (COMPLIANCE YOUTUBE) */}
+        <div className="card-disclaimer-lateral">
+          <div className="card-disclaimer-header">
+            <span className="badge-edu">🎓 PROJETO EDUCACIONAL</span>
+          </div>
+          <p className="card-disclaimer-desc">
+            Simulação de IA em Python • <strong>Sem Dinheiro Real</strong> (Play Money Only)
+          </p>
+        </div>
+
         <div className="log-chat" ref={chatRef}>
           <h4>📋 Transmissão</h4>
           <ul>
