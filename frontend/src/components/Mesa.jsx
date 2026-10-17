@@ -173,13 +173,6 @@ export default function Mesa({ socket }) {
 
   return (
     <div className="container-jogo" style={{position: 'relative'}}>
-      {/* DISCLAIMER FIXO SUPERIOR (YOUTUBE / PROJETO EDUCACIONAL) */}
-      <div className="disclaimer-banner">
-        <span className="disclaimer-badge">PROJETO EDUCACIONAL / DEVLOG</span>
-        <span className="disclaimer-text">SIMULAÇÃO DE IA E MATEMÁTICA EM PYTHON</span>
-        <span className="disclaimer-subtext">• Fichas fictícias / Sem dinheiro real (Play Money Only)</span>
-      </div>
-
       <AnimatePresence>
         {fichasNaMesa.map(f => (
           <motion.div 
@@ -195,12 +188,13 @@ export default function Mesa({ socket }) {
       </AnimatePresence>
       {/* MESA PRINCIPAL */}
       <div className="poker-table">
-        {/* MARCA D'ÁGUA NO FELTRO */}
-        <div className="watermark-feltro">
-          PROJETO EDUCACIONAL • SIMULAÇÃO DE IA • SEM VALOR MONETÁRIO REAL
+        {/* DISCLAIMER EDUCACIONAL (CANTO SUPERIOR ESQUERDO) */}
+        <div className="disclaimer-topo-esquerdo">
+          <span className="disclaimer-badge">🎓 PROJETO EDUCACIONAL / DEVLOG</span>
+          <span className="disclaimer-subtext">Simulação de IA em Python • Sem Dinheiro Real</span>
         </div>
 
-        {/* BOTÃO DE CONTROLE DE ÁUDIO */}
+        {/* BOTÃO DE CONTROLE DE ÁUDIO (CANTO SUPERIOR DIREITO) */}
         <button 
           className="sound-toggle-btn" 
           onClick={toggleMute} 
