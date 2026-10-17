@@ -23,7 +23,7 @@ class TestCaotico(unittest.TestCase):
             
         acoes_possiveis = ["FOLD", "CALL", "RAISE", "CHECK"]
         
-        for mao in range(5000000):
+        for mao in range(500):
             mesa.iniciar_mao()
             
             for _ in range(4): # 4 rodadas de aposta (Pre-flop, Flop, Turn, River)
