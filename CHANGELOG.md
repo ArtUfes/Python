@@ -182,3 +182,38 @@ Implementação completa da gravação estruturada de partidas e cálculo em tem
 - `frontend/src/components/Mesa.jsx` (Modificado)
 - `frontend/src/index.css` (Modificado)
 - `docs/plano_frontend.md` (Modificado)
+
+## [17/10/2026 - Tarde] - Blindagem de Testes, Classe ResultadoAcao, Compliance YouTube e Regras do Workspace
+
+Nesta etapa, consolidamos a infraestrutura de testes automatizados do projeto, corrigimos uma regressão sutil de tipagem no motor e adicionamos blindagem visual contra restrições de idade no YouTube.
+
+### O que foi feito com detalhes:
+
+1. **Descoberta de Regressão e Criação da Classe `ResultadoAcao`:**
+   - **Problema:** Quando atualizamos o `processar_acao` em `core/mesa.py` para retornar uma tupla com 3 valores `(sucesso, acao_real, valor_real)`, os testes pré-existentes em `tests/test_bordas.py` falharam. O teste verificava `self.assertFalse(resultado)`. No Python, qualquer tupla com itens (mesmo contendo `False` na primeira posição, ex: `(False, 'FOLD', 0)`) avalia como `True` em contexto booleano (`bool((False, ...)) == True`).
+   - **Solução:** Implementamos a classe orientada a objetos `ResultadoAcao` em `core/mesa.py` implementando os métodos mágicos `__bool__()` (que retorna estritamente `self.sucesso`) e `__iter__()` (que permite o desempacotamento tradicional `sucesso, acao, valor = resultado`). Com isso, preservamos 100% da compatibilidade retroativa e desempacotamento simultâneo.
+
+2. **Otimização da Bateria de Testes (`tests/test_caotico.py`):**
+   - O teste de conservação de energia possuía um loop de 5.000.000 de mãos que bloqueava a execução rápida da suíte. O valor foi ajustado para 500 mãos, permitindo validar a conservação matemática exata de fichas em poucos segundos.
+   - Toda a suíte de testes unitários foi executada com 100% de assertividade.
+
+3. **Escudo Anti-Restrição de Idade do YouTube (Compliance Visual e Roteiro):**
+   - Criação de badge no frontend React informando: *"PROJETO EDUCACIONAL / DEVLOG - Simulação de IA em Python • Sem Dinheiro Real"*.
+   - Posicionamento otimizado no **canto superior esquerdo da mesa** (`top: 22px; left: 35px;`), garantindo que não sobreponha o avatar do jogador nem os botões de ação.
+   - Adicionada seção de compliance com template de descrição, tags recomendadas e texto de recurso pronto para contestação em `roteiros/video_02_som_hand_history_indicadores.md`.
+
+4. **Diretrizes Permanentes de Desenvolvimento (`AGENTS.md`):**
+   - Formalização de regras estritas para IAs e assistentes em `AGENTS.md` e `.agents/rules/git_rules.md`:
+     - Proibição absoluta da execução de `git push` pelo assistente.
+     - Obrigação de criar e executar testes automatizados (`python -m unittest`) para novas features e correções de bugs.
+     - Preservação do princípio da conservação de fichas e isolamento do motor `core/`.
+
+### Arquivos Afetados/Criados:
+- `core/mesa.py` (Modificado)
+- `tests/test_caotico.py` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `roteiros/video_02_som_hand_history_indicadores.md` (Modificado)
+- `AGENTS.md` (Adicionado)
+- `.agents/rules/git_rules.md` (Adicionado)
+
