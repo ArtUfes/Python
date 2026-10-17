@@ -64,48 +64,57 @@ class Mesa:
     def processar_acao(self, nome_jogador, acao, valor=0):
         jogador = next((j for j in self.jogadores if j.nome == nome_jogador), None)
         if not jogador or not jogador.ativo:
-            return False
+            return False, "FOLD", 0
             
         if acao == "FOLD":
             ativos_antes = [j for j in self.jogadores if j.ativo]
             if len(ativos_antes) <= 1:
-                return False # O último jogador não pode dar fold
+                return False, "FOLD", 0
             jogador.foldar()
             
             # Se apos o fold so sobrou 1 jogador ativo, o jogo vai direto pro showdown (W.O.)
             ativos_agora = [j for j in self.jogadores if j.ativo]
             if len(ativos_agora) == 1:
                 self.estado_atual = "SHOWDOWN"
-            return True
+            return True, "FOLD", 0
             
         if acao == "CALL":
             falta_pagar = self.maior_aposta_rodada - self.apostas_rodada.get(jogador.nome, 0)
             valor_real = jogador.apostar(falta_pagar)
             self.apostas_rodada[jogador.nome] = self.apostas_rodada.get(jogador.nome, 0) + valor_real
-            return True
+            return True, "CALL", valor_real
             
         if acao == "RAISE":
-            # Para ser um raise válido, o valor final deve ser maior que a aposta máxima atual
-            if valor <= self.maior_aposta_rodada:
-                return False
+            aposta_atual = self.apostas_rodada.get(jogador.nome, 0)
+            max_atingivel = jogador.stack + aposta_atual
+            
+            # Se o jogador nem tem fichas para cobrir a maior aposta, ele só pode pagar (All-In)
+            if max_atingivel <= self.maior_aposta_rodada:
+                valor_real = jogador.apostar(jogador.stack)
+                self.apostas_rodada[jogador.nome] = aposta_atual + valor_real
+                return True, "CALL", valor_real
                 
-            # 'valor' é o total que a pessoa quer atingir (ex: raise TO 60)
-            falta_pagar = valor - self.apostas_rodada.get(jogador.nome, 0)
+            # Limita o raise estritamente ao all-in do jogador
+            valor_alvo = min(valor, max_atingivel)
+            if valor_alvo <= self.maior_aposta_rodada:
+                return False, "FOLD", 0
+                
+            falta_pagar = valor_alvo - aposta_atual
             if falta_pagar > 0:
                 valor_real = jogador.apostar(falta_pagar)
-                nova_aposta_total = self.apostas_rodada.get(jogador.nome, 0) + valor_real
+                nova_aposta_total = aposta_atual + valor_real
                 self.apostas_rodada[jogador.nome] = nova_aposta_total
                 
                 if nova_aposta_total > self.maior_aposta_rodada:
                     self.maior_aposta_rodada = nova_aposta_total
-                return True
+                return True, "RAISE", nova_aposta_total
         
         if acao == "CHECK":
             # Só pode dar check se a aposta atual dele for igual a maior aposta
             if self.apostas_rodada.get(jogador.nome, 0) == self.maior_aposta_rodada:
-                return True
+                return True, "CHECK", 0
                 
-        return False
+        return False, "FOLD", 0
 
     def avancar_rodada(self):
         # Coleta as apostas para o Pote

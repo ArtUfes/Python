@@ -93,14 +93,18 @@ class Bot(Jogador):
             if random.random() < self.genes["taxa_slowplay"]:
                 return ("CALL", falta_pagar) if falta_pagar > 0 else ("CHECK", 0)
 
+        aposta_atual = mesa.apostas_rodada.get(self.nome, 0)
+        max_atingivel = self.stack + aposta_atual
+        pode_dar_raise = max_atingivel > mesa.maior_aposta_rodada
+
         if falta_pagar == 0:
-            if forca_relativa > self.genes["forca_open_raise"]:
+            if forca_relativa > self.genes["forca_open_raise"] and pode_dar_raise:
                 valor = int((pote_total * 0.5) * self.genes["agressividade_raise"] * self.agressividade)
                 valor = max(mesa.maior_aposta_rodada * 2, valor) if mesa.maior_aposta_rodada > 0 else max(20, valor)
-                valor = min(self.stack, valor)
-                return "RAISE", mesa.apostas_rodada.get(self.nome, 0) + valor
-            else:
-                return "CHECK", 0
+                valor_total = min(max_atingivel, aposta_atual + valor)
+                if valor_total > mesa.maior_aposta_rodada:
+                    return "RAISE", valor_total
+            return "CHECK", 0
                 
         # Se tem aposta para pagar
         pot_odds = falta_pagar / (pote_total + falta_pagar) if (pote_total + falta_pagar) > 0 else 1.0
@@ -111,15 +115,15 @@ class Bot(Jogador):
         if falta_pagar >= self.stack * 0.4: limite_forca = self.genes["forca_call_overbet"]
             
         if equidade > pot_odds or forca_relativa >= limite_forca: 
-            if forca_relativa > 1.8:
-                valor = int(falta_pagar * self.genes["agressividade_raise"] * self.agressividade)
-                valor = min(self.stack, valor)
-                valor_total = mesa.apostas_rodada.get(self.nome, 0) + falta_pagar + valor
-                if valor > 0 and valor_total > falta_pagar:
+            if forca_relativa > 1.8 and pode_dar_raise:
+                incremento = max(mesa.maior_aposta_rodada, int(falta_pagar * self.genes["agressividade_raise"] * self.agressividade))
+                valor_total = min(max_atingivel, mesa.maior_aposta_rodada + incremento)
+                if valor_total > mesa.maior_aposta_rodada:
                     return "RAISE", valor_total
             return "CALL", falta_pagar
         else:
-            if forca_relativa < 0.5 and random.random() < self.genes["taxa_blefe"]:
-                valor_total = mesa.apostas_rodada.get(self.nome, 0) + falta_pagar + int(pote_total * 0.7)
-                return "RAISE", valor_total
+            if forca_relativa < 0.5 and random.random() < self.genes["taxa_blefe"] and pode_dar_raise:
+                valor_total = min(max_atingivel, mesa.maior_aposta_rodada + int(pote_total * 0.7))
+                if valor_total > mesa.maior_aposta_rodada:
+                    return "RAISE", valor_total
             return "FOLD", 0
