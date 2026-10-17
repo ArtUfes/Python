@@ -111,3 +111,74 @@ Nesta etapa, elevamos o nível da interface implementando o sistema de física v
 - `frontend/src/components/Mesa.jsx` (Modificado)
 - `frontend/src/index.css` (Modificado)
 - `docs/plano_frontend.md` (Modificado)
+
+## [16/10/2026] - Feedback Sonoro Orgânico (Audio Engine)
+
+Nesta etapa, implementamos a sonoplastia imersiva de cassino com foley real gravado em estúdio (Passo 3.3 do plano frontend).
+
+### O que foi feito com detalhes:
+
+1. **Coleta de Assets Reais de Cassino (Kenney CC0):**
+   - Baixados e organizados arquivos de áudio profissionais gravados de estúdio em `frontend/public/sounds/`.
+   - Inclui variações de atrito de cartas no feltro (`card-slide`), impacto e virada de cartas (`card-place`), choque seco de cerâmica de fichas (`chip-lay`, `chips-collide`), recolhimento de fichas (`chips-handle`, `chips-stack`) e sinos elegantes de confirmação/vitória.
+
+2. **Criação do Módulo `audioEngine.js`:**
+   - Pré-carregamento automático (`preload`) em memória para latência zero de disparo durante as animações do Framer Motion.
+   - Variação dinâmica de Pitch (±5%) em cada execução, evitando que cliques repetidos de apostas soem mecânicos ou artificiais.
+   - Fallback resiliente contra restrições de autoplay dos navegadores.
+
+3. **Integração Reativa com os Eventos da Mesa:**
+   - Cartas comunitárias (Flop/Turn/River) emitem som no exato momento da revelação.
+   - Cartas da mão no Pre-Flop tocam som sutil de deal no início da rodada.
+   - Apostas dos jogadores e bots disparam o som seco de fichas caindo no centro.
+   - O vencedor do Showdown é celebrado com o som do recolhimento de fichas e sino de vitória.
+   - Alerta sonoro discreto quando o turno passa para o jogador humano ("Sua Vez").
+   - Botão flutuante estilizado na mesa (🔊 / 🔇) permitindo mutar ou desmutar com 1 clique.
+
+### Arquivos Afetados/Criados:
+- `frontend/public/sounds/` (Adicionados 50+ assets de áudio)
+- `frontend/src/audioEngine.js` (Adicionado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `docs/plano_frontend.md` (Modificado)
+
+## [17/10/2026] - Sistema de Coleta de Dados e Hand History (Padrão PokerStars)
+
+Implementação completa da gravação estruturada de partidas e cálculo em tempo real de estatísticas de jogadores (Passo 3.4 do plano frontend).
+
+### O que foi feito com detalhes:
+
+1. **Gravação Canônica no Padrão PokerStars:**
+   - Criação do módulo `core/gravador_historico.py` contendo a engine de persistência e serialização textual.
+   - Cada mão produz o texto canônico idêntico ao gerado pelo software PokerStars (com ID da mão, data/hora, posições dos assentos, stacks, postagem de blinds, cartas distribuídas, ações por rodada, showdown e sumário do pote).
+   - Isso permite a exportação direta para softwares como PokerTracker, Hold'em Manager e Hand Replayers online.
+
+2. **Banco Relacional SQLite (`historico_partidas.db`):**
+   - Estrutura normalizada em 4 tabelas: `maos`, `mao_jogadores`, `acoes_mao` e `estatisticas_jogadores`.
+   - Permite consultas analíticas instantâneas por jogador, posição ou situação de aposta.
+
+3. **Cálculo Incremental de Indicadores em Tempo Real:**
+   - A cada mão finalizada, o sistema atualiza em tempo $O(1)$ métricas cruciais de poker: **VPIP %, PFR %, AF (Fator de Agressividade), WTSD %, W$SD %, C-Bet % e BB/100**.
+   - Classificação automática de perfis de jogadores (*Calling Station*, *TAG*, *Maniac/LAG*, *Nit*).
+
+4. **HUD em Tempo Real na Mesa Web:**
+   - O servidor agora emite o evento `metricas_jogador` via WebSocket.
+   - O frontend React renderiza uma tag elegante de HUD no avatar do jogador humano informando seu VPIP, PFR e Arquétipo atual.
+
+5. **Correção de Lógica e Notação: Capping de Raises e Stacks Negativos:**
+   - Detectado e corrigido o bug onde bots e jogadores podiam declarar raises superiores ao próprio stack (causando stacks negativos no Poker Hand Replayer).
+   - O `processar_acao` em `core/mesa.py` agora limita estritamente qualquer raise ao `max_atingivel` do jogador, convertendo tentativas inválidas em `CALL (All-In)`.
+   - O `core/bot.py` foi blindado para nunca tentar dar raise se seu stack for menor ou igual à aposta da mesa.
+   - O slider e botões no frontend foram ajustados para desabilitar raises inviáveis e alternar automaticamente para o botão `All-In`.
+   - Correção do painel de ações que continuava visível após timeout/fold.
+
+### Arquivos Afetados/Criados:
+- `core/gravador_historico.py` (Adicionado)
+- `docs/indicadores_poker.md` (Adicionado)
+- `relatorio_historico.py` (Adicionado)
+- `core/mesa.py` (Modificado)
+- `core/bot.py` (Modificado)
+- `servidor.py` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `docs/plano_frontend.md` (Modificado)
