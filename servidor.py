@@ -11,10 +11,12 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from core.mesa import Mesa
 from core.jogador import Jogador
 from core.bot import Bot
+from core.gravador_historico import GravadorHistorico
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+gravador = GravadorHistorico()
 mesa = None
 humano = None
 jogo_rodando = False
@@ -75,6 +77,13 @@ def loop_do_jogo():
         emitir_estado()
         time.sleep(1.5) # Pausa dramática para o frontend animar as cartas
         
+        # Estrutura para captura de dados da mão (Hand History)
+        ativos_iniciais = [j for j in mesa.jogadores if j.ativo]
+        sb_nome = ativos_iniciais[(mesa.posicao_button + 1) % len(ativos_iniciais)].nome if len(ativos_iniciais) >= 2 else ""
+        bb_nome = ativos_iniciais[(mesa.posicao_button + 2) % len(ativos_iniciais)].nome if len(ativos_iniciais) >= 2 else ""
+        
+        stacks_iniciais = {j.nome: j.stack + mesa.apostas_rodada.get(j.nome, 0) for j in mesa.jogadores}
+        acoes_historico = []
 
         while mesa.estado_atual != "SHOWDOWN":
             rodada_atual = mesa.estado_atual
@@ -144,27 +153,39 @@ def loop_do_jogo():
                 turno_atual = None # Limpa turno após a ação
                 if acao == "CALL" and valor == 0: acao = "CHECK"
                 
-                sucesso = mesa.processar_acao(j.nome, acao, valor) if acao == "RAISE" else mesa.processar_acao(j.nome, acao)
-                if not sucesso: mesa.processar_acao(j.nome, "FOLD")
+                sucesso, acao_real, valor_real = mesa.processar_acao(j.nome, acao, valor) if acao == "RAISE" else mesa.processar_acao(j.nome, acao)
+                if not sucesso:
+                    _, acao_real, valor_real = mesa.processar_acao(j.nome, "FOLD")
+                
+                # Registra ação no histórico da mão com o valor real aplicado nas fichas
+                acoes_historico.append({
+                    'rodada': rodada_atual,
+                    'jogador': j.nome,
+                    'acao': acao_real,
+                    'valor': valor_real
+                })
                 
                 # Enviar notificação visual pro feed de chat do frontend
-                msg_valor = f" ${valor}" if valor > 0 else ""
-                socketio.emit('mensagem', f"{j.nome} deu {acao}{msg_valor}")
+                msg_valor = f" ${valor_real}" if valor_real > 0 else ""
+                socketio.emit('mensagem', f"{j.nome} deu {acao_real}{msg_valor}")
+                socketio.emit('acao_executada', {'jogador': j.nome, 'acao': acao_real, 'valor': valor_real})
                 
-                if acao in ["CALL", "RAISE"] and valor > 0:
-                    socketio.emit('animar_fichas', {'de': j.nome, 'para': 'centro', 'valor': valor})
+                if acao_real in ["CALL", "RAISE"] and valor_real > 0:
+                    socketio.emit('animar_fichas', {'de': j.nome, 'para': 'centro', 'valor': valor_real})
                 
                 jogadores_agiram[j.nome] = True
-                if acao == "RAISE":
+                if acao_real == "RAISE":
                     for outro in mesa.jogadores:
                         if outro.nome != j.nome: jogadores_agiram[outro.nome] = False
                 
                 idx_atual = (idx_atual + 1) % len(mesa.jogadores)
                 
+        pote_final_calculado = sum(p.valor for p in mesa.gerenciador_pote.potes) + sum(mesa.apostas_rodada.values())
         ranking, pagamentos = mesa.executar_showdown()
         emitir_estado()
         
         from core.avaliador_otimizado import AvaliadorDeMaosOtimizado
+        vencedores_detalhe = []
         if ranking:
             vencedores = " e ".join(ranking[0])
             jogador_exemplo = next(j for j in mesa.jogadores if j.nome == ranking[0][0])
@@ -174,8 +195,43 @@ def loop_do_jogo():
             
         for nome, valor in pagamentos.items():
             if valor > 0:
+                vencedores_detalhe.append({'nome': nome, 'valor': valor})
                 socketio.emit('mensagem', f"💰 {nome} recolheu ${valor}")
                 socketio.emit('animar_fichas', {'de': 'centro', 'para': nome, 'valor': valor})
+        
+        # Gravação Completa do Histórico (Formato PokerStars + SQLite)
+        try:
+            dados_para_salvar = {
+                'small_blind': mesa.small_blind,
+                'big_blind': mesa.big_blind,
+                'posicao_button': mesa.posicao_button,
+                'small_blind_player': sb_nome,
+                'big_blind_player': bb_nome,
+                'cartas_comunitarias': list(mesa.cartas_na_mesa),
+                'pote_total': pote_final_calculado,
+                'showdown': True if ranking else False,
+                'jogadores': [
+                    {
+                        'nome': j.nome,
+                        'stack_inicial': stacks_iniciais.get(j.nome, j.stack),
+                        'cartas': list(j.cartas),
+                        'lucro_liquido': j.stack - stacks_iniciais.get(j.nome, j.stack),
+                        'chegou_showdown': j.ativo,
+                        'desc_mao': AvaliadorDeMaosOtimizado.imprimir_mao(j.classificacao_mao) if getattr(j, 'classificacao_mao', None) else ""
+                    }
+                    for j in mesa.jogadores
+                ],
+                'acoes': acoes_historico,
+                'vencedores_detalhe': vencedores_detalhe
+            }
+            gravador.salvar_mao(dados_para_salvar)
+            
+            # Emite métricas atualizadas do jogador humano para o frontend
+            metricas_humano = gravador.obter_metricas_jogador("Você")
+            if metricas_humano:
+                socketio.emit('metricas_jogador', metricas_humano)
+        except Exception as e:
+            print("Erro ao gravar histórico da mão:", e)
         
         socketio.emit('mensagem', "Próxima mão em 5s...")
         time.sleep(5)

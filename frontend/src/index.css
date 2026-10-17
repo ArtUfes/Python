@@ -200,4 +200,57 @@ body {
   border-radius: 50%;
   border: 2px dashed #fff;
 }
+.sound-toggle-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #f1c40f;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+.sound-toggle-btn:hover {
+  background: rgba(241, 196, 15, 0.2);
+  border-color: #f1c40f;
+  transform: scale(1.08);
+}
+
+.hud-badge {
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(241, 196, 15, 0.4);
+  color: #f1c40f;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.4s ease;
+}
+
+.arquetipo-tag {
+  font-size: 10px;
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 button:active { transform: translateY(1px); filter: brightness(0.9); box-shadow: 0 2px 10px rgba(0,0,0,0.2); }

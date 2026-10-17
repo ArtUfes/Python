@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import audioEngine from '../audioEngine';
 
 export default function Mesa({ socket }) {
   const [estado, setEstado] = useState(null);
@@ -8,10 +9,22 @@ export default function Mesa({ socket }) {
   const [valorRaise, setValorRaise] = useState("");
   const [mensagens, setMensagens] = useState([]);
   const [fichasNaMesa, setFichasNaMesa] = useState([]);
+  const [mutado, setMutado] = useState(audioEngine.isMuted());
+  const [metricasJogador, setMetricasJogador] = useState(null);
   const chatRef = useRef(null);
   const estadoRef = useRef(estado);
 
   useEffect(() => {
+    // Detecta nova rodada (distribuição de cartas) ou cartas comunitárias viradas
+    if (estado && estadoRef.current) {
+      const prevCartas = estadoRef.current.cartas_na_mesa?.length || 0;
+      const curCartas = estado.cartas_na_mesa?.length || 0;
+      if (curCartas > prevCartas) {
+        audioEngine.playCommunityCard();
+      } else if (estado.estado_atual === 'PRE_FLOP' && estadoRef.current.estado_atual !== 'PRE_FLOP') {
+        audioEngine.playCardDeal();
+      }
+    }
     estadoRef.current = estado;
   }, [estado]);
 
@@ -21,11 +34,16 @@ export default function Mesa({ socket }) {
 
     socket.on('estado_mesa', (dados) => {
       setEstado(dados);
+      if (dados.turno_atual !== 'Você') {
+        setMinhaVez(false);
+      }
     });
 
     socket.on('pedir_acao', (dados) => {
       setMinhaVez(true);
       setInfoAcao(dados);
+      // Alerta sonoro sutil quando a ação chega para o jogador
+      audioEngine.playTurnAlert();
       // Sugere valor de raise como o dobro da maior aposta (padrão de poker)
       setValorRaise(dados.maior_aposta * 2 || 20); 
     });
@@ -34,9 +52,26 @@ export default function Mesa({ socket }) {
       setMensagens(prev => [...prev, msg]);
     });
 
+    socket.on('metricas_jogador', (dados) => {
+      setMetricasJogador(dados);
+    });
+
+    socket.on('acao_executada', (data) => {
+      if (data.jogador === 'Você') {
+        setMinhaVez(false);
+      }
+      // Dispara os sons correspondentes para jogadas dos bots e humanos
+      if (data.acao === 'CHECK') {
+        audioEngine.playCheck();
+      } else if (data.acao === 'FOLD') {
+        audioEngine.playFold();
+      }
+    });
+
     socket.on('animar_fichas', (data) => {
       if (data.de === 'centro') {
-        // Alguém ganhou o pote, as fichas do centro vão para ele
+        // Alguém ganhou o pote, toca som de vitória/recolher fichas
+        audioEngine.playChipWin();
         const to = getPlayerCoordinates(data.para);
         setFichasNaMesa(prev => prev.map(f => {
           if (f.para === 'centro') {
@@ -46,7 +81,8 @@ export default function Mesa({ socket }) {
         }));
         setTimeout(() => setFichasNaMesa([]), 5000);
       } else {
-        // Alguém apostou, joga ficha pro centro
+        // Alguém apostou, toca som de aposta de fichas
+        audioEngine.playChipBet();
         const id = Date.now() + Math.random();
         const from = getPlayerCoordinates(data.de);
         // Desloca um pouco as fichas para o alto/baixo para não cobrirem o River
@@ -67,6 +103,8 @@ export default function Mesa({ socket }) {
     return () => {
       socket.off('estado_mesa');
       socket.off('pedir_acao');
+      socket.off('metricas_jogador');
+      socket.off('acao_executada');
       socket.off('mensagem');
       socket.off('animar_fichas');
     };
@@ -78,10 +116,19 @@ export default function Mesa({ socket }) {
     }
   }, [mensagens]);
 
+  const toggleMute = () => {
+    const novoStatus = !mutado;
+    setMutado(novoStatus);
+    audioEngine.setMuted(novoStatus);
+  };
+
   const enviarAcao = (acao) => {
     let valorEnvio = 0;
-    if (acao === 'RAISE') valorEnvio = parseInt(valorRaise) || 0;
-    else if (acao === 'CALL') valorEnvio = infoAcao.falta_pagar || 0;
+    if (acao === 'RAISE') {
+      valorEnvio = parseInt(valorRaise) || 0;
+    } else if (acao === 'CALL') {
+      valorEnvio = infoAcao.falta_pagar || 0;
+    }
     
     socket.emit('enviar_acao', { acao, valor: valorEnvio });
     setMinhaVez(false);
@@ -141,6 +188,15 @@ export default function Mesa({ socket }) {
       </AnimatePresence>
       {/* MESA PRINCIPAL */}
       <div className="poker-table">
+        {/* BOTÃO DE CONTROLE DE ÁUDIO */}
+        <button 
+          className="sound-toggle-btn" 
+          onClick={toggleMute} 
+          title={mutado ? "Ativar Áudio" : "Mutar Áudio"}
+        >
+          {mutado ? "🔇" : "🔊"}
+        </button>
+
         <div className="painel-central">
           <div className="pote-info">
             Pote Total: <motion.span key={estado.pote_total} initial={{ scale: 1.5, color: '#fff' }} animate={{ scale: 1, color: '#f1c40f' }} className="fichas">${estado.pote_total}</motion.span>
@@ -173,6 +229,12 @@ export default function Mesa({ socket }) {
             {estado.turno_atual === j.nome && <div className="timer-bar"></div>}
             <h3 className="nome">{j.nome}</h3>
             <p className="stack">💰 ${j.stack}</p>
+            {j.nome === 'Você' && metricasJogador && metricasJogador.total_maos > 0 && (
+              <div className="hud-badge" title={`Mãos: ${metricasJogador.total_maos} | AF: ${metricasJogador.af} | BB/100: ${metricasJogador.bb_100}`}>
+                📊 VPIP: {metricasJogador.vpip}% | PFR: {metricasJogador.pfr}%
+                <span className="arquetipo-tag">{metricasJogador.arquetipo}</span>
+              </div>
+            )}
             <motion.p key={j.aposta} initial={{ scale: 1.5, y: -10 }} animate={{ scale: 1, y: 0 }} className="aposta">
               💵 {j.aposta > 0 ? j.aposta : ''}
             </motion.p>
@@ -205,37 +267,67 @@ export default function Mesa({ socket }) {
           </ul>
         </div>
 
-        <div className={`painel-controles ${minhaVez ? 'minha-vez' : 'esperando'}`}>
-          {minhaVez ? (
-            <>
-              <h4>👉 Sua Vez!</h4>
-              <p>Falta pagar: ${infoAcao.falta_pagar}</p>
-              <div className="botoes-acao">
-                <button className="btn-fold" onClick={() => enviarAcao('FOLD')}>❌ Fold</button>
-                <button className="btn-call" onClick={() => enviarAcao(infoAcao.falta_pagar > 0 ? 'CALL' : 'CHECK')}>
-                  {infoAcao.falta_pagar > 0 ? `🪙 Call ($${infoAcao.falta_pagar})` : '✔️ Check'}
-                </button>
-              </div>
-              <div className="raise-container">
-                <div className="raise-inputs">
-                  <input 
-                    type="range" 
-                    min={infoAcao.maior_aposta * 2 || 20} 
-                    max={estado.jogadores.find(j => j.nome === 'Você')?.stack || 1000}
-                    step="10"
-                    value={valorRaise} 
-                    onChange={e => setValorRaise(e.target.value)}
-                    className="slider-raise"
-                  />
-                  <div className="valor-raise-display">${valorRaise}</div>
+        {(() => {
+          const meuJogador = estado?.jogadores?.find(j => j.nome === 'Você');
+          const estaFora = meuJogador && !meuJogador.ativo;
+          const podeAgir = minhaVez && estado?.turno_atual === 'Você' && !estaFora;
+
+          const stackAtual = meuJogador?.stack || 0;
+          const apostaAtual = meuJogador?.aposta || 0;
+          const maxAtingivel = stackAtual + apostaAtual;
+          const maiorAposta = infoAcao?.maior_aposta || 0;
+          const podeDarRaise = podeAgir && (maxAtingivel > maiorAposta);
+          
+          const minRaiseCalc = Math.min(maxAtingivel, Math.max(maiorAposta * 2, 20));
+          const maxRaiseCalc = maxAtingivel;
+
+          return (
+            <div className={`painel-controles ${podeAgir ? 'minha-vez' : (estaFora ? 'fora' : 'esperando')}`}>
+              {podeAgir ? (
+                <>
+                  <h4>👉 Sua Vez!</h4>
+                  <p>Falta pagar: ${infoAcao?.falta_pagar || 0}</p>
+                  <div className="botoes-acao">
+                    <button className="btn-fold" onClick={() => enviarAcao('FOLD')}>❌ Fold</button>
+                    <button className="btn-call" onClick={() => enviarAcao(infoAcao?.falta_pagar > 0 ? 'CALL' : 'CHECK')}>
+                      {infoAcao?.falta_pagar > 0 
+                        ? (infoAcao.falta_pagar >= stackAtual ? `🪙 All-In ($${stackAtual})` : `🪙 Call ($${infoAcao.falta_pagar})`) 
+                        : '✔️ Check'}
+                    </button>
+                  </div>
+                  {podeDarRaise && (
+                    <div className="raise-container">
+                      <div className="raise-inputs">
+                        <input 
+                          type="range" 
+                          min={minRaiseCalc} 
+                          max={maxRaiseCalc}
+                          step="10"
+                          value={Math.min(maxRaiseCalc, Math.max(minRaiseCalc, parseInt(valorRaise) || minRaiseCalc))} 
+                          onChange={e => setValorRaise(e.target.value)}
+                          className="slider-raise"
+                        />
+                        <div className="valor-raise-display">${Math.min(maxRaiseCalc, Math.max(minRaiseCalc, parseInt(valorRaise) || minRaiseCalc))}</div>
+                      </div>
+                      <button className="btn-raise" onClick={() => enviarAcao('RAISE')}>
+                        {parseInt(valorRaise) >= maxRaiseCalc ? `🔥 All-In ($${maxRaiseCalc})` : `🔥 Raise ($${valorRaise})`}
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : estaFora ? (
+                <div style={{ textAlign: 'center', padding: '15px 0' }}>
+                  <h4 style={{ color: '#e74c3c' }}>💤 Você deu Fold</h4>
+                  <p style={{ color: '#bdc3c7', fontSize: '13px', marginTop: '8px' }}>
+                    Aguardando a conclusão da rodada...
+                  </p>
                 </div>
-                <button className="btn-raise" onClick={() => enviarAcao('RAISE')}>🔥 Raise (${valorRaise})</button>
-              </div>
-            </>
-          ) : (
-            <h4>⏳ Aguardando os Bots...</h4>
-          )}
-        </div>
+              ) : (
+                <h4>⏳ Aguardando {estado?.turno_atual ? `${estado.turno_atual}...` : 'os Bots...'}</h4>
+              )}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
