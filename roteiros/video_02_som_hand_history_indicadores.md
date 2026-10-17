@@ -24,6 +24,7 @@
 Deixe tudo engatilhado nas suas abas e janelas para a gravação fluir sem engasgos:
 
 1. **Aba 1 (Seu Jogo):** Servidor Python rodando (`python servidor.py`) e frontend aberto em `http://localhost:5173`. Certifique-se de que o som do navegador está desmutado e sendo capturado pelo OBS.
+   - *Nota de Compliance:* O banner fixo superior e a marca d'água no feltro (*"PROJETO EDUCACIONAL / DEVLOG - SIMULAÇÃO SEM DINHEIRO REAL"*) já estão ativos no React para proteger seu vídeo contra restrições de idade do YouTube!
 2. **Aba 2 (Hand Replayer Online):** Abra com antecedência um site de Hand Replay gratuito (sugestões testadas que aceitam texto do PokerStars):
    - [PokerHandReplayer.com](https://www.pokerhandreplayer.com/)
    - [UniversalPokerReplayer.com](https://www.universalpokerreplayer.com/) ou [PokerGuru Hand Replayer](https://pokerguru.in/hand-replayer/)
@@ -38,7 +39,7 @@ Deixe tudo engatilhado nas suas abas e janelas para a gravação fluir sem engas
 ## ⏱️ Estrutura & Minutagem do Vídeo
 
 ```text
-00:00 - 01:30 | Bloco 1: Introdução & O que mudou desde o Vídeo 1
+00:00 - 01:30 | Bloco 1: Introdução, Disclaimer Educacional & O que mudou
 01:30 - 04:30 | Bloco 2: A Imersão Sonora (Foley Real e Audio Engine)
 04:30 - 08:00 | Bloco 3: O Pulo do Gato (Hand History PokerStars no Replayer)
 08:00 - 10:15 | Bloco 4: Métricas Profissionais & HUD em Tempo Real
@@ -59,6 +60,9 @@ Deixe tudo engatilhado nas suas abas e janelas para a gravação fluir sem engas
 
 **[Fala sugerida]:**
 > "Fala, pessoal! Sejam muito bem-vindos ao segundo episódio do nosso devlog construindo um jogo completo de Poker em Python e React!
+>
+> *(Aviso de Compliance - fale isso claramente nos primeiros 30s):*
+> **Antes de mais nada, vale reforçar que este é um projeto 100% didático e educacional de engenharia de software e inteligência artificial. Não há nenhum tipo de aposta ou dinheiro real envolvido: todas as fichas são fictícias para fins de simulação matemática.**
 >
 > No primeiro vídeo, eu apresentei a espinha dorsal do projeto: o motor em Python puro, o avaliador de mãos ultra-otimizado com operações bitwise e os primeiros bots tomando decisões com simulação de Monte Carlo. O jogo funcionava... mas sejamos sinceros: faltava **alma**. Era silencioso, parecia uma planilha com gráficos e a gente não tinha como medir com precisão se os jogadores estavam jogando bem ou mal.
 >
@@ -213,3 +217,32 @@ Deixe tudo engatilhado nas suas abas e janelas para a gravação fluir sem engas
 1. **Zoom Dinâmico nas Cartas:** Durante os momentos em que o Flop virar ou alguém der raise, dê um zoom sutil de 10% no centro da mesa para guiar a atenção do espectador.
 2. **Efeito Sonoro no Replayer:** Quando colar o texto no PokerHandReplayer e der play, coloque uma música empolgante de fundo em volume baixo (*lo-fi* ou eletrônica moderna) para dar o tom de "missão cumprida".
 3. **Card / Link para o Vídeo 1:** Lembre-se de colocar um card nos primeiros 30 segundos apontando para o Vídeo 1 para os novos espectadores maratonarem a série.
+
+---
+
+## 🛡️ Escudo Anti-Restrição de Idade do YouTube (Compliance & Recurso)
+
+O algoritmo do YouTube detecta automaticamente palavras visuais e sonoras associadas a apostas e jogos de azar ("poker", "fichas", "dinheiro", "$"). Para blindar o seu vídeo e ter 100% de respaldo na hora de pedir recurso contra restrição de idade (18+), utilize as diretrizes abaixo:
+
+### 1. Template para o Topo da Descrição do Vídeo (Cole exatamente assim):
+```text
+⚠️ AVISO IMPORTANTE / PROJETO EDUCACIONAL:
+Este vídeo é um Devlog estritamente educacional sobre Ciência da Computação, Engenharia de Software e Inteligência Artificial. O software demonstrado foi desenvolvido do zero em Python e React para fins acadêmicos e didáticos.
+- NÃO se trata de um site de apostas ou cassino online.
+- NÃO há apostas reais, transações financeiras nem dinheiro real envolvido.
+- Todas as fichas e saldos são fictícios (Play Money Only) utilizados exclusivamente para testes de algoritmos matemáticos e lógica de jogos.
+- Código 100% aberto e disponível no GitHub para fins de estudo.
+```
+
+### 2. Tags Recomendadas (Foco em Computação, EVITE termos de azar):
+* **Boas:** `Python`, `React`, `Devlog`, `Programação`, `Engenharia de Software`, `Inteligência Artificial`, `Algoritmo Genético`, `Simulação de Monte Carlo`, `WebSockets`, `Game Development`, `Código Aberto`, `GitHub`.
+* **Evite:** `Como ganhar dinheiro no poker`, `Apostas online`, `Cassino`, `Bet`, `Gamble`, `Lucro fácil`.
+
+### 3. Texto Pronto para Recurso no YouTube Studio (Caso o bot limite o vídeo):
+Se mesmo assim o robô do YouTube colocar restrição de idade, clique em **"Contestar" (Appeal)** e cole o seguinte texto:
+
+> **Texto do Recurso (Português & Inglês):**
+> "Prezada equipe do YouTube, solicito a revisão da restrição de idade deste vídeo. Este conteúdo é um DEVLOG EDUCACIONAL de programação e engenharia de software (Python/React) de código aberto. O projeto é uma simulação acadêmica de inteligência artificial e matemática. NÃO há apostas, cassino nem dinheiro real: todas as fichas são fictícias (Play Money) para demonstrar a lógica do código, conforme indicado visualmente durante todo o vídeo e falado na introdução. O conteúdo é 100% seguro para todas as idades e respeita integralmente as Diretrizes da Comunidade. Obrigado!"
+>
+> *"Dear YouTube Team, I kindly request a review of the age restriction on this video. This content is an open-source EDUCATIONAL programming devlog (Python/React) focusing on software engineering and AI simulations. There is NO real money, gambling, or real betting involved: all chips are strictly fictional play-money used to test mathematical algorithms. A visible educational disclaimer is present on-screen throughout the entire video. The video is completely safe for all audiences and complies with Community Guidelines. Thank you!"*
+
