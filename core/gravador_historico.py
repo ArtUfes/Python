@@ -122,42 +122,58 @@ class GravadorHistorico:
             if j['nome'] == 'Você' or dados_mao.get('revelar_todas', False):
                 lines.append(f"Dealt to {j['nome']} [{cartas_str}]")
 
-        # Ações street por street
-        rodada_atual = None
-        for acao in dados_mao['acoes']:
-            rod = acao['rodada']
-            if rod != rodada_atual:
-                rodada_atual = rod
-                if rod == 'FLOP':
-                    cartas_flop = " ".join([self._formatar_carta_pokerstars(c) for c in dados_mao['cartas_comunitarias'][:3]])
-                    lines.append(f"*** FLOP *** [{cartas_flop}]")
-                elif rod == 'TURN':
-                    cartas_flop = " ".join([self._formatar_carta_pokerstars(c) for c in dados_mao['cartas_comunitarias'][:3]])
-                    turn = self._formatar_carta_pokerstars(dados_mao['cartas_comunitarias'][3])
-                    lines.append(f"*** TURN *** [{cartas_flop}] [{turn}]")
-                elif rod == 'RIVER':
-                    board_4 = " ".join([self._formatar_carta_pokerstars(c) for c in dados_mao['cartas_comunitarias'][:4]])
-                    river = self._formatar_carta_pokerstars(dados_mao['cartas_comunitarias'][4])
-                    lines.append(f"*** RIVER *** [{board_4}] [{river}]")
-            
-            # Formatando a ação textual
+        # Ações street por street (Garante exibição do board mesmo em All-In Pré-Flop)
+        acoes = dados_mao.get('acoes', [])
+        
+        def formatar_linha_acao(acao):
             jog = acao['jogador']
             act = acao['acao'].lower()
             val = acao['valor']
             if act == 'fold':
-                lines.append(f"{jog}: folds")
+                return f"{jog}: folds"
             elif act == 'check':
-                lines.append(f"{jog}: checks")
+                return f"{jog}: checks"
             elif act == 'call':
-                lines.append(f"{jog}: calls ${val}")
+                return f"{jog}: calls ${val}"
             elif act == 'raise':
-                lines.append(f"{jog}: raises to ${val}")
+                return f"{jog}: raises to ${val}"
+            return f"{jog}: {act} ${val}"
+
+        # 1. PRE-FLOP
+        for acao in [a for a in acoes if a['rodada'] == 'PRE_FLOP']:
+            lines.append(formatar_linha_acao(acao))
+
+        comunitarias = dados_mao.get('cartas_comunitarias', [])
+        total_com = len(comunitarias)
+
+        # 2. FLOP
+        if total_com >= 3:
+            cartas_flop = " ".join([self._formatar_carta_pokerstars(c) for c in comunitarias[:3]])
+            lines.append(f"*** FLOP *** [{cartas_flop}]")
+            for acao in [a for a in acoes if a['rodada'] == 'FLOP']:
+                lines.append(formatar_linha_acao(acao))
+
+        # 3. TURN
+        if total_com >= 4:
+            cartas_flop = " ".join([self._formatar_carta_pokerstars(c) for c in comunitarias[:3]])
+            turn = self._formatar_carta_pokerstars(comunitarias[3])
+            lines.append(f"*** TURN *** [{cartas_flop}] [{turn}]")
+            for acao in [a for a in acoes if a['rodada'] == 'TURN']:
+                lines.append(formatar_linha_acao(acao))
+
+        # 4. RIVER
+        if total_com >= 5:
+            board_4 = " ".join([self._formatar_carta_pokerstars(c) for c in comunitarias[:4]])
+            river = self._formatar_carta_pokerstars(comunitarias[4])
+            lines.append(f"*** RIVER *** [{board_4}] [{river}]")
+            for acao in [a for a in acoes if a['rodada'] == 'RIVER']:
+                lines.append(formatar_linha_acao(acao))
 
         # Showdown & Summary
         if dados_mao.get('showdown', False):
             lines.append("*** SHOWDOWN ***")
             for j in dados_mao['jogadores']:
-                if j['chegou_showdown']:
+                if j.get('chegou_showdown', False):
                     cartas_str = " ".join([self._formatar_carta_pokerstars(c) for c in j['cartas']])
                     desc = j.get('desc_mao', '')
                     lines.append(f"{j['nome']}: shows [{cartas_str}] ({desc})")
@@ -171,7 +187,8 @@ class GravadorHistorico:
         if board_str:
             lines.append(f"Board [{board_str}]")
         for idx, j in enumerate(dados_mao['jogadores']):
-            resultado = f"won (${j['lucro_liquido']})" if j['lucro_liquido'] > 0 else f"lost (${abs(j['lucro_liquido'])})"
+            lucro = j.get('lucro_liquido', 0)
+            resultado = f"won (${lucro})" if lucro > 0 else f"lost (${abs(lucro)})"
             lines.append(f"Seat {idx + 1}: {j['nome']} {resultado}")
 
         return "\n".join(lines)

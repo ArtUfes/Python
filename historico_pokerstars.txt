@@ -1,85 +1,45 @@
-PokerStars Hand #1792207481: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:24:41 ET
-Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($1000 in chips)
-Seat 2: ProBot_1 ($2258 in chips)
-Seat 3: ProBot_2 ($1020 in chips)
-Seat 4: ProBot_3 ($1722 in chips)
-ProBot_1: posts small blind $10
-ProBot_2: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Ad 2h]
-ProBot_3: folds
-Você: raises to $220
-ProBot_1: folds
-ProBot_2: folds
-*** SHOWDOWN ***
-Você: shows [Ad 2h] ()
-Você collected $250 from pot
-*** SUMMARY ***
-Total pot $250 | Rake $0
-Seat 1: Você won ($30)
-Seat 2: ProBot_1 lost ($10)
-Seat 3: ProBot_2 lost ($20)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792207522: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:25:22 ET
-Table 'VIP Python Club' 4-max Seat #3 is the button
-Seat 1: Você ($1030 in chips)
-Seat 2: ProBot_1 ($2248 in chips)
-Seat 3: ProBot_2 ($1000 in chips)
-Seat 4: ProBot_3 ($1722 in chips)
-ProBot_2: posts small blind $10
-ProBot_3: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Tc Td]
-Você: raises to $140
-ProBot_1: folds
-ProBot_2: folds
-ProBot_3: raises to $258
-Você: raises to $886
-ProBot_3: folds
-*** SHOWDOWN ***
-Você: shows [Tc Td] ()
-Você collected $1154 from pot
-*** SUMMARY ***
-Total pot $1154 | Rake $0
-Seat 1: Você won ($268)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($10)
-Seat 4: ProBot_3 lost ($258)
-
-
-PokerStars Hand #1792207544: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:25:44 ET
+PokerStars Hand #1792363051: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:37:31 ET
 Table 'VIP Python Club' 4-max Seat #4 is the button
-Seat 1: Você ($1298 in chips)
-Seat 2: ProBot_1 ($2248 in chips)
-Seat 3: ProBot_2 ($990 in chips)
-Seat 4: ProBot_3 ($1464 in chips)
+Seat 1: Você ($820 in chips)
+Seat 2: ProBot_1 ($1722 in chips)
+Seat 3: ProBot_2 ($3458 in chips)
+Seat 4: ProBot_3 ($1000 in chips)
 ProBot_3: posts small blind $10
 Você: posts big blind $20
 *** HOLE CARDS ***
-Dealt to Você [Js 3c]
+Dealt to Você [4c 2d]
 ProBot_1: folds
 ProBot_2: folds
-ProBot_3: folds
+ProBot_3: calls $10
+Você: checks
+*** FLOP *** [3h 4d 8c]
+ProBot_3: checks
+Você: checks
+*** TURN *** [3h 4d 8c] [9h]
+ProBot_3: checks
+Você: checks
+*** RIVER *** [3h 4d 8c 9h] [4h]
+ProBot_3: checks
+Você: checks
 *** SHOWDOWN ***
-Você: shows [Js 3c] ()
-Você collected $30 from pot
+Você: shows [4c 2d] (Trio)
+ProBot_3: shows [Jd 7h] (Par)
+Você collected $40 from pot
 *** SUMMARY ***
-Total pot $30 | Rake $0
-Seat 1: Você won ($10)
+Total pot $40 | Rake $0
+Board [3h 4d 8c 9h 4h]
+Seat 1: Você won ($20)
 Seat 2: ProBot_1 lost ($0)
 Seat 3: ProBot_2 lost ($0)
-Seat 4: ProBot_3 lost ($10)
+Seat 4: ProBot_3 lost ($20)
 
 
-PokerStars Hand #1792207567: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:26:07 ET
+PokerStars Hand #1792363080: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:38:00 ET
 Table 'VIP Python Club' 4-max Seat #1 is the button
-Seat 1: Você ($1308 in chips)
-Seat 2: ProBot_1 ($2248 in chips)
-Seat 3: ProBot_2 ($990 in chips)
-Seat 4: ProBot_3 ($1454 in chips)
+Seat 1: Você ($840 in chips)
+Seat 2: ProBot_1 ($1722 in chips)
+Seat 3: ProBot_2 ($3458 in chips)
+Seat 4: ProBot_3 ($980 in chips)
 Você: posts small blind $10
 ProBot_1: posts big blind $20
 *** HOLE CARDS ***
@@ -88,7 +48,7 @@ ProBot_2: folds
 ProBot_3: folds
 Você: folds
 *** SHOWDOWN ***
-ProBot_1: shows [Ah 5s] ()
+ProBot_1: shows [Jd 9d] ()
 ProBot_1 collected $30 from pot
 *** SUMMARY ***
 Total pot $30 | Rake $0
@@ -98,12 +58,12 @@ Seat 3: ProBot_2 lost ($0)
 Seat 4: ProBot_3 lost ($0)
 
 
-PokerStars Hand #1792207619: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:26:59 ET
+PokerStars Hand #1792363146: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:39:06 ET
 Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($1298 in chips)
-Seat 2: ProBot_1 ($2258 in chips)
-Seat 3: ProBot_2 ($990 in chips)
-Seat 4: ProBot_3 ($1454 in chips)
+Seat 1: Você ($830 in chips)
+Seat 2: ProBot_1 ($1732 in chips)
+Seat 3: ProBot_2 ($3458 in chips)
+Seat 4: ProBot_3 ($980 in chips)
 ProBot_1: posts small blind $10
 ProBot_2: posts big blind $20
 *** HOLE CARDS ***
@@ -112,323 +72,84 @@ ProBot_3: folds
 Você: folds
 ProBot_1: calls $10
 ProBot_2: checks
-*** FLOP *** [8c 7h 2s]
-ProBot_1: raises to $47
-ProBot_2: calls $47
-*** TURN *** [8c 7h 2s] [6h]
+*** FLOP *** [Kh 7s 8d]
+ProBot_1: checks
+ProBot_2: raises to $47
+ProBot_1: calls $47
+*** TURN *** [Kh 7s 8d] [7h]
 ProBot_1: raises to $157
 ProBot_2: calls $157
-*** RIVER *** [8c 7h 2s 6h] [9s]
-ProBot_1: checks
-ProBot_2: checks
+*** RIVER *** [Kh 7s 8d 7h] [Th]
+ProBot_1: raises to $526
+ProBot_2: calls $526
 *** SHOWDOWN ***
-ProBot_1: shows [7c Jd] (Par)
-ProBot_2: shows [3d 2c] (Par)
-ProBot_1 collected $448 from pot
+ProBot_1: shows [2c As] (Par)
+ProBot_2: shows [3s 3h] (Dois Pares)
+ProBot_2 collected $1500 from pot
 *** SUMMARY ***
-Total pot $448 | Rake $0
-Board [8c 7h 2s 6h 9s]
+Total pot $1500 | Rake $0
+Board [Kh 7s 8d 7h Th]
 Seat 1: Você lost ($0)
-Seat 2: ProBot_1 won ($224)
-Seat 3: ProBot_2 lost ($224)
+Seat 2: ProBot_1 lost ($750)
+Seat 3: ProBot_2 won ($750)
 Seat 4: ProBot_3 lost ($0)
 
 
-PokerStars Hand #1792207685: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:28:05 ET
+PokerStars Hand #1792363172: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:39:32 ET
 Table 'VIP Python Club' 4-max Seat #3 is the button
-Seat 1: Você ($1298 in chips)
-Seat 2: ProBot_1 ($2482 in chips)
-Seat 3: ProBot_2 ($766 in chips)
-Seat 4: ProBot_3 ($1454 in chips)
+Seat 1: Você ($830 in chips)
+Seat 2: ProBot_1 ($982 in chips)
+Seat 3: ProBot_2 ($4208 in chips)
+Seat 4: ProBot_3 ($980 in chips)
 ProBot_2: posts small blind $10
 ProBot_3: posts big blind $20
 *** HOLE CARDS ***
 Dealt to Você []
 Você: folds
 ProBot_1: folds
-ProBot_2: calls $10
-ProBot_3: checks
-*** FLOP *** [3h 9c Ks]
-ProBot_2: checks
-ProBot_3: checks
-*** TURN *** [3h 9c Ks] [7d]
-ProBot_2: checks
-ProBot_3: raises to $47
-ProBot_2: calls $47
-*** RIVER *** [3h 9c Ks 7d] [7s]
-ProBot_2: raises to $157
-ProBot_3: raises to $525
-ProBot_2: calls $368
+ProBot_2: folds
 *** SHOWDOWN ***
-ProBot_2: shows [6d Qs] (Par)
-ProBot_3: shows [8c 7h] (Trio)
-ProBot_3 collected $1184 from pot
+ProBot_3: shows [2h Jd] ()
+ProBot_3 collected $30 from pot
 *** SUMMARY ***
-Total pot $1184 | Rake $0
-Board [3h 9c Ks 7d 7s]
+Total pot $30 | Rake $0
 Seat 1: Você lost ($0)
 Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($592)
-Seat 4: ProBot_3 won ($592)
+Seat 3: ProBot_2 lost ($10)
+Seat 4: ProBot_3 won ($10)
 
 
-PokerStars Hand #1792207726: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:28:46 ET
+PokerStars Hand #1792363198: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:39:58 ET
 Table 'VIP Python Club' 4-max Seat #4 is the button
-Seat 1: Você ($1298 in chips)
-Seat 2: ProBot_1 ($2482 in chips)
-Seat 3: ProBot_2 ($174 in chips)
-Seat 4: ProBot_3 ($2046 in chips)
+Seat 1: Você ($830 in chips)
+Seat 2: ProBot_1 ($982 in chips)
+Seat 3: ProBot_2 ($4198 in chips)
+Seat 4: ProBot_3 ($990 in chips)
 ProBot_3: posts small blind $10
 Você: posts big blind $20
 *** HOLE CARDS ***
-Dealt to Você [7d 2d]
+Dealt to Você []
 ProBot_1: raises to $41
-ProBot_2: raises to $137
+ProBot_2: folds
 ProBot_3: folds
-Você: raises to $1274
-ProBot_1: folds
-ProBot_2: calls $1137
+Você: folds
 *** SHOWDOWN ***
-Você: shows [7d 2d] (Par)
-ProBot_2: shows [Ad Ac] (Par)
-ProBot_2 collected $399 from pot
-Você collected $1100 from pot
+ProBot_1: shows [8s Td] ()
+ProBot_1 collected $71 from pot
 *** SUMMARY ***
-Total pot $1499 | Rake $0
-Board [Qd 4h 2h Jc 8h]
-Seat 1: Você lost ($174)
-Seat 2: ProBot_1 lost ($41)
-Seat 3: ProBot_2 won ($225)
+Total pot $71 | Rake $0
+Seat 1: Você lost ($20)
+Seat 2: ProBot_1 won ($30)
+Seat 3: ProBot_2 lost ($0)
 Seat 4: ProBot_3 lost ($10)
 
 
-PokerStars Hand #1792207792: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:29:52 ET
+PokerStars Hand #1792363223: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:40:23 ET
 Table 'VIP Python Club' 4-max Seat #1 is the button
-Seat 1: Você ($1124 in chips)
-Seat 2: ProBot_1 ($2441 in chips)
-Seat 3: ProBot_2 ($399 in chips)
-Seat 4: ProBot_3 ($2036 in chips)
-Você: posts small blind $10
-ProBot_1: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você []
-ProBot_2: folds
-ProBot_3: folds
-Você: calls $10
-ProBot_1: checks
-*** FLOP *** [Jc 4c 2s]
-Você: checks
-ProBot_1: raises to $47
-Você: calls $47
-*** TURN *** [Jc 4c 2s] [6c]
-Você: checks
-ProBot_1: raises to $157
-Você: calls $157
-*** RIVER *** [Jc 4c 2s 6c] [3d]
-Você: checks
-ProBot_1: raises to $526
-Você: folds
-*** SHOWDOWN ***
-ProBot_1: shows [7s 2c] (Par)
-ProBot_1 collected $974 from pot
-*** SUMMARY ***
-Total pot $974 | Rake $0
-Board [Jc 4c 2s 6c 3d]
-Seat 1: Você lost ($224)
-Seat 2: ProBot_1 won ($224)
-Seat 3: ProBot_2 lost ($0)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792207816: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:30:16 ET
-Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($900 in chips)
-Seat 2: ProBot_1 ($2665 in chips)
-Seat 3: ProBot_2 ($399 in chips)
-Seat 4: ProBot_3 ($2036 in chips)
-ProBot_1: posts small blind $10
-ProBot_2: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [2s Ah]
-ProBot_3: folds
-Você: raises to $900
-ProBot_1: folds
-ProBot_2: folds
-*** SHOWDOWN ***
-Você: shows [2s Ah] ()
-Você collected $930 from pot
-*** SUMMARY ***
-Total pot $930 | Rake $0
-Seat 1: Você won ($30)
-Seat 2: ProBot_1 lost ($10)
-Seat 3: ProBot_2 lost ($20)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792207828: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:30:28 ET
-Table 'VIP Python Club' 4-max Seat #3 is the button
-Seat 1: Você ($930 in chips)
-Seat 2: ProBot_1 ($2655 in chips)
-Seat 3: ProBot_2 ($379 in chips)
-Seat 4: ProBot_3 ($2036 in chips)
-ProBot_2: posts small blind $10
-ProBot_3: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [8h Jd]
-Você: raises to $930
-ProBot_1: folds
-ProBot_2: folds
-ProBot_3: folds
-*** SHOWDOWN ***
-Você: shows [8h Jd] ()
-Você collected $960 from pot
-*** SUMMARY ***
-Total pot $960 | Rake $0
-Seat 1: Você won ($30)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($10)
-Seat 4: ProBot_3 lost ($20)
-
-
-PokerStars Hand #1792207870: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:31:10 ET
-Table 'VIP Python Club' 4-max Seat #4 is the button
-Seat 1: Você ($960 in chips)
-Seat 2: ProBot_1 ($2655 in chips)
-Seat 3: ProBot_2 ($369 in chips)
-Seat 4: ProBot_3 ($2016 in chips)
-ProBot_3: posts small blind $10
-Você: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Ad Kh]
-ProBot_1: folds
-ProBot_2: folds
-ProBot_3: raises to $41
-Você: raises to $192
-ProBot_3: raises to $355
-Você: raises to $760
-ProBot_3: folds
-*** SHOWDOWN ***
-Você: shows [Ad Kh] ()
-Você collected $1115 from pot
-*** SUMMARY ***
-Total pot $1115 | Rake $0
-Seat 1: Você won ($355)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($0)
-Seat 4: ProBot_3 lost ($355)
-
-
-PokerStars Hand #1792207887: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:31:27 ET
-Table 'VIP Python Club' 4-max Seat #1 is the button
-Seat 1: Você ($1315 in chips)
-Seat 2: ProBot_1 ($2655 in chips)
-Seat 3: ProBot_2 ($369 in chips)
-Seat 4: ProBot_3 ($1661 in chips)
-Você: posts small blind $10
-ProBot_1: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [4h 8h]
-ProBot_2: folds
-ProBot_3: folds
-Você: raises to $1300
-ProBot_1: folds
-*** SHOWDOWN ***
-Você: shows [4h 8h] ()
-Você collected $1320 from pot
-*** SUMMARY ***
-Total pot $1320 | Rake $0
-Seat 1: Você won ($20)
-Seat 2: ProBot_1 lost ($20)
-Seat 3: ProBot_2 lost ($0)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792207907: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:31:47 ET
-Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($1335 in chips)
-Seat 2: ProBot_1 ($2635 in chips)
-Seat 3: ProBot_2 ($369 in chips)
-Seat 4: ProBot_3 ($1661 in chips)
-ProBot_1: posts small blind $10
-ProBot_2: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Js 4c]
-ProBot_3: folds
-Você: raises to $1330
-ProBot_1: folds
-ProBot_2: folds
-*** SHOWDOWN ***
-Você: shows [Js 4c] ()
-Você collected $1360 from pot
-*** SUMMARY ***
-Total pot $1360 | Rake $0
-Seat 1: Você won ($30)
-Seat 2: ProBot_1 lost ($10)
-Seat 3: ProBot_2 lost ($20)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792207929: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:32:09 ET
-Table 'VIP Python Club' 4-max Seat #3 is the button
-Seat 1: Você ($1365 in chips)
-Seat 2: ProBot_1 ($2625 in chips)
-Seat 3: ProBot_2 ($349 in chips)
-Seat 4: ProBot_3 ($1661 in chips)
-ProBot_2: posts small blind $10
-ProBot_3: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Kh Js]
-Você: raises to $1360
-ProBot_1: folds
-ProBot_2: raises to $2332
-ProBot_3: folds
-Você: raises to $2720
-*** SHOWDOWN ***
-Você: shows [Kh Js] (Par)
-ProBot_2: shows [Kc Qd] (Par)
-ProBot_2 collected $718 from pot
-Você collected $1016 from pot
-*** SUMMARY ***
-Total pot $1734 | Rake $0
-Board [8h 2d Kd 4h 5d]
-Seat 1: Você lost ($349)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 won ($369)
-Seat 4: ProBot_3 lost ($20)
-
-
-PokerStars Hand #1792207952: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:32:32 ET
-Table 'VIP Python Club' 4-max Seat #4 is the button
-Seat 1: Você ($1016 in chips)
-Seat 2: ProBot_1 ($2625 in chips)
-Seat 3: ProBot_2 ($718 in chips)
-Seat 4: ProBot_3 ($1641 in chips)
-ProBot_3: posts small blind $10
-Você: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [5s 9d]
-ProBot_1: folds
-ProBot_2: folds
-ProBot_3: calls $10
-Você: raises to $990
-ProBot_3: folds
-*** SHOWDOWN ***
-Você: shows [5s 9d] ()
-Você collected $1010 from pot
-*** SUMMARY ***
-Total pot $1010 | Rake $0
-Seat 1: Você won ($20)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($0)
-Seat 4: ProBot_3 lost ($20)
-
-
-PokerStars Hand #1792207973: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:32:53 ET
-Table 'VIP Python Club' 4-max Seat #1 is the button
-Seat 1: Você ($1036 in chips)
-Seat 2: ProBot_1 ($2625 in chips)
-Seat 3: ProBot_2 ($718 in chips)
-Seat 4: ProBot_3 ($1621 in chips)
+Seat 1: Você ($810 in chips)
+Seat 2: ProBot_1 ($1012 in chips)
+Seat 3: ProBot_2 ($4198 in chips)
+Seat 4: ProBot_3 ($980 in chips)
 Você: posts small blind $10
 ProBot_1: posts big blind $20
 *** HOLE CARDS ***
@@ -437,7 +158,7 @@ ProBot_2: folds
 ProBot_3: folds
 Você: folds
 *** SHOWDOWN ***
-ProBot_1: shows [Qs 9d] ()
+ProBot_1: shows [4h Jh] ()
 ProBot_1 collected $30 from pot
 *** SUMMARY ***
 Total pot $30 | Rake $0
@@ -447,12 +168,359 @@ Seat 3: ProBot_2 lost ($0)
 Seat 4: ProBot_3 lost ($0)
 
 
-PokerStars Hand #1792208022: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:33:42 ET
+PokerStars Hand #1792363287: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:41:27 ET
 Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($1026 in chips)
-Seat 2: ProBot_1 ($2635 in chips)
-Seat 3: ProBot_2 ($718 in chips)
-Seat 4: ProBot_3 ($1621 in chips)
+Seat 1: Você ($800 in chips)
+Seat 2: ProBot_1 ($1022 in chips)
+Seat 3: ProBot_2 ($4198 in chips)
+Seat 4: ProBot_3 ($980 in chips)
+ProBot_1: posts small blind $10
+ProBot_2: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_3: folds
+Você: folds
+ProBot_1: calls $10
+ProBot_2: checks
+*** FLOP *** [8d Jh 7c]
+ProBot_1: raises to $47
+ProBot_2: calls $47
+*** TURN *** [8d Jh 7c] [2s]
+ProBot_1: raises to $157
+ProBot_2: calls $157
+*** RIVER *** [8d Jh 7c 2s] [2d]
+ProBot_1: raises to $526
+ProBot_2: raises to $1762
+ProBot_1: calls $272
+*** SHOWDOWN ***
+ProBot_1: shows [Qc 7d] (Dois Pares)
+ProBot_2: shows [Jd 6s] (Dois Pares)
+ProBot_2 collected $3008 from pot
+*** SUMMARY ***
+Total pot $3008 | Rake $0
+Board [8d Jh 7c 2s 2d]
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 lost ($1022)
+Seat 3: ProBot_2 won ($1022)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363316: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:41:56 ET
+Table 'VIP Python Club' 4-max Seat #3 is the button
+Seat 1: Você ($800 in chips)
+Seat 2: ProBot_1 ($1000 in chips)
+Seat 3: ProBot_2 ($5220 in chips)
+Seat 4: ProBot_3 ($980 in chips)
+ProBot_2: posts small blind $10
+ProBot_3: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+Você: folds
+ProBot_1: folds
+ProBot_2: folds
+*** SHOWDOWN ***
+ProBot_3: shows [4c Kh] ()
+ProBot_3 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 lost ($0)
+Seat 3: ProBot_2 lost ($10)
+Seat 4: ProBot_3 won ($10)
+
+
+PokerStars Hand #1792363380: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:43:00 ET
+Table 'VIP Python Club' 4-max Seat #4 is the button
+Seat 1: Você ($800 in chips)
+Seat 2: ProBot_1 ($1000 in chips)
+Seat 3: ProBot_2 ($5210 in chips)
+Seat 4: ProBot_3 ($990 in chips)
+ProBot_3: posts small blind $10
+Você: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_1: folds
+ProBot_2: folds
+ProBot_3: calls $10
+Você: checks
+*** FLOP *** [Ks Qh 7d]
+ProBot_3: checks
+Você: checks
+*** TURN *** [Ks Qh 7d] [5s]
+ProBot_3: raises to $47
+Você: folds
+*** SHOWDOWN ***
+ProBot_3: shows [8s Kd] ()
+ProBot_3 collected $87 from pot
+*** SUMMARY ***
+Total pot $87 | Rake $0
+Board [Ks Qh 7d 5s]
+Seat 1: Você lost ($20)
+Seat 2: ProBot_1 lost ($0)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 won ($20)
+
+
+PokerStars Hand #1792363410: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:43:30 ET
+Table 'VIP Python Club' 4-max Seat #1 is the button
+Seat 1: Você ($780 in chips)
+Seat 2: ProBot_1 ($1000 in chips)
+Seat 3: ProBot_2 ($5210 in chips)
+Seat 4: ProBot_3 ($1010 in chips)
+Você: posts small blind $10
+ProBot_1: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_2: folds
+ProBot_3: folds
+Você: folds
+*** SHOWDOWN ***
+ProBot_1: shows [Jc 3d] ()
+ProBot_1 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($10)
+Seat 2: ProBot_1 won ($10)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363468: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:44:28 ET
+Table 'VIP Python Club' 4-max Seat #2 is the button
+Seat 1: Você ($770 in chips)
+Seat 2: ProBot_1 ($1010 in chips)
+Seat 3: ProBot_2 ($5210 in chips)
+Seat 4: ProBot_3 ($1010 in chips)
+ProBot_1: posts small blind $10
+ProBot_2: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_3: folds
+Você: folds
+ProBot_1: calls $10
+ProBot_2: checks
+*** FLOP *** [Qc 4h 7s]
+ProBot_1: raises to $47
+ProBot_2: raises to $107
+ProBot_1: calls $60
+*** TURN *** [Qc 4h 7s] [Ac]
+ProBot_1: raises to $298
+ProBot_2: folds
+*** SHOWDOWN ***
+ProBot_1: shows [5s As] ()
+ProBot_1 collected $552 from pot
+*** SUMMARY ***
+Total pot $552 | Rake $0
+Board [Qc 4h 7s Ac]
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 won ($127)
+Seat 3: ProBot_2 lost ($127)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363524: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:45:24 ET
+Table 'VIP Python Club' 4-max Seat #3 is the button
+Seat 1: Você ($770 in chips)
+Seat 2: ProBot_1 ($1137 in chips)
+Seat 3: ProBot_2 ($5083 in chips)
+Seat 4: ProBot_3 ($1010 in chips)
+ProBot_2: posts small blind $10
+ProBot_3: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+Você: folds
+ProBot_1: calls $20
+ProBot_2: calls $10
+ProBot_3: checks
+*** FLOP *** [Td 2s 2d]
+ProBot_2: raises to $70
+ProBot_3: raises to $234
+ProBot_1: raises to $783
+ProBot_2: raises to $2458
+ProBot_3: calls $756
+ProBot_1: calls $334
+*** SHOWDOWN ***
+ProBot_1: shows [Qs Qc] (Dois Pares)
+ProBot_2: shows [9c 9s] (Dois Pares)
+ProBot_3: shows [Tc 5s] (Dois Pares)
+ProBot_1 collected $3284 from pot
+ProBot_2 collected $1341 from pot
+*** SUMMARY ***
+Total pot $4625 | Rake $0
+Board [Td 2s 2d 7c Kd]
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 won ($2147)
+Seat 3: ProBot_2 lost ($1137)
+Seat 4: ProBot_3 lost ($1010)
+
+
+PokerStars Hand #1792363596: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:46:36 ET
+Table 'VIP Python Club' 4-max Seat #4 is the button
+Seat 1: Você ($770 in chips)
+Seat 2: ProBot_1 ($3284 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($1000 in chips)
+ProBot_3: posts small blind $10
+Você: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_1: calls $20
+ProBot_2: folds
+ProBot_3: folds
+Você: checks
+*** FLOP *** [Ah Ts As]
+Você: checks
+ProBot_1: checks
+*** TURN *** [Ah Ts As] [4h]
+Você: checks
+ProBot_1: raises to $58
+Você: folds
+*** SHOWDOWN ***
+ProBot_1: shows [Jc Jd] ()
+ProBot_1 collected $108 from pot
+*** SUMMARY ***
+Total pot $108 | Rake $0
+Board [Ah Ts As 4h]
+Seat 1: Você lost ($20)
+Seat 2: ProBot_1 won ($30)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 lost ($10)
+
+
+PokerStars Hand #1792363616: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:46:56 ET
+Table 'VIP Python Club' 4-max Seat #1 is the button
+Seat 1: Você ($750 in chips)
+Seat 2: ProBot_1 ($3314 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($990 in chips)
+Você: posts small blind $10
+ProBot_1: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_2: folds
+ProBot_3: folds
+Você: folds
+*** SHOWDOWN ***
+ProBot_1: shows [6d Ad] ()
+ProBot_1 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($10)
+Seat 2: ProBot_1 won ($10)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363643: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:47:23 ET
+Table 'VIP Python Club' 4-max Seat #2 is the button
+Seat 1: Você ($740 in chips)
+Seat 2: ProBot_1 ($3324 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($990 in chips)
+ProBot_1: posts small blind $10
+ProBot_2: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_3: folds
+Você: folds
+ProBot_1: folds
+*** SHOWDOWN ***
+ProBot_2: shows [2d 5s] ()
+ProBot_2 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 lost ($10)
+Seat 3: ProBot_2 won ($10)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363665: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:47:45 ET
+Table 'VIP Python Club' 4-max Seat #3 is the button
+Seat 1: Você ($740 in chips)
+Seat 2: ProBot_1 ($3314 in chips)
+Seat 3: ProBot_2 ($3956 in chips)
+Seat 4: ProBot_3 ($990 in chips)
+ProBot_2: posts small blind $10
+ProBot_3: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+Você: folds
+ProBot_1: folds
+ProBot_2: folds
+*** SHOWDOWN ***
+ProBot_3: shows [2s 2d] ()
+ProBot_3 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($0)
+Seat 2: ProBot_1 lost ($0)
+Seat 3: ProBot_2 lost ($10)
+Seat 4: ProBot_3 won ($10)
+
+
+PokerStars Hand #1792363723: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:48:43 ET
+Table 'VIP Python Club' 4-max Seat #4 is the button
+Seat 1: Você ($740 in chips)
+Seat 2: ProBot_1 ($3314 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($1000 in chips)
+ProBot_3: posts small blind $10
+Você: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_1: folds
+ProBot_2: folds
+ProBot_3: calls $10
+Você: checks
+*** FLOP *** [Td Ad 2h]
+ProBot_3: checks
+Você: checks
+*** TURN *** [Td Ad 2h] [Js]
+ProBot_3: raises to $47
+Você: folds
+*** SHOWDOWN ***
+ProBot_3: shows [Qc Jd] ()
+ProBot_3 collected $87 from pot
+*** SUMMARY ***
+Total pot $87 | Rake $0
+Board [Td Ad 2h Js]
+Seat 1: Você lost ($20)
+Seat 2: ProBot_1 lost ($0)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 won ($20)
+
+
+PokerStars Hand #1792363749: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:49:09 ET
+Table 'VIP Python Club' 4-max Seat #1 is the button
+Seat 1: Você ($720 in chips)
+Seat 2: ProBot_1 ($3314 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($1020 in chips)
+Você: posts small blind $10
+ProBot_1: posts big blind $20
+*** HOLE CARDS ***
+Dealt to Você []
+ProBot_2: folds
+ProBot_3: folds
+Você: folds
+*** SHOWDOWN ***
+ProBot_1: shows [8d 4h] ()
+ProBot_1 collected $30 from pot
+*** SUMMARY ***
+Total pot $30 | Rake $0
+Seat 1: Você lost ($10)
+Seat 2: ProBot_1 won ($10)
+Seat 3: ProBot_2 lost ($0)
+Seat 4: ProBot_3 lost ($0)
+
+
+PokerStars Hand #1792363785: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:49:45 ET
+Table 'VIP Python Club' 4-max Seat #2 is the button
+Seat 1: Você ($710 in chips)
+Seat 2: ProBot_1 ($3324 in chips)
+Seat 3: ProBot_2 ($3946 in chips)
+Seat 4: ProBot_3 ($1020 in chips)
 ProBot_1: posts small blind $10
 ProBot_2: posts big blind $20
 *** HOLE CARDS ***
@@ -461,110 +529,43 @@ ProBot_3: raises to $41
 Você: folds
 ProBot_1: folds
 ProBot_2: calls $21
-*** FLOP *** [7c 7s 5h]
+*** FLOP *** [3h 7d 6d]
 ProBot_2: checks
 ProBot_3: raises to $108
 ProBot_2: folds
 *** SHOWDOWN ***
-ProBot_3: shows [Ah 6c] ()
+ProBot_3: shows [7c Kh] ()
 ProBot_3 collected $200 from pot
 *** SUMMARY ***
 Total pot $200 | Rake $0
-Board [7c 7s 5h]
+Board [3h 7d 6d]
 Seat 1: Você lost ($0)
 Seat 2: ProBot_1 lost ($10)
 Seat 3: ProBot_2 lost ($41)
 Seat 4: ProBot_3 won ($51)
 
 
-PokerStars Hand #1792208827: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:47:07 ET
-Table 'VIP Python Club' 4-max Seat #2 is the button
-Seat 1: Você ($1000 in chips)
-Seat 2: ProBot_1 ($1000 in chips)
-Seat 3: ProBot_2 ($1000 in chips)
-Seat 4: ProBot_3 ($1000 in chips)
-ProBot_1: posts small blind $10
-ProBot_2: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você [Qc Ks]
-ProBot_3: folds
-Você: raises to $40
-ProBot_1: folds
-ProBot_2: raises to $89
-Você: calls $49
-*** FLOP *** [Ad Qd 4h]
-ProBot_2: checks
-Você: raises to $70
-ProBot_2: folds
-*** SHOWDOWN ***
-Você: shows [Qc Ks] ()
-Você collected $258 from pot
-*** SUMMARY ***
-Total pot $258 | Rake $0
-Board [Ad Qd 4h]
-Seat 1: Você won ($99)
-Seat 2: ProBot_1 lost ($10)
-Seat 3: ProBot_2 lost ($89)
-Seat 4: ProBot_3 lost ($0)
-
-
-PokerStars Hand #1792208859: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:47:39 ET
+PokerStars Hand #1792363810: Hold'em No Limit ($10/$20 USD) - 2026/10/18 19:50:10 ET
 Table 'VIP Python Club' 4-max Seat #3 is the button
-Seat 1: Você ($1099 in chips)
-Seat 2: ProBot_1 ($990 in chips)
-Seat 3: ProBot_2 ($911 in chips)
-Seat 4: ProBot_3 ($1000 in chips)
+Seat 1: Você ($710 in chips)
+Seat 2: ProBot_1 ($3314 in chips)
+Seat 3: ProBot_2 ($3905 in chips)
+Seat 4: ProBot_3 ($1071 in chips)
 ProBot_2: posts small blind $10
 ProBot_3: posts big blind $20
 *** HOLE CARDS ***
 Dealt to Você []
 Você: folds
 ProBot_1: folds
-ProBot_2: calls $10
-ProBot_3: raises to $67
 ProBot_2: folds
 *** SHOWDOWN ***
-ProBot_3: shows [Qc Qh] ()
-ProBot_3 collected $87 from pot
+ProBot_3: shows [7c 6c] ()
+ProBot_3 collected $30 from pot
 *** SUMMARY ***
-Total pot $87 | Rake $0
+Total pot $30 | Rake $0
 Seat 1: Você lost ($0)
 Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 lost ($20)
-Seat 4: ProBot_3 won ($20)
-
-
-PokerStars Hand #1792208916: Hold'em No Limit ($10/$20 USD) - 2026/10/17 00:48:36 ET
-Table 'VIP Python Club' 4-max Seat #4 is the button
-Seat 1: Você ($1099 in chips)
-Seat 2: ProBot_1 ($990 in chips)
-Seat 3: ProBot_2 ($891 in chips)
-Seat 4: ProBot_3 ($1020 in chips)
-ProBot_3: posts small blind $10
-Você: posts big blind $20
-*** HOLE CARDS ***
-Dealt to Você []
-ProBot_1: folds
-ProBot_2: raises to $67
-ProBot_3: raises to $134
-Você: folds
-ProBot_2: calls $67
-*** FLOP *** [Qs Th Tc]
-ProBot_3: checks
-ProBot_2: checks
-*** TURN *** [Qs Th Tc] [Ah]
-ProBot_3: checks
-ProBot_2: raises to $338
-ProBot_3: folds
-*** SHOWDOWN ***
-ProBot_2: shows [Ks Kc] ()
-ProBot_2 collected $626 from pot
-*** SUMMARY ***
-Total pot $626 | Rake $0
-Board [Qs Th Tc Ah]
-Seat 1: Você lost ($20)
-Seat 2: ProBot_1 lost ($0)
-Seat 3: ProBot_2 won ($154)
-Seat 4: ProBot_3 lost ($134)
+Seat 3: ProBot_2 lost ($10)
+Seat 4: ProBot_3 won ($10)
 
 

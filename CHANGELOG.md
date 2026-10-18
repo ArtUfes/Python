@@ -217,3 +217,20 @@ Nesta etapa, consolidamos a infraestrutura de testes automatizados do projeto, c
 - `AGENTS.md` (Adicionado)
 - `.agents/rules/git_rules.md` (Adicionado)
 
+## [18/10/2026] - Correção do Hand History em All-In Pré-Flop e Teste Unitário
+
+### O que foi feito com detalhes:
+
+1. **Exibição Garantida das Cartas Comunitárias (Streets) em Replayers de PokerStars:**
+   - **Problema:** Quando os jogadores iam All-In ainda no Pré-Flop, nenhuma aposta ocorria nas rodadas seguintes (Flop, Turn, River). O gerador de Hand History só emitia os cabeçalhos de street (`*** FLOP ***`, `*** TURN ***`, `*** RIVER ***`) dentro do loop de ações de aposta. Como não havia ações pós-flop, esses cabeçalhos eram omitidos, fazendo com que replayers online (como PokerStars Replayer / PokerHandReplayer) pulassem direto para o Showdown sem abrir as cartas do board na animação da mesa.
+   - **Solução:** O método `gerar_hand_history_text` em `core/gravador_historico.py` foi ajustado para estruturar as streets pelo total de cartas comunitárias distribuídas, garantindo que Flop, Turn e River sejam sempre impressos com suas respectivas cartas mesmo que não tenham ocorrido apostas.
+   - **Resiliência:** Adicionou-se acesso seguro via `.get()` para campos como `chegou_showdown` e `lucro_liquido`.
+
+2. **Criação de Teste Automatizado de Anti-Regressão (`tests/test_historico.py`):**
+   - Implementado teste unitário que simula uma mão com All-In pré-flop e valida a presença obrigatória dos blocos `*** FLOP ***`, `*** TURN ***`, `*** RIVER ***` e `Board [...]` no texto canônico gerado.
+
+### Arquivos Afetados/Criados:
+- `core/gravador_historico.py` (Modificado)
+- `tests/test_historico.py` (Adicionado)
+- `historico_pokerstars.txt` (Modificado)
+
