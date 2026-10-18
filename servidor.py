@@ -83,6 +83,7 @@ def loop_do_jogo():
         bb_nome = ativos_iniciais[(mesa.posicao_button + 2) % len(ativos_iniciais)].nome if len(ativos_iniciais) >= 2 else ""
         
         stacks_iniciais = {j.nome: j.stack + mesa.apostas_rodada.get(j.nome, 0) for j in mesa.jogadores}
+        cartas_iniciais = {j.nome: list(j.cartas) for j in mesa.jogadores}
         acoes_historico = []
 
         while mesa.estado_atual != "SHOWDOWN":
@@ -201,6 +202,9 @@ def loop_do_jogo():
         
         # Gravação Completa do Histórico (Formato PokerStars + SQLite)
         try:
+            ativos_finais = [j for j in mesa.jogadores if j.ativo]
+            houve_showdown = len(ativos_finais) >= 2
+
             dados_para_salvar = {
                 'small_blind': mesa.small_blind,
                 'big_blind': mesa.big_blind,
@@ -209,15 +213,15 @@ def loop_do_jogo():
                 'big_blind_player': bb_nome,
                 'cartas_comunitarias': list(mesa.cartas_na_mesa),
                 'pote_total': pote_final_calculado,
-                'showdown': True if ranking else False,
+                'showdown': houve_showdown,
                 'jogadores': [
                     {
                         'nome': j.nome,
                         'stack_inicial': stacks_iniciais.get(j.nome, j.stack),
-                        'cartas': list(j.cartas),
+                        'cartas': list(cartas_iniciais.get(j.nome, j.cartas)),
                         'lucro_liquido': j.stack - stacks_iniciais.get(j.nome, j.stack),
-                        'chegou_showdown': j.ativo,
-                        'desc_mao': AvaliadorDeMaosOtimizado.imprimir_mao(j.classificacao_mao) if getattr(j, 'classificacao_mao', None) else ""
+                        'chegou_showdown': j.ativo and houve_showdown,
+                        'desc_mao': AvaliadorDeMaosOtimizado.imprimir_mao(j.classificacao_mao) if (getattr(j, 'classificacao_mao', None) and houve_showdown) else ""
                     }
                     for j in mesa.jogadores
                 ],

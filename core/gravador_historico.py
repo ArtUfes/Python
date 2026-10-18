@@ -119,7 +119,7 @@ class GravadorHistorico:
         lines.append("*** HOLE CARDS ***")
         for j in dados_mao['jogadores']:
             cartas_str = " ".join([self._formatar_carta_pokerstars(c) for c in j['cartas']])
-            if j['nome'] == 'Você' or dados_mao.get('revelar_todas', False):
+            if (j['nome'] == 'Você' or dados_mao.get('revelar_todas', False)) and cartas_str.strip():
                 lines.append(f"Dealt to {j['nome']} [{cartas_str}]")
 
         # Ações street por street (Garante exibição do board mesmo em All-In Pré-Flop)
@@ -169,14 +169,17 @@ class GravadorHistorico:
             for acao in [a for a in acoes if a['rodada'] == 'RIVER']:
                 lines.append(formatar_linha_acao(acao))
 
-        # Showdown & Summary
-        if dados_mao.get('showdown', False):
+        # Showdown & Summary (só ocorre se 2 ou mais jogadores chegaram ao showdown)
+        jogadores_showdown = [j for j in dados_mao['jogadores'] if j.get('chegou_showdown', False)]
+        if dados_mao.get('showdown', False) and len(jogadores_showdown) >= 2:
             lines.append("*** SHOWDOWN ***")
-            for j in dados_mao['jogadores']:
-                if j.get('chegou_showdown', False):
-                    cartas_str = " ".join([self._formatar_carta_pokerstars(c) for c in j['cartas']])
-                    desc = j.get('desc_mao', '')
+            for j in jogadores_showdown:
+                cartas_str = " ".join([self._formatar_carta_pokerstars(c) for c in j['cartas']])
+                desc = j.get('desc_mao', '')
+                if desc:
                     lines.append(f"{j['nome']}: shows [{cartas_str}] ({desc})")
+                elif cartas_str.strip():
+                    lines.append(f"{j['nome']}: shows [{cartas_str}]")
                     
         for v in dados_mao.get('vencedores_detalhe', []):
             lines.append(f"{v['nome']} collected ${v['valor']} from pot")

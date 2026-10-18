@@ -229,8 +229,15 @@ Nesta etapa, consolidamos a infraestrutura de testes automatizados do projeto, c
 2. **Criação de Teste Automatizado de Anti-Regressão (`tests/test_historico.py`):**
    - Implementado teste unitário que simula uma mão com All-In pré-flop e valida a presença obrigatória dos blocos `*** FLOP ***`, `*** TURN ***`, `*** RIVER ***` e `Board [...]` no texto canônico gerado.
 
+3. **Correção de Parser Error em Mãos Ganhas sem Showdown (W.O. / Fold Geral):**
+   - **Problema 1 (`Dealt to Você []`):** Quando o jogador dava FOLD, `jogador.foldar()` limpava suas cartas (`self.cartas = []`). Como o histórico era salvo no encerramento da rodada, as cartas do jogador ficavam vazias `[]`, gerando erro de sintaxe no parser.
+   - **Solução 1:** No `servidor.py`, criamos `cartas_iniciais` salvas no início da rodada logo após a distribuição, preservando o registro das cartas próprias no Hand History mesmo que o jogador folde. Além disso, no `gravador_historico.py`, se `cartas_str` estiver vazia, a linha `Dealt to` não é emitida com colchetes vazios.
+   - **Problema 2 (`*** SHOWDOWN ***` e `shows [...] ()` indevidos):** Quando todos os adversários foldavam, o motor ainda emitia `*** SHOWDOWN ***` e tentava mostrar cartas com descrição vazia `()`, o que quebrava o parser de replayers externos.
+   - **Solução 2:** O bloco `*** SHOWDOWN ***` agora só é emitido se 2 ou mais jogadores disputaram até o final. Se apenas 1 jogador sobrou, o pote é recolhido diretamente sem showdown.
+
 ### Arquivos Afetados/Criados:
 - `core/gravador_historico.py` (Modificado)
-- `tests/test_historico.py` (Adicionado)
+- `servidor.py` (Modificado)
+- `tests/test_historico.py` (Modificado)
 - `historico_pokerstars.txt` (Modificado)
 
