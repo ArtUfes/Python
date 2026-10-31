@@ -87,6 +87,11 @@ class AudioEngine {
     return this.muted;
   }
 
+  toggleMute() {
+    this.muted = !this.muted;
+    return this.muted;
+  }
+
   setVolume(vol) {
     this.volume = Math.max(0, Math.min(1, vol));
   }

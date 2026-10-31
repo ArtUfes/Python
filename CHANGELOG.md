@@ -241,3 +241,53 @@ Nesta etapa, consolidamos a infraestrutura de testes automatizados do projeto, c
 - `tests/test_historico.py` (Modificado)
 - `historico_pokerstars.txt` (Modificado)
 
+## [31/10/2026] - Menu Principal VIP (Lobby), Sistema de Bankroll e Cash Game RallyAces
+
+Nesta fase construímos a experiência de entrada do jogo no frontend React e o sistema econômico de perfil/bankroll persistente em SQLite, permitindo selecionar mesas de Cash Game dinâmicas e transitar de forma fluida e instantânea entre o Lobby e a Mesa.
+
+### O que foi feito com detalhes:
+
+1. **Sistema de Perfil e Bankroll Persistente (`core/perfil.py`):**
+   - Criação da classe `GerenciadorPerfil` operando na nova tabela `perfil` do banco SQLite unificado `historico_partidas.db`.
+   - Saldo inicial de $10.000 para novos jogadores e botão de recarga rápida (+$10.000) para testes livres.
+   - Sincronização automática do histórico de partidas anteriores (mãos e vitórias calculadas de `mao_jogadores`).
+   - Métodos transacionais seguros `debitar_bankroll`, `creditar_bankroll`, `recarregar_fichas` e `registrar_mao_jogada`.
+   - Suíte de 6 testes unitários em `tests/test_perfil.py` validando conservação de fichas e prevenção de saldos inconsistentes.
+
+2. **Rotas e Eventos em Tempo Real no Servidor (`servidor.py`):**
+   - Novo endpoint HTTP `GET /api/historico-txt` para download direto do arquivo de histórico canônico.
+   - Eventos de Socket.io: `obter_perfil`, `recarregar_fichas`, `iniciar_cash_game` e `sair_da_mesa`.
+   - Inicialização da mesa com blinds e buy-ins dinâmicos escolhidos pelo jogador.
+   - **Encerramento Instantâneo:** Ao sair da mesa, o servidor agora credita imediatamente o saldo remanescente ao Bankroll e emite `sessao_encerrada` sem nenhum delay (interrompendo sleeps dos bots em blocos de 0.1s).
+   - Testes automatizados em `tests/test_servidor_rotas.py`.
+
+3. **Menu Principal VIP em React (`frontend/src/components/MenuPrincipal.jsx` e `MenuPrincipal.css`):**
+   - Design fiel à Opção 1 (VIP Casino Lounge com auras esmeralda/dourada e glassmorphism).
+   - Header com logo *"Python Poker Club"*, avatar, indicador de Bankroll e botão de mudo.
+   - Cards centrais com destaque para **Cash Game** (disponível) e **Torneio Sit & Go** (selo "Em Breve").
+   - Modal de Seleção de Stakes (Micro $5/$10, Médio $10/$20, High $25/$50 e VIP $50/$100) com slider interativo de Buy-In (10 BB a 1.000 BB).
+   - Modal de Estatísticas e HUD com métricas reais (VPIP, PFR, AF, Taxa de Vitórias e Arquétipo) sem mocks numéricos.
+   - Modal informativo de Regras Básicas do Texas Hold'em.
+
+4. **Refinamentos na Mesa de Jogo (`frontend/src/components/Mesa.jsx` e `index.css`):**
+   - Botão `[🚪 Sair para o Menu]` reposicionado no canto superior esquerdo da mesa com visual pill translúcido.
+   - Modal de confirmação inteligente caso o jogador tente sair durante uma rodada ativa (com opção de foldar ou continuar jogando).
+   - Correção do método `audioEngine.toggleMute()`.
+   - Preservação da proporção da mesa e do dimensionamento das cartas (`mini-carta`).
+
+### Arquivos Afetados/Criados:
+- `core/perfil.py` (Adicionado)
+- `servidor.py` (Modificado)
+- `tests/test_perfil.py` (Adicionado)
+- `tests/test_servidor_rotas.py` (Adicionado)
+- `frontend/src/App.jsx` (Modificado)
+- `frontend/src/audioEngine.js` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/components/MenuPrincipal.jsx` (Adicionado)
+- `frontend/src/components/MenuPrincipal.css` (Adicionado)
+- `docs/plano_menu_principal.md` (Adicionado)
+- `docs/roadmap.md` (Modificado)
+- `CHANGELOG.md` (Modificado)
+
+

@@ -49,24 +49,22 @@ Esse comportamento matemático, alinhado ao conceito de *Expected Value (EV)*, c
 > **Diretriz Estratégica Atual (Foco em Game Dev & Experiência):**
 > O foco do projeto agora está **100% concentrado no desenvolvimento do jogo em si** (Criação de Modos de Jogo, Lobby/Menu Inicial, Regras de Torneio vs Cash Game, UX/UI e integração com Hand Replayer), **ao invés de focar no treinamento avançado de bots por enquanto**. Os bots atuais (Monte Carlo + DNA Darwin v1) já são oponentes funcionais excelentes para alimentar a dinâmica e validar a economia das partidas.
 
-## 6. Menu Inicial (Lobby), Modos de Jogo e Experiência do Jogador (FOCO ATUAL)
-- **Tela de Lobby Inicial (Full Web Experience):**
-  - Entrada visual premium antes de carregar a mesa de feltro.
-  - Painel de perfil do jogador (Avatar, Banca acumulada, Indicadores de Carreira como VPIP, PFR e Arquétipo).
+## 6. Menu Inicial (Lobby), Modos de Jogo e Experiência do Jogador (EM PROGRESSO - ETAPA 1 CONCLUÍDA)
+- **Tela de Lobby Inicial (✅ Concluída):**
+  - Entrada visual premium no frontend React com estética VIP Casino (Opção 1 aprovada).
+  - Header com logo *"Python Poker Club"*, avatar, exibição do Bankroll e recarga rápida (+$10k para testes).
+  - Cards centrais com destaque visual para **Cash Game** e **Torneio** (Selo "Em Breve").
+  - Rodapé de utilidades: Modal de Estatísticas de Carreira & HUD (VPIP, PFR, AF, mãos), download direto de `historico_pokerstars.txt` e regras do jogo.
 - **Seleção de Modos de Jogo:**
-  - **Modo 1: Cash Game (Mesa Contínua):**
-    - Blinds fixos (ex: $10/$20).
-    - Rebuys ilimitados ao zerar fichas (recarga instantânea).
-    - Foco estratégico: Maximizar lucro a longo prazo e taxa de **BB/100**.
-    - O jogador pode entrar e sair da mesa a qualquer momento com o saldo acumulado.
-  - **Modo 2: Torneio Mata-Mata (Sit & Go / Knockout):**
-    - Buy-in fixo (ex: $500 para entrar) e stack inicial igual para todos os 4 jogadores.
-    - **Sem rebuy:** Se as fichas zerarem, o jogador/bot é eliminado da mesa (eliminação direta).
-    - **Aumento progressivo dos Blinds (Blind Levels):** A cada $N$ mãos (ex: a cada 5 mãos), os blinds sobem (10/20 -> 20/40 -> 40/80 -> 100/200), forçando a agressão.
-    - **Disputa por Pódio:** Premiação para 1º lugar (Troféu/Premiação máx) e 2º lugar.
-- **Central de Dados & Exportação no Menu:**
-  - Botão de download rápido de arquivo `.txt` do histórico de mãos (Padrão PokerStars) pronto para colar em replayers externos.
-  - Visualizador interno rápido de histórico com resumo das últimas mãos jogadas.
+  - **Modo 1: Cash Game Estilo RallyAces (✅ Concluído):**
+    - 4 mesas dinâmicas: Micro ($5/$10), Médio ($10/$20), High ($25/$50) e VIP ($50/$100).
+    - Slider interativo de Buy-In (10 BB a 1000 BB) respeitando o saldo do Bankroll.
+    - Saída instantânea da mesa com devolução automática do saldo restante para o Bankroll e confirmação caso haja mão em andamento.
+  - **Modo 2: Torneio Mata-Mata Sit & Go (PRÓXIMO PASSO):**
+    - Buy-in fixo e stack inicial igual para todos os 4 jogadores.
+    - **Sem rebuy:** Eliminação direta ao zerar as fichas.
+    - **Aumento progressivo dos Blinds (Blind Levels):** A cada $N$ mãos (ex: a cada 5 mãos), os blinds sobem, forçando a ação.
+    - **Disputa por Pódio:** Premiação para 1º lugar (Troféu) e 2º lugar.
 
 ## 7. Organização e Limpeza da Estrutura do Repositório (Refatoração)
 - Limpeza da raiz do projeto para isolar arquivos transitórios e gerados:

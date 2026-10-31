@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import audioEngine from '../audioEngine';
 
-export default function Mesa({ socket }) {
+export default function Mesa({ socket, onVoltarMenu }) {
   const [estado, setEstado] = useState(null);
   const [minhaVez, setMinhaVez] = useState(false);
   const [infoAcao, setInfoAcao] = useState(null);
@@ -11,6 +11,7 @@ export default function Mesa({ socket }) {
   const [fichasNaMesa, setFichasNaMesa] = useState([]);
   const [mutado, setMutado] = useState(audioEngine.isMuted());
   const [metricasJogador, setMetricasJogador] = useState(null);
+  const [modalConfirmarSaida, setModalConfirmarSaida] = useState(null);
   const chatRef = useRef(null);
   const estadoRef = useRef(estado);
 
@@ -29,9 +30,6 @@ export default function Mesa({ socket }) {
   }, [estado]);
 
   useEffect(() => {
-    // Pede ao servidor Python para inicializar as threads assim que renderiza
-    socket.emit('iniciar_jogo');
-
     socket.on('estado_mesa', (dados) => {
       setEstado(dados);
       if (dados.turno_atual !== 'Você') {
@@ -42,10 +40,8 @@ export default function Mesa({ socket }) {
     socket.on('pedir_acao', (dados) => {
       setMinhaVez(true);
       setInfoAcao(dados);
-      // Alerta sonoro sutil quando a ação chega para o jogador
       audioEngine.playTurnAlert();
-      // Sugere valor de raise como o dobro da maior aposta (padrão de poker)
-      setValorRaise(dados.maior_aposta * 2 || 20); 
+      setValorRaise(dados.maior_aposta * 2 || (dados?.big_blind || 20)); 
     });
 
     socket.on('mensagem', (msg) => {
@@ -56,11 +52,27 @@ export default function Mesa({ socket }) {
       setMetricasJogador(dados);
     });
 
+    socket.on('confirmar_saida', (data) => {
+      setModalConfirmarSaida(data.mensagem);
+    });
+
+    socket.on('sessao_encerrada', (data) => {
+      if (onVoltarMenu) {
+        onVoltarMenu(data.perfil);
+      }
+    });
+
+    socket.on('jogador_falido', (data) => {
+      alert(data.mensagem || "Suas fichas na mesa acabaram!");
+      if (onVoltarMenu) {
+        onVoltarMenu();
+      }
+    });
+
     socket.on('acao_executada', (data) => {
       if (data.jogador === 'Você') {
         setMinhaVez(false);
       }
-      // Dispara os sons correspondentes para jogadas dos bots e humanos
       if (data.acao === 'CHECK') {
         audioEngine.playCheck();
       } else if (data.acao === 'FOLD') {
@@ -70,7 +82,6 @@ export default function Mesa({ socket }) {
 
     socket.on('animar_fichas', (data) => {
       if (data.de === 'centro') {
-        // Alguém ganhou o pote, toca som de vitória/recolher fichas
         audioEngine.playChipWin();
         const to = getPlayerCoordinates(data.para);
         setFichasNaMesa(prev => prev.map(f => {
@@ -81,13 +92,10 @@ export default function Mesa({ socket }) {
         }));
         setTimeout(() => setFichasNaMesa([]), 5000);
       } else {
-        // Alguém apostou, toca som de aposta de fichas
         audioEngine.playChipBet();
         const id = Date.now() + Math.random();
         const from = getPlayerCoordinates(data.de);
-        // Desloca um pouco as fichas para o alto/baixo para não cobrirem o River
         const to = { x: 0, y: -120 }; 
-        
         const newFicha = { 
           id, 
           x: to.x + (Math.random() * 80 - 40),
@@ -103,12 +111,15 @@ export default function Mesa({ socket }) {
     return () => {
       socket.off('estado_mesa');
       socket.off('pedir_acao');
-      socket.off('metricas_jogador');
-      socket.off('acao_executada');
       socket.off('mensagem');
+      socket.off('metricas_jogador');
+      socket.off('confirmar_saida');
+      socket.off('sessao_encerrada');
+      socket.off('jogador_falido');
+      socket.off('acao_executada');
       socket.off('animar_fichas');
     };
-  }, [socket]);
+  }, [socket, onVoltarMenu]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -117,9 +128,19 @@ export default function Mesa({ socket }) {
   }, [mensagens]);
 
   const toggleMute = () => {
-    const novoStatus = !mutado;
+    const novoStatus = audioEngine.toggleMute();
     setMutado(novoStatus);
-    audioEngine.setMuted(novoStatus);
+  };
+
+  const handlePedirSaida = () => {
+    audioEngine.playChipBet();
+    socket.emit('sair_da_mesa');
+  };
+
+  const handleConfirmarSaidaForcada = () => {
+    audioEngine.playChipBet();
+    setModalConfirmarSaida(null);
+    socket.emit('sair_da_mesa', { forcar: true });
   };
 
   const enviarAcao = (acao) => {
@@ -158,36 +179,38 @@ export default function Mesa({ socket }) {
 
   const getPlayerCoordinates = (nome) => {
     if (nome === "centro") return { x: 0, y: 0 };
-    const currentEstado = estadoRef.current;
-    const idx = currentEstado?.jogadores.findIndex(j => j.nome === nome);
+    if (!estado) return { x: 0, y: 0 };
+    const idx = estado.jogadores.findIndex(j => j.nome === nome);
     switch(idx) {
-      case 0: return { x: 0, y: 300 }; // bottom
-      case 1: return { x: -350, y: 0 }; // left
-      case 2: return { x: 0, y: -250 }; // top
-      case 3: return { x: 350, y: 0 }; // right
+      case 0: return { x: 0, y: 260 };
+      case 1: return { x: -420, y: 0 };
+      case 2: return { x: 0, y: -260 };
+      case 3: return { x: 420, y: 0 };
       default: return { x: 0, y: 0 };
     }
   };
 
-  if (!estado) return <div className="poker-table"><h1>Iniciando partida...</h1></div>;
+  if (!estado) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '100px', color: '#f8fafc' }}>
+        <h2>Carregando Mesa...</h2>
+      </div>
+    );
+  }
 
   return (
-    <div className="container-jogo" style={{position: 'relative'}}>
-      <AnimatePresence>
-        {fichasNaMesa.map(f => (
-          <motion.div 
-            key={f.id}
-            className="ficha-grafica"
-            initial={{ x: f.fromX, y: f.fromY, scale: 0.5, opacity: 0 }}
-            animate={{ x: f.x, y: f.y, scale: 1, opacity: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ duration: f.para === 'centro' ? 0.5 : 1.5, ease: "easeOut" }}
-            style={{ position: 'absolute', top: '50%', left: '50%', zIndex: 100 }}
-          />
-        ))}
-      </AnimatePresence>
-      {/* MESA PRINCIPAL */}
+    <div className="container-jogo">
+      {/* MESA DE POKER */}
       <div className="poker-table">
+        {/* BOTÃO DE SAÍDA (CANTO SUPERIOR ESQUERDO) */}
+        <button 
+          className="btn-sair-mesa"
+          onClick={handlePedirSaida}
+          title="Voltar ao Menu Principal"
+        >
+          🚪 Sair para o Menu
+        </button>
+
         {/* BOTÃO DE CONTROLE DE ÁUDIO (CANTO SUPERIOR DIREITO) */}
         <button 
           className="sound-toggle-btn" 
@@ -220,7 +243,9 @@ export default function Mesa({ socket }) {
               </AnimatePresence>
             )}
           </div>
-          <div className="rodada-info">Fase: {estado.estado_atual}</div>
+          <div className="rodada-info">
+            Fase: {estado.estado_atual} • Blinds: ${estado.small_blind || 10}/${estado.big_blind || 20}
+          </div>
         </div>
 
         {/* JOGADORES SENTADOS */}
@@ -256,11 +281,22 @@ export default function Mesa({ socket }) {
             </div>
           </div>
         ))}
+
+        {/* ANIMAÇÃO DE FICHAS EM TEMPO REAL */}
+        {fichasNaMesa.map((f) => (
+          <motion.div
+            key={f.id}
+            initial={{ x: f.fromX, y: f.fromY, scale: 0.5, opacity: 0 }}
+            animate={{ x: f.x, y: f.y, scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="ficha-grafica"
+            style={{ position: 'absolute', left: '50%', top: '50%' }}
+          />
+        ))}
       </div>
 
       {/* PAINEL LATERAL (DISCLAIMER, LOG E BOTÕES) */}
       <div className="painel-lateral">
-        {/* CARD DE AVISO EDUCACIONAL (COMPLIANCE YOUTUBE) */}
         <div className="card-disclaimer-lateral">
           <div className="card-disclaimer-header">
             <span className="badge-edu">🎓 PROJETO EDUCACIONAL</span>
@@ -288,7 +324,8 @@ export default function Mesa({ socket }) {
           const maiorAposta = infoAcao?.maior_aposta || 0;
           const podeDarRaise = podeAgir && (maxAtingivel > maiorAposta);
           
-          const minRaiseCalc = Math.min(maxAtingivel, Math.max(maiorAposta * 2, 20));
+          const bbAtual = estado?.big_blind || 20;
+          const minRaiseCalc = Math.min(maxAtingivel, Math.max(maiorAposta * 2, bbAtual));
           const maxRaiseCalc = maxAtingivel;
 
           return (
@@ -312,7 +349,7 @@ export default function Mesa({ socket }) {
                           type="range" 
                           min={minRaiseCalc} 
                           max={maxRaiseCalc}
-                          step="10"
+                          step={bbAtual}
                           value={Math.min(maxRaiseCalc, Math.max(minRaiseCalc, parseInt(valorRaise) || minRaiseCalc))} 
                           onChange={e => setValorRaise(e.target.value)}
                           className="slider-raise"
@@ -339,6 +376,41 @@ export default function Mesa({ socket }) {
           );
         })()}
       </div>
+
+      {/* MODAL DE CONFIRMAÇÃO DE SAÍDA DURANTE A RODADA */}
+      <AnimatePresence>
+        {modalConfirmarSaida && (
+          <div className="modal-overlay" style={{ zIndex: 9999 }}>
+            <motion.div 
+              className="modal-dialog" 
+              style={{ maxWidth: 460 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+            >
+              <div className="modal-header">
+                <h3>⚠️ Confirmar Saída</h3>
+                <button className="btn-close-modal" onClick={() => setModalConfirmarSaida(null)}>✕</button>
+              </div>
+              <div className="modal-body" style={{ color: '#cbd5e1', fontSize: '14px', lineHeight: 1.5 }}>
+                <p>{modalConfirmarSaida}</p>
+              </div>
+              <div className="modal-footer">
+                <button className="btn-secundario" onClick={() => setModalConfirmarSaida(null)}>
+                  Continuar Jogando
+                </button>
+                <button 
+                  className="btn-primario-ouro" 
+                  style={{ background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)', color: '#fff', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)' }}
+                  onClick={handleConfirmarSaidaForcada}
+                >
+                  Foldar e Sair
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
