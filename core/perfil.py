@@ -16,60 +16,89 @@ class GerenciadorPerfil:
         return sqlite3.connect(self.db_path)
 
     def _inicializar_banco(self) -> None:
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS perfil (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT UNIQUE DEFAULT 'Você',
-                bankroll INTEGER DEFAULT 10000,
-                maos_jogadas INTEGER DEFAULT 0,
-                vitorias INTEGER DEFAULT 0,
-                ultimo_resgate_bonus DATETIME,
-                criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-            """)
-
-            # Garante a existência do perfil padrão 'Você'
-            cursor.execute("SELECT id FROM perfil WHERE nome = 'Você'")
-            if cursor.fetchone() is None:
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
                 cursor.execute("""
-                INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
-                VALUES ('Você', 10000, 0, 0)
+                CREATE TABLE IF NOT EXISTS perfil (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nome TEXT UNIQUE DEFAULT 'Você',
+                    bankroll INTEGER DEFAULT 10000,
+                    maos_jogadas INTEGER DEFAULT 0,
+                    vitorias INTEGER DEFAULT 0,
+                    ultimo_resgate_bonus DATETIME,
+                    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
                 """)
-            conn.commit()
+
+                cursor.execute("SELECT id FROM perfil WHERE nome = 'Você'")
+                if cursor.fetchone() is None:
+                    cursor.execute("""
+                    INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
+                    VALUES ('Você', 10000, 0, 0)
+                    """)
+        finally:
+            conn.close()
 
     def obter_perfil(self, nome: str = "Você") -> Dict[str, Any]:
         """
         Retorna o dicionário com os dados do perfil do jogador.
         Cria o jogador com $10.000 de bankroll caso não exista.
         """
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-            SELECT id, nome, bankroll, maos_jogadas, vitorias, ultimo_resgate_bonus, criado_em
-            FROM perfil
-            WHERE nome = ?
-            """, (nome,))
-            row = cursor.fetchone()
-
-            if row is None:
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
                 cursor.execute("""
-                INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
-                VALUES (?, 10000, 0, 0)
+                SELECT id, nome, bankroll, maos_jogadas, vitorias, ultimo_resgate_bonus, criado_em
+                FROM perfil
+                WHERE nome = ?
                 """, (nome,))
-                conn.commit()
-                return self.obter_perfil(nome)
+                row = cursor.fetchone()
 
-            return {
-                "id": row[0],
-                "nome": row[1],
-                "bankroll": row[2],
-                "maos_jogadas": row[3],
-                "vitorias": row[4],
-                "ultimo_resgate_bonus": row[5],
-                "criado_em": row[6]
-            }
+                if row is None:
+                    cursor.execute("""
+                    INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
+                    VALUES (?, 10000, 0, 0)
+                    """, (nome,))
+                    cursor.execute("""
+                    SELECT id, nome, bankroll, maos_jogadas, vitorias, ultimo_resgate_bonus, criado_em
+                    FROM perfil
+                    WHERE nome = ?
+                    """, (nome,))
+                    row = cursor.fetchone()
+
+                # Sincroniza com o histórico real de partidas caso existam mãos gravadas
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='mao_jogadores'")
+                if cursor.fetchone() is not None:
+                    cursor.execute("""
+                    SELECT COUNT(*), COALESCE(SUM(CASE WHEN lucro_liquido > 0 THEN 1 ELSE 0 END), 0)
+                    FROM mao_jogadores WHERE nome = ?
+                    """, (nome,))
+                    hist_row = cursor.fetchone()
+                    if hist_row and hist_row[0] > 0 and row[3] == 0:
+                        cursor.execute("""
+                        UPDATE perfil SET maos_jogadas = ?, vitorias = ? WHERE nome = ?
+                        """, (hist_row[0], hist_row[1], nome))
+                        cursor.execute("""
+                        SELECT id, nome, bankroll, maos_jogadas, vitorias, ultimo_resgate_bonus, criado_em
+                        FROM perfil
+                        WHERE nome = ?
+                        """, (nome,))
+                        row = cursor.fetchone()
+
+                return {
+                    "id": row[0],
+                    "nome": row[1],
+                    "bankroll": row[2],
+                    "maos_jogadas": row[3],
+                    "vitorias": row[4],
+                    "ultimo_resgate_bonus": row[5],
+                    "criado_em": row[6]
+                }
+        finally:
+            conn.close()
 
     def debitar_bankroll(self, valor: int, nome: str = "Você") -> bool:
         """
@@ -79,20 +108,23 @@ class GerenciadorPerfil:
         if valor <= 0:
             return False
 
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT bankroll FROM perfil WHERE nome = ?", (nome,))
-            row = cursor.fetchone()
-            if not row or row[0] < valor:
-                return False
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT bankroll FROM perfil WHERE nome = ?", (nome,))
+                row = cursor.fetchone()
+                if not row or row[0] < valor:
+                    return False
 
-            cursor.execute("""
-            UPDATE perfil
-            SET bankroll = bankroll - ?
-            WHERE nome = ?
-            """, (valor, nome))
-            conn.commit()
-            return True
+                cursor.execute("""
+                UPDATE perfil
+                SET bankroll = bankroll - ?
+                WHERE nome = ?
+                """, (valor, nome))
+                return True
+        finally:
+            conn.close()
 
     def creditar_bankroll(self, valor: int, nome: str = "Você") -> bool:
         """
@@ -101,15 +133,18 @@ class GerenciadorPerfil:
         if valor < 0:
             return False
 
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-            UPDATE perfil
-            SET bankroll = bankroll + ?
-            WHERE nome = ?
-            """, (valor, nome))
-            conn.commit()
-            return True
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                UPDATE perfil
+                SET bankroll = bankroll + ?
+                WHERE nome = ?
+                """, (valor, nome))
+                return True
+        finally:
+            conn.close()
 
     def recarregar_fichas(self, valor: int = 10000, nome: str = "Você") -> Dict[str, Any]:
         """
@@ -120,15 +155,18 @@ class GerenciadorPerfil:
             return self.obter_perfil(nome)
 
         agora = datetime.now().isoformat()
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-            UPDATE perfil
-            SET bankroll = bankroll + ?,
-                ultimo_resgate_bonus = ?
-            WHERE nome = ?
-            """, (valor, agora, nome))
-            conn.commit()
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                UPDATE perfil
+                SET bankroll = bankroll + ?,
+                    ultimo_resgate_bonus = ?
+                WHERE nome = ?
+                """, (valor, agora, nome))
+        finally:
+            conn.close()
 
         return self.obter_perfil(nome)
 
@@ -136,13 +174,15 @@ class GerenciadorPerfil:
         """
         Atualiza o contador de mãos disputadas e vitórias do jogador.
         """
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-            UPDATE perfil
-            SET maos_jogadas = maos_jogadas + 1,
-                vitorias = vitorias + ?
-            WHERE nome = ?
-            """, (1 if venceu else 0, nome))
-            conn.commit()
-
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                UPDATE perfil
+                SET maos_jogadas = maos_jogadas + 1,
+                    vitorias = vitorias + ?
+                WHERE nome = ?
+                """, (1 if venceu else 0, nome))
+        finally:
+            conn.close()
