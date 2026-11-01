@@ -7,6 +7,7 @@ class Jogador:
         self.aposta_atual = 0
         self.ativo = True
         self.is_all_in = False
+        self.espectador = False
         self.cartas = [] # Contém as duas cartas que o jogador recebe em cada rodada
         self.mao = [] # Contém as cinco cartas da mesa e as duas cartas do jogador
         self.melhor_mao = [] # Contém as 5 cartas que resultam na melhor mão do jogador
@@ -53,5 +54,5 @@ class Jogador:
     def preparar_nova_mao(self):
         self.aposta_atual = 0
         self.is_all_in = False
-        self.ativo = self.stack > 0
+        self.ativo = (self.stack > 0) and not self.espectador
         self.reseta_cartas_jogador()

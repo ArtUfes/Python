@@ -77,6 +77,35 @@ class TestServidorRotas(unittest.TestCase):
         self.assertEqual(servidor.humano.stack, 0)
         client.disconnect()
 
+    def test_levantar_e_sentar_modo_espectador(self):
+        import servidor
+        client = socketio.test_client(app)
+        gerenciador_perfil.definir_bankroll(100000, "Você")
+
+        # 1. Simula jogador sentado com 10000 fichas
+        servidor.humano = servidor.Jogador("Você", stack=10000)
+        servidor.humano.espectador = False
+        servidor.mesa = servidor.Mesa(small_blind=10, big_blind=20)
+        servidor.jogo_rodando = True
+
+        # 2. Jogador se levanta
+        client.emit('levantar_da_mesa', {'forcar': True})
+        
+        perfil_depois_levantar = gerenciador_perfil.obter_perfil("Você")
+        self.assertEqual(perfil_depois_levantar['bankroll'], 110000) # 100k + 10k da mesa
+        self.assertEqual(servidor.humano.stack, 0)
+        self.assertTrue(servidor.humano.espectador)
+
+        # 3. Jogador no modo espectador clica para sentar novamente com 15000
+        client.emit('sentar_na_mesa', {'valor': 15000})
+
+        perfil_depois_sentar = gerenciador_perfil.obter_perfil("Você")
+        self.assertEqual(perfil_depois_sentar['bankroll'], 95000) # 110k - 15k
+        self.assertEqual(servidor.humano.stack, 15000)
+        self.assertFalse(servidor.humano.espectador)
+
+        client.disconnect()
+
 if __name__ == '__main__':
     unittest.main()
 

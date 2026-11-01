@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import time
+import random
 from threading import Thread, Event, Lock
 from flask import Flask, send_file, jsonify
 from flask_socketio import SocketIO, emit
@@ -39,6 +40,38 @@ config_sessao = {
     "big_blind": 20,
     "buy_in": 1000
 }
+
+# ==============================================================================
+# CONFIGURAÇÃO CENTRALIZADA DE TEMPOS E RITMO DA MESA (EM SEGUNDOS)
+# Consulte docs/tempos_e_dinamica_de_jogo.md para mais detalhes e presets.
+# ==============================================================================
+CONFIG_TEMPOS = {
+    "animacao_distribuicao_cartas": 1.5,
+    "intervalo_ruas_all_in": 1.8,
+    "showdown_revelacao": 3.5,
+    "intervalo_entre_maos": 5.0,
+    "tempo_decisao_humano": 10.0,
+    # Distribuição de tempo de reflexão dos Bots:
+    # 83% em 1-3 seg | 10% em 3-6 seg | 2% em 6-9 seg | 5% em 0.5-1.0 seg
+    "bots_distribuicao": [
+        {"faixa": "rapido", "prob": 0.83, "min": 1.0, "max": 3.0},
+        {"faixa": "pensando", "prob": 0.10, "min": 3.0, "max": 6.0},
+        {"faixa": "tanking", "prob": 0.02, "min": 6.0, "max": 9.0},
+        {"faixa": "snap", "prob": 0.05, "min": 0.5, "max": 1.0}
+    ]
+}
+
+def sortear_tempo_bot() -> float:
+    """
+    Sorteia o tempo de reflexão do bot de acordo com a distribuição em CONFIG_TEMPOS.
+    """
+    r = random.random()
+    acumulado = 0.0
+    for faixa in CONFIG_TEMPOS["bots_distribuicao"]:
+        acumulado += faixa["prob"]
+        if r <= acumulado:
+            return random.uniform(faixa["min"], faixa["max"])
+    return random.uniform(1.0, 3.0)
 
 def finalizar_sessao_e_devolver_fichas():
     """
@@ -84,6 +117,7 @@ def empacotar_estado():
         "turno_atual": turno_atual,
         "small_blind": mesa.small_blind,
         "big_blind": mesa.big_blind,
+        "humano_espectador": getattr(humano, 'espectador', False),
         "jogadores": []
     }
     for j in mesa.jogadores:
@@ -93,6 +127,7 @@ def empacotar_estado():
             "aposta": mesa.apostas_rodada.get(j.nome, 0),
             "ativo": j.ativo,
             "is_all_in": j.is_all_in,
+            "espectador": getattr(j, 'espectador', False),
             # Esconde as cartas dos bots a menos que seja showdown
             "cartas": [f"{c.simbolo}{c.naipe}" for c in j.cartas] if j.nome == "Você" or mesa.estado_atual == "SHOWDOWN" else ["?", "?"]
         })
@@ -133,7 +168,7 @@ def loop_do_jogo():
     while jogo_rodando:
         mesa.iniciar_mao()
         emitir_estado()
-        time.sleep(1.5) # Pausa dramática para o frontend animar as cartas
+        time.sleep(CONFIG_TEMPOS["animacao_distribuicao_cartas"]) # Pausa dramática para o frontend animar as cartas
 
         if not jogo_rodando:
             break
@@ -155,7 +190,7 @@ def loop_do_jogo():
 
             if len(ativos_livres) == 0:
                 if mesa.estado_atual != "SHOWDOWN":
-                    time.sleep(1.8)
+                    time.sleep(CONFIG_TEMPOS["intervalo_ruas_all_in"])
                     mesa.avancar_rodada()
                     emitir_estado()
                 continue
@@ -164,7 +199,7 @@ def loop_do_jogo():
                 falta = mesa.maior_aposta_rodada - mesa.apostas_rodada.get(unico_livre.nome, 0)
                 if falta == 0:
                     if mesa.estado_atual != "SHOWDOWN":
-                        time.sleep(1.8)
+                        time.sleep(CONFIG_TEMPOS["intervalo_ruas_all_in"])
                         mesa.avancar_rodada()
                         emitir_estado()
                     continue
@@ -197,7 +232,7 @@ def loop_do_jogo():
 
                 if j.nome == "Você":
                     socketio.emit('pedir_acao', {"falta_pagar": falta_pagar, "maior_aposta": mesa.maior_aposta_rodada})
-                    agiu_no_tempo = esperando_humano.wait(timeout=10.0)
+                    agiu_no_tempo = esperando_humano.wait(timeout=CONFIG_TEMPOS["tempo_decisao_humano"])
                     if not jogo_rodando:
                         break
 
@@ -212,14 +247,7 @@ def loop_do_jogo():
                         esperando_humano.clear()
                         socketio.emit('mensagem', "⏳ Tempo esgotado! Ação automática.")
                 else:
-                    import random
-                    r = random.random()
-                    if r < 0.80:
-                        wait_time = random.uniform(2, 7)
-                    elif r < 0.95:
-                        wait_time = 1.0
-                    else:
-                        wait_time = random.uniform(8, 10)
+                    wait_time = sortear_tempo_bot()
                     
                     # Dorme em fatias curtas de 0.1s para responder imediatamente a pedidos de saída
                     passos = int(wait_time / 0.1)
@@ -290,7 +318,7 @@ def loop_do_jogo():
                 socketio.emit('animar_fichas', {'de': 'centro', 'para': nome, 'valor': valor})
 
         # Pausa dramática para ver o vencedor, as cartas e a divisão do pote
-        time.sleep(3.5)
+        time.sleep(CONFIG_TEMPOS["showdown_revelacao"])
 
         # Atualiza métricas e histórico no banco SQLite
         gerenciador_perfil.registrar_mao_jogada(venceu=humano_venceu, nome="Você")
@@ -334,7 +362,7 @@ def loop_do_jogo():
         socketio.emit('perfil_atualizado', gerenciador_perfil.obter_perfil("Você"))
 
         # Checa se o jogador humano faliu na mesa (sem bloquear a partida dos bots)
-        if humano and humano.stack <= 0:
+        if humano and humano.stack <= 0 and not getattr(humano, 'espectador', False):
             maos_sem_fichas += 1
             perfil_atual = gerenciador_perfil.obter_perfil("Você")
             min_rebuy = bb * 10
@@ -365,8 +393,9 @@ def loop_do_jogo():
                 j.stack = max(bb * 50, buy_in)
                 socketio.emit('mensagem', f"{j.nome} fez Rebuy de ${j.stack}.")
 
-        socketio.emit('mensagem', "Próxima mão em 5s...")
-        for _ in range(10):
+        intervalo_prox = int(CONFIG_TEMPOS["intervalo_entre_maos"])
+        socketio.emit('mensagem', f"Próxima mão em {intervalo_prox}s...")
+        for _ in range(int(intervalo_prox / 0.5)):
             if not jogo_rodando:
                 break
             time.sleep(0.5)
@@ -476,6 +505,82 @@ def handle_confirmar_rebuy_mesa(data):
 @socketio.on('recusar_rebuy_mesa')
 def handle_recusar_rebuy_mesa():
     handle_sair_da_mesa()
+
+@socketio.on('levantar_da_mesa')
+def handle_levantar_da_mesa(data=None):
+    global humano, mesa, acao_humano, valor_humano
+    print("[SERVER] Recebido pedido 'levantar_da_mesa'")
+    if not humano or getattr(humano, 'espectador', False):
+        return
+
+    data = data or {}
+    forcar = data.get('forcar', False)
+
+    humano_na_mao = False
+    if mesa and mesa.estado_atual != "SHOWDOWN":
+        if humano.ativo or humano.is_all_in:
+            humano_na_mao = True
+
+    if humano_na_mao and not forcar:
+        emit('confirmar_levantar', {
+            "mensagem": "Você está disputando a rodada atual! Se levantar agora, você dará FOLD e perderá o valor apostado nesta mão. Deseja levantar mesmo assim?"
+        })
+        return
+
+    if humano_na_mao and forcar and mesa:
+        mesa.processar_acao("Você", "FOLD")
+        acao_humano = "FOLD"
+        valor_humano = 0
+        esperando_humano.set()
+        socketio.emit('mensagem', "Você deu FOLD para se levantar da mesa.")
+
+    with mesa_lock:
+        if humano.stack > 0:
+            fichas_devolver = humano.stack
+            humano.stack = 0
+            gerenciador_perfil.creditar_bankroll(fichas_devolver, "Você")
+            socketio.emit('mensagem', f"💵 Fichas da mesa (${fichas_devolver:,}) devolvidas ao seu Bankroll!")
+
+        humano.espectador = True
+        humano.ativo = False
+
+    perfil_atual = gerenciador_perfil.obter_perfil("Você")
+    socketio.emit('perfil_atualizado', perfil_atual)
+    socketio.emit('jogador_levantou', {'perfil': perfil_atual})
+    socketio.emit('mensagem', "👁️ Você se levantou da mesa e agora está no modo espectador.")
+    emitir_estado()
+
+@socketio.on('sentar_na_mesa')
+def handle_sentar_na_mesa(data):
+    global humano, mesa
+    print(f"[SERVER] Recebido pedido 'sentar_na_mesa': {data}")
+    if not humano or not getattr(humano, 'espectador', False):
+        return
+
+    data = data or {}
+    valor = data.get('valor', 0)
+    bb = mesa.big_blind if mesa else config_sessao.get('big_blind', 20)
+    min_buy_in = bb * 10
+    max_buy_in = bb * 1000
+
+    if valor < min_buy_in or valor > max_buy_in:
+        emit('erro_sentar', {"mensagem": f"O valor de entrada deve ser entre ${min_buy_in:,} e ${max_buy_in:,}."})
+        return
+
+    if not gerenciador_perfil.debitar_bankroll(valor, "Você"):
+        emit('erro_sentar', {"mensagem": "Saldo insuficiente no Bankroll para sentar na mesa!"})
+        return
+
+    with mesa_lock:
+        humano.stack = valor
+        humano.espectador = False
+        humano.ativo = False # Entra ativo na próxima rodada em mesa.iniciar_mao
+
+    perfil_atual = gerenciador_perfil.obter_perfil("Você")
+    socketio.emit('perfil_atualizado', perfil_atual)
+    socketio.emit('jogador_sentou', {'stack': valor, 'perfil': perfil_atual})
+    socketio.emit('mensagem', f"💵 Você sentou na mesa com ${valor:,}! Você entrará na próxima rodada.")
+    emitir_estado()
 
 @socketio.on('enviar_acao')
 def handle_enviar_acao(data):

@@ -10,7 +10,8 @@ Esta pasta armazena o planejamento, roteiros completos e diretrizes de gravaçã
 | :--- | :--- | :--- | :--- |
 | **Vídeo 1** | Apresentação Inicial: Motor em Python, Avaliador e Primeiros Bots | 🟢 Gravado / Publicado | — |
 | **Vídeo 2** | Áudio de Cassino, Hand History PokerStars no Replayer Externo e HUD de Métricas | 🟡 Pronto para Gravação | [video_02_som_hand_history_indicadores.md](video_02_som_hand_history_indicadores.md) |
-| **Vídeo 3** | *(Planejado)* Tela de Lobby, Modo Cash Game vs Torneio Mata-Mata (Sit & Go) | ⚪ Em Breve | — |
+| **Vídeo 3** | Lobby VIP, Economia Realista de Bankroll, Cash Game e Modo Espectador | 🟢 Pronto para Gravação | [video_03_lobby_vip_cash_game_espectador.md](video_03_lobby_vip_cash_game_espectador.md) |
+| **Vídeo 4** | *(Planejado)* Torneio Mata-Mata (Sit & Go), Subida de Blinds e Mesa Final | ⚪ Em Breve | — |
 
 ---
 

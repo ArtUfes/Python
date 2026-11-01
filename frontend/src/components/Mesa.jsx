@@ -12,6 +12,9 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
   const [mutado, setMutado] = useState(audioEngine.isMuted());
   const [metricasJogador, setMetricasJogador] = useState(null);
   const [modalConfirmarSaida, setModalConfirmarSaida] = useState(null);
+  const [modalConfirmarLevantar, setModalConfirmarLevantar] = useState(null);
+  const [modalSentar, setModalSentar] = useState(false);
+  const [valorSentar, setValorSentar] = useState(1000);
   const [dadosRebuy, setDadosRebuy] = useState(null);
   const [valorRebuy, setValorRebuy] = useState(1000);
   const chatRef = useRef(null);
@@ -56,6 +59,19 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
 
     socket.on('confirmar_saida', (data) => {
       setModalConfirmarSaida(data.mensagem);
+    });
+
+    socket.on('confirmar_levantar', (data) => {
+      console.log("Recebeu 'confirmar_levantar':", data);
+      setModalConfirmarLevantar(data.mensagem);
+    });
+
+    socket.on('jogador_sentou', () => {
+      setModalSentar(false);
+    });
+
+    socket.on('erro_sentar', (err) => {
+      alert(err.mensagem || "Erro ao sentar na mesa.");
     });
 
     socket.on('sessao_encerrada', (data) => {
@@ -119,6 +135,9 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
       socket.off('mensagem');
       socket.off('metricas_jogador');
       socket.off('confirmar_saida');
+      socket.off('confirmar_levantar');
+      socket.off('jogador_sentou');
+      socket.off('erro_sentar');
       socket.off('sessao_encerrada');
       socket.off('jogador_zerou_fichas');
       socket.off('perfil_atualizado');
@@ -147,6 +166,34 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
     audioEngine.playChipBet();
     setModalConfirmarSaida(null);
     socket.emit('sair_da_mesa', { forcar: true });
+  };
+
+  const handlePedirLevantar = () => {
+    audioEngine.playChipBet();
+    console.log("Clicou em Levantar da Mesa. Emitindo 'levantar_da_mesa'...");
+    socket.emit('levantar_da_mesa');
+  };
+
+  const handleConfirmarLevantarForcado = () => {
+    audioEngine.playChipBet();
+    setModalConfirmarLevantar(null);
+    socket.emit('levantar_da_mesa', { forcar: true });
+  };
+
+  const handleAbrirModalSentar = () => {
+    audioEngine.playChipBet();
+    const bb = estado?.big_blind || 20;
+    const minVal = bb * 10;
+    const maxVal = Math.min(bb * 1000, perfil?.bankroll || minVal);
+    const defVal = Math.min(bb * 100, Math.max(minVal, maxVal));
+    setValorSentar(defVal);
+    setModalSentar(true);
+  };
+
+  const handleConfirmarSentar = () => {
+    audioEngine.playChipBet();
+    socket.emit('sentar_na_mesa', { valor: valorSentar });
+    setModalSentar(false);
   };
 
   const handleConfirmarRebuy = () => {
@@ -225,15 +272,30 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
     <div className="container-jogo">
       {/* MESA DE POKER */}
       <div className="poker-table">
-        {/* BOTÃO DE SAÍDA (CANTO SUPERIOR ESQUERDO) */}
-        <button 
-          className="btn-sair-mesa"
-          onClick={handlePedirSaida}
-          title="Voltar ao Menu Principal"
-          style={{ position: 'absolute', top: 20, left: 20, zIndex: 100 }}
-        >
-          ← Sair para o Menu
-        </button>
+        {/* TOPO ESQUERDO: SAIR, LEVANTAR OU BADGE ESPECTADOR */}
+        <div style={{ position: 'absolute', top: 20, left: 20, display: 'flex', alignItems: 'center', gap: 10, zIndex: 100 }}>
+          <button 
+            className="btn-sair-mesa"
+            onClick={handlePedirSaida}
+            title="Voltar ao Menu Principal"
+          >
+            ← Sair para o Menu
+          </button>
+
+          {!estado.humano_espectador ? (
+            <button 
+              className="btn-levantar-mesa"
+              onClick={handlePedirLevantar}
+              title="Levantar e assistir como espectador (devolve suas fichas da mesa)"
+            >
+              ⬆ Levantar
+            </button>
+          ) : (
+            <div className="badge-modo-espectador" title="Você está assistindo como espectador. Clique no lugar livre para sentar!">
+              👁️ Modo Espectador
+            </div>
+          )}
+        </div>
 
         {/* BOTÃO DE CONTROLE DE ÁUDIO (CANTO SUPERIOR DIREITO) */}
         <button 
@@ -273,38 +335,61 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
         </div>
 
         {/* JOGADORES SENTADOS */}
-        {estado.jogadores.map((j, idx) => (
-          <div key={idx} className={`jogador-box pos-${idx} ${j.ativo ? 'ativo' : 'inativo'} ${estado.turno_atual === j.nome ? 'turno-ativo' : ''}`}>
-            {estado.turno_atual === j.nome && <div className="timer-bar"></div>}
-            <h3 className="nome">{j.nome}</h3>
-            <p className="stack">💰 ${j.stack}</p>
-            {j.nome === 'Você' && metricasJogador && metricasJogador.total_maos > 0 && (
-              <div className="hud-badge" title={`Mãos: ${metricasJogador.total_maos} | AF: ${metricasJogador.af} | BB/100: ${metricasJogador.bb_100}`}>
-                📊 VPIP: {metricasJogador.vpip}% | PFR: {metricasJogador.pfr}%
-                <span className="arquetipo-tag">{metricasJogador.arquetipo}</span>
+        {estado.jogadores.map((j, idx) => {
+          if (j.nome === 'Você' && (estado.humano_espectador || j.espectador)) {
+            return (
+              <div
+                key={idx}
+                className="jogador-box pos-0 assento-livre-box"
+                onClick={handleAbrirModalSentar}
+                title="Clique para sentar e escolher suas fichas"
+              >
+                <motion.div 
+                  className="seta-sentar"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                >
+                  ⬇
+                </motion.div>
+                <span className="assento-titulo">LUGAR LIVRE</span>
+                <span className="assento-subtitulo">Clique para Sentar</span>
               </div>
-            )}
-            <motion.p key={j.aposta} initial={{ scale: 1.5, y: -10 }} animate={{ scale: 1, y: 0 }} className="aposta">
-              💵 {j.aposta > 0 ? j.aposta : ''}
-            </motion.p>
-            
-            <div className="mao-jogador">
-              <AnimatePresence>
-                {j.cartas.map((c, i) => (
-                  <motion.img 
-                    key={c + i} 
-                    initial={getInitialPosition(idx)}
-                    animate={{ scale: 1, x: 0, y: 0, opacity: 1 }}
-                    transition={{ duration: 0.6, delay: i * 0.2, type: "spring", stiffness: 80 }}
-                    className="carta-img mini-carta" 
-                    src={getCardImage(c)} 
-                    alt={c} 
-                  />
-                ))}
-              </AnimatePresence>
+            );
+          }
+
+          return (
+            <div key={idx} className={`jogador-box pos-${idx} ${j.ativo ? 'ativo' : 'inativo'} ${estado.turno_atual === j.nome ? 'turno-ativo' : ''}`}>
+              {estado.turno_atual === j.nome && <div className="timer-bar"></div>}
+              <h3 className="nome">{j.nome}</h3>
+              <p className="stack">💰 ${j.stack}</p>
+              {j.nome === 'Você' && metricasJogador && metricasJogador.total_maos > 0 && (
+                <div className="hud-badge" title={`Mãos: ${metricasJogador.total_maos} | AF: ${metricasJogador.af} | BB/100: ${metricasJogador.bb_100}`}>
+                  📊 VPIP: {metricasJogador.vpip}% | PFR: {metricasJogador.pfr}%
+                  <span className="arquetipo-tag">{metricasJogador.arquetipo}</span>
+                </div>
+              )}
+              <motion.p key={j.aposta} initial={{ scale: 1.5, y: -10 }} animate={{ scale: 1, y: 0 }} className="aposta">
+                💵 {j.aposta > 0 ? j.aposta : ''}
+              </motion.p>
+              
+              <div className="mao-jogador">
+                <AnimatePresence>
+                  {j.cartas.map((c, i) => (
+                    <motion.img 
+                      key={c + i} 
+                      initial={getInitialPosition(idx)}
+                      animate={{ scale: 1, x: 0, y: 0, opacity: 1 }}
+                      transition={{ duration: 0.6, delay: i * 0.2, type: "spring", stiffness: 80 }}
+                      className="carta-img mini-carta" 
+                      src={getCardImage(c)} 
+                      alt={c} 
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* ANIMAÇÃO DE FICHAS EM TEMPO REAL */}
         {fichasNaMesa.map((f) => (
@@ -544,6 +629,160 @@ export default function Mesa({ socket, perfil, onVoltarMenu }) {
                   style={{ background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', fontSize: '13px', fontWeight: '800', cursor: dadosRebuy.bankroll < dadosRebuy.min_rebuy ? 'not-allowed' : 'pointer' }}
                 >
                   FAZER REBUY ▶
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL CONFIRMAR LEVANTAR DA MESA (DURANTE MÃO ATIVA) */}
+      <AnimatePresence>
+        {modalConfirmarLevantar && (
+          <div className="modal-overlay">
+            <motion.div 
+              className="modal-dialog alert-dialog"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+            >
+              <div className="modal-header">
+                <h3 style={{ color: '#f59e0b', margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  ⚠️ Mão em Andamento!
+                </h3>
+              </div>
+              <div className="modal-body" style={{ padding: '20px 24px' }}>
+                <p style={{ color: '#e2e8f0', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>
+                  {modalConfirmarLevantar}
+                </p>
+              </div>
+              <div className="modal-footer" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '16px 24px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button 
+                  className="btn-secundario" 
+                  onClick={() => setModalConfirmarLevantar(null)}
+                  style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#cbd5e1', padding: '10px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Continuar Jogando
+                </button>
+                <button 
+                  className="btn-perigo-fold" 
+                  onClick={handleConfirmarLevantarForcado}
+                  style={{ background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '10px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Sim, Levantar
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL SENTAR NA MESA (MODO ESPECTADOR -> JOGADOR) */}
+      <AnimatePresence>
+        {modalSentar && (
+          <div className="modal-overlay" onClick={() => setModalSentar(false)}>
+            <motion.div 
+              className="modal-dialog rebuy-dialog"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <div>
+                  <h3 style={{ margin: 0, color: '#fef08a', fontSize: '18px' }}>
+                    🎰 Sentar na Mesa
+                  </h3>
+                  <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                    Escolha o valor de fichas para entrar na próxima rodada
+                  </span>
+                </div>
+                <button className="btn-close-modal" onClick={() => setModalSentar(false)}>✕</button>
+              </div>
+
+              <div className="modal-body" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.8)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <span style={{ fontSize: '13px', color: '#cbd5e1' }}>Saldo Disponível no Bankroll:</span>
+                  <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#fef08a' }}>
+                    ${perfil?.bankroll?.toLocaleString('en-US') || 0}
+                  </span>
+                </div>
+
+                {perfil?.bankroll < (estado.big_blind || 20) * 10 ? (
+                  <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', padding: '14px', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <span style={{ color: '#fca5a5', fontSize: '13px' }}>
+                      ⚠️ Seu Bankroll é menor que a entrada mínima (${(estado.big_blind || 20) * 10}). Recarregue fichas para sentar!
+                    </span>
+                    <button 
+                      onClick={handleRecarregarNoModal}
+                      style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px' }}
+                    >
+                      + Recarregar $10.000 no Bankroll
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#cbd5e1' }}>Valor de Entrada:</span>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#fde047' }}>
+                          ${valorSentar.toLocaleString('en-US')}
+                        </span>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                          ({Math.round(valorSentar / (estado.big_blind || 20))} BBs)
+                        </span>
+                      </div>
+                    </div>
+
+                    <input 
+                      type="range"
+                      min={(estado.big_blind || 20) * 10}
+                      max={Math.min((estado.big_blind || 20) * 1000, perfil?.bankroll || (estado.big_blind || 20) * 10)}
+                      step={estado.big_blind || 20}
+                      value={valorSentar}
+                      onChange={e => setValorSentar(parseInt(e.target.value))}
+                      style={{ width: '100%', accentColor: '#eab308', cursor: 'pointer' }}
+                    />
+
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => setValorSentar((estado.big_blind || 20) * 10)}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Mínimo (${(estado.big_blind || 20) * 10})
+                      </button>
+                      <button 
+                        onClick={() => setValorSentar(Math.min((estado.big_blind || 20) * 100, perfil?.bankroll || 0))}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Padrão (100 BB)
+                      </button>
+                      <button 
+                        onClick={() => setValorSentar(Math.min((estado.big_blind || 20) * 1000, perfil?.bankroll || 0))}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Máximo (${Math.min((estado.big_blind || 20) * 1000, perfil?.bankroll || 0)})
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="modal-footer" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '16px 24px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button 
+                  className="btn-secundario" 
+                  onClick={() => setModalSentar(false)}
+                  style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#cbd5e1', padding: '10px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  className="btn-primario-ouro" 
+                  onClick={handleConfirmarSentar}
+                  disabled={perfil?.bankroll < (estado.big_blind || 20) * 10}
+                  style={{ background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', fontSize: '13px', fontWeight: '800', cursor: perfil?.bankroll < (estado.big_blind || 20) * 10 ? 'not-allowed' : 'pointer' }}
+                >
+                  SENTAR NA MESA ▶
                 </button>
               </div>
             </motion.div>

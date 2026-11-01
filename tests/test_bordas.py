@@ -77,5 +77,124 @@ class TestCasosDeBorda(unittest.TestCase):
         resultado_bb = mesa.processar_acao(nome_bb, "CHECK")
         self.assertTrue(resultado_bb)
 
+    # --- BORDAS FASE 4: MODO ESPECTADOR & LEVANTAR / SENTAR ---
+    def test_jogador_espectador_nao_entra_na_mao(self):
+        """
+        Mesmo que o jogador possua fichas, se estiver com espectador=True,
+        ele NUNCA deve ser marcado como ativo ao iniciar a mão.
+        """
+        j = Jogador("Você", stack=5000)
+        j.espectador = True
+        j.preparar_nova_mao()
+        self.assertFalse(j.ativo)
+        self.assertEqual(len(j.cartas), 0)
+
+        # Ao desativar o modo espectador, ele volta a ser ativo
+        j.espectador = False
+        j.preparar_nova_mao()
+        self.assertTrue(j.ativo)
+
+    def test_levantar_mid_hand_folda_e_preserva_conservacao(self):
+        """
+        Quando o jogador levanta no meio da rodada:
+        Ele deve foldar a aposta já feita, e apenas o stack restante é devolvido.
+        O pote continua elegível para os bots restantes.
+        """
+        import tempfile
+        from core.perfil import GerenciadorPerfil
+        temp_db = tempfile.NamedTemporaryFile(delete=False, suffix=".db")
+        temp_db.close()
+        try:
+            gerenciador = GerenciadorPerfil(db_path=temp_db.name)
+            gerenciador.definir_bankroll(100000, "Você")
+
+            mesa = Mesa(small_blind=10, big_blind=20)
+            humano = Jogador("Você", stack=1000) # Buy-in de 1000
+            gerenciador.debitar_bankroll(1000, "Você") # Bankroll: 99.000
+            
+            bot1 = Jogador("Bot1", stack=1000)
+            mesa.adiciona_jogador(humano)
+            mesa.adiciona_jogador(bot1)
+            mesa.iniciar_mao()
+
+            # Humano aposta mais 50 fichas (stack vai pra 940 ou 950 dependendo do blind)
+            stack_antes_levantar = humano.stack
+            aposta_humano = mesa.apostas_rodada[humano.nome]
+            self.assertEqual(stack_antes_levantar + aposta_humano, 1000)
+
+            # Humano decide levantar com confirmação (forcar=True): dá fold
+            mesa.processar_acao("Você", "FOLD")
+            self.assertFalse(humano.ativo)
+
+            # Devolve stack restante ao bankroll
+            gerenciador.creditar_bankroll(humano.stack, "Você")
+            humano.stack = 0
+            humano.espectador = True
+
+            # Invariante econômico: Bankroll final + fichas presas no pote da mesa == 100.000 original
+            saldo_final = gerenciador.obter_perfil("Você")["bankroll"]
+            self.assertEqual(saldo_final + aposta_humano, 100000)
+        finally:
+            if os.path.exists(temp_db.name):
+                try: os.remove(temp_db.name)
+                except PermissionError: pass
+
+    def test_sentar_limites_invalidos_buyin(self):
+        """
+        Garante que valores abaixo do mínimo (10 BBs) ou acima do máximo (1000 BBs)
+        são devidamente rejeitados pelo servidor.
+        """
+        import servidor
+        client = servidor.socketio.test_client(servidor.app)
+        servidor.humano = Jogador("Você", stack=0)
+        servidor.humano.espectador = True
+        servidor.mesa = Mesa(small_blind=10, big_blind=20) # Min: 200, Max: 20.000
+        servidor.gerenciador_perfil.definir_bankroll(100000, "Você")
+
+        # Tentativa com 100 (abaixo de 200)
+        client.emit('sentar_na_mesa', {'valor': 100})
+        recebidos = client.get_received()
+        nomes_eventos = [e['name'] for e in recebidos]
+        self.assertIn('erro_sentar', nomes_eventos)
+        self.assertTrue(servidor.humano.espectador)
+
+        # Tentativa com 50.000 (acima de 20.000)
+        client.emit('sentar_na_mesa', {'valor': 50000})
+        recebidos2 = client.get_received()
+        nomes_eventos2 = [e['name'] for e in recebidos2]
+        self.assertIn('erro_sentar', nomes_eventos2)
+        self.assertTrue(servidor.humano.espectador)
+
+        # Tentativa válida com 1000 (50 BBs)
+        client.emit('sentar_na_mesa', {'valor': 1000})
+        self.assertEqual(servidor.humano.stack, 1000)
+        self.assertFalse(servidor.humano.espectador)
+
+        client.disconnect()
+
+    def test_debito_saldo_exato_limite(self):
+        """
+        Testa débito exatamente no limite do saldo (deve zerar o bankroll perfeitamente, sem erro).
+        """
+        import tempfile
+        from core.perfil import GerenciadorPerfil
+        temp_db = tempfile.NamedTemporaryFile(delete=False, suffix=".db")
+        temp_db.close()
+        try:
+            g = GerenciadorPerfil(db_path=temp_db.name)
+            g.definir_bankroll(5000, "Você")
+            
+            # Debita exatamente 5000
+            self.assertTrue(g.debitar_bankroll(5000, "Você"))
+            self.assertEqual(g.obter_perfil("Você")["bankroll"], 0)
+
+            # Tenta debitar 1 ficha quando saldo é 0
+            self.assertFalse(g.debitar_bankroll(1, "Você"))
+            self.assertEqual(g.obter_perfil("Você")["bankroll"], 0)
+        finally:
+            if os.path.exists(temp_db.name):
+                try: os.remove(temp_db.name)
+                except PermissionError: pass
+
 if __name__ == '__main__':
     unittest.main()
