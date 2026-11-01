@@ -1,6 +1,9 @@
+import os
 import sqlite3
 from datetime import datetime
 from typing import Optional, Dict, Any
+
+DB_PATH_PADRAO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "historico_partidas.db")
 
 class GerenciadorPerfil:
     """
@@ -8,8 +11,8 @@ class GerenciadorPerfil:
     Persiste dados do jogador (saldo total, mãos jogadas, vitórias e bônus)
     no banco relacional SQLite unificado (historico_partidas.db).
     """
-    def __init__(self, db_path: str = "historico_partidas.db"):
-        self.db_path = db_path
+    def __init__(self, db_path: Optional[str] = None):
+        self.db_path = db_path if db_path is not None else DB_PATH_PADRAO
         self._inicializar_banco()
 
     def _get_connection(self) -> sqlite3.Connection:
@@ -24,7 +27,7 @@ class GerenciadorPerfil:
                 CREATE TABLE IF NOT EXISTS perfil (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nome TEXT UNIQUE DEFAULT 'Você',
-                    bankroll INTEGER DEFAULT 10000,
+                    bankroll INTEGER DEFAULT 100000,
                     maos_jogadas INTEGER DEFAULT 0,
                     vitorias INTEGER DEFAULT 0,
                     ultimo_resgate_bonus DATETIME,
@@ -36,7 +39,7 @@ class GerenciadorPerfil:
                 if cursor.fetchone() is None:
                     cursor.execute("""
                     INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
-                    VALUES ('Você', 10000, 0, 0)
+                    VALUES ('Você', 100000, 0, 0)
                     """)
         finally:
             conn.close()
@@ -44,7 +47,7 @@ class GerenciadorPerfil:
     def obter_perfil(self, nome: str = "Você") -> Dict[str, Any]:
         """
         Retorna o dicionário com os dados do perfil do jogador.
-        Cria o jogador com $10.000 de bankroll caso não exista.
+        Cria o jogador com $100.000 de bankroll caso não exista.
         """
         conn = self._get_connection()
         try:
@@ -60,7 +63,7 @@ class GerenciadorPerfil:
                 if row is None:
                     cursor.execute("""
                     INSERT INTO perfil (nome, bankroll, maos_jogadas, vitorias)
-                    VALUES (?, 10000, 0, 0)
+                    VALUES (?, 100000, 0, 0)
                     """, (nome,))
                     cursor.execute("""
                     SELECT id, nome, bankroll, maos_jogadas, vitorias, ultimo_resgate_bonus, criado_em
@@ -140,6 +143,26 @@ class GerenciadorPerfil:
                 cursor.execute("""
                 UPDATE perfil
                 SET bankroll = bankroll + ?
+                WHERE nome = ?
+                """, (valor, nome))
+                return True
+        finally:
+            conn.close()
+
+    def definir_bankroll(self, valor: int, nome: str = "Você") -> bool:
+        """
+        Define o saldo do bankroll diretamente (útil para resets ou ajustes administrativos).
+        """
+        if valor < 0:
+            return False
+
+        conn = self._get_connection()
+        try:
+            with conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                UPDATE perfil
+                SET bankroll = ?
                 WHERE nome = ?
                 """, (valor, nome))
                 return True

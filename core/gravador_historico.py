@@ -2,14 +2,16 @@ import sqlite3
 import os
 from datetime import datetime
 
+DB_PATH_PADRAO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "historico_partidas.db")
+
 class GravadorHistorico:
     """
     Gravador de Histórico de Partidas de Poker.
     Persiste cada mão em banco relacional SQLite e gera o formato
     canônico de Hand History compatível com a notação do PokerStars.
     """
-    def __init__(self, db_path="historico_partidas.db"):
-        self.db_path = db_path
+    def __init__(self, db_path=None):
+        self.db_path = db_path if db_path is not None else DB_PATH_PADRAO
         self._inicializar_banco()
         
     def _get_connection(self):

@@ -10,7 +10,7 @@ const socket = io('http://localhost:5000', { autoConnect: false });
 function App() {
   const [conectado, setConectado] = useState(false);
   const [telaAtual, setTelaAtual] = useState('MENU'); // 'MENU' | 'MESA'
-  const [perfil, setPerfil] = useState({ nome: 'Você', bankroll: 10000, maos_jogadas: 0, vitorias: 0 });
+  const [perfil, setPerfil] = useState({ nome: 'Você', bankroll: 100000, maos_jogadas: 0, vitorias: 0 });
   const [metricas, setMetricas] = useState(null);
 
   useEffect(() => {
@@ -60,6 +60,7 @@ function App() {
 
   const handleVoltarMenu = (perfilFinal) => {
     if (perfilFinal) setPerfil(perfilFinal);
+    socket.emit('obter_perfil');
     setTelaAtual('MENU');
   };
 
@@ -76,6 +77,7 @@ function App() {
         ) : (
           <Mesa 
             socket={socket} 
+            perfil={perfil}
             onVoltarMenu={handleVoltarMenu} 
           />
         )

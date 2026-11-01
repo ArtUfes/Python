@@ -45,6 +45,38 @@ class TestServidorRotas(unittest.TestCase):
         self.assertIn('erro_entrada', nomes_eventos)
         client.disconnect()
 
+    def test_socket_rebuy_eventos(self):
+        client = socketio.test_client(app)
+        gerenciador_perfil.creditar_bankroll(2000, "Você")
+        saldo_antes = gerenciador_perfil.obter_perfil("Você")['bankroll']
+
+        # Testa confirmação de rebuy debitando do bankroll
+        client.emit('confirmar_rebuy_mesa', {'valor': 1000})
+        saldo_depois = gerenciador_perfil.obter_perfil("Você")['bankroll']
+        self.assertEqual(saldo_depois, saldo_antes - 1000)
+
+        # Testa recusa de rebuy
+        client.emit('recusar_rebuy_mesa')
+        client.disconnect()
+
+    def test_sair_da_mesa_credita_stack(self):
+        import servidor
+        client = socketio.test_client(app)
+        gerenciador_perfil.definir_bankroll(100000, "Você")
+        
+        # Simula jogador com 15000 fichas na mesa
+        servidor.humano = servidor.Jogador("Você", stack=15000)
+        servidor.jogo_rodando = True
+        
+        # Jogador pede saída
+        client.emit('sair_da_mesa', {'forcar': True})
+        
+        perfil_depois = gerenciador_perfil.obter_perfil("Você")
+        # 100000 + 15000 = 115000
+        self.assertEqual(perfil_depois['bankroll'], 115000)
+        self.assertEqual(servidor.humano.stack, 0)
+        client.disconnect()
+
 if __name__ == '__main__':
     unittest.main()
 

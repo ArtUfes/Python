@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import audioEngine from '../audioEngine';
 
-export default function Mesa({ socket, onVoltarMenu }) {
+export default function Mesa({ socket, perfil, onVoltarMenu }) {
   const [estado, setEstado] = useState(null);
   const [minhaVez, setMinhaVez] = useState(false);
   const [infoAcao, setInfoAcao] = useState(null);
@@ -12,6 +12,8 @@ export default function Mesa({ socket, onVoltarMenu }) {
   const [mutado, setMutado] = useState(audioEngine.isMuted());
   const [metricasJogador, setMetricasJogador] = useState(null);
   const [modalConfirmarSaida, setModalConfirmarSaida] = useState(null);
+  const [dadosRebuy, setDadosRebuy] = useState(null);
+  const [valorRebuy, setValorRebuy] = useState(1000);
   const chatRef = useRef(null);
   const estadoRef = useRef(estado);
 
@@ -62,11 +64,14 @@ export default function Mesa({ socket, onVoltarMenu }) {
       }
     });
 
-    socket.on('jogador_falido', (data) => {
-      alert(data.mensagem || "Suas fichas na mesa acabaram!");
-      if (onVoltarMenu) {
-        onVoltarMenu();
-      }
+    socket.on('jogador_zerou_fichas', (data) => {
+      setDadosRebuy(data);
+      const defVal = Math.min(data.max_rebuy, Math.max(data.min_rebuy, data.default_rebuy || data.min_rebuy));
+      setValorRebuy(defVal);
+    });
+
+    socket.on('perfil_atualizado', (novoPerfil) => {
+      setDadosRebuy(prev => prev ? { ...prev, bankroll: novoPerfil.bankroll } : null);
     });
 
     socket.on('acao_executada', (data) => {
@@ -115,7 +120,8 @@ export default function Mesa({ socket, onVoltarMenu }) {
       socket.off('metricas_jogador');
       socket.off('confirmar_saida');
       socket.off('sessao_encerrada');
-      socket.off('jogador_falido');
+      socket.off('jogador_zerou_fichas');
+      socket.off('perfil_atualizado');
       socket.off('acao_executada');
       socket.off('animar_fichas');
     };
@@ -141,6 +147,23 @@ export default function Mesa({ socket, onVoltarMenu }) {
     audioEngine.playChipBet();
     setModalConfirmarSaida(null);
     socket.emit('sair_da_mesa', { forcar: true });
+  };
+
+  const handleConfirmarRebuy = () => {
+    audioEngine.playChipBet();
+    socket.emit('confirmar_rebuy_mesa', { valor: valorRebuy });
+    setDadosRebuy(null);
+  };
+
+  const handleRecusarRebuy = () => {
+    audioEngine.playChipBet();
+    socket.emit('recusar_rebuy_mesa');
+    setDadosRebuy(null);
+  };
+
+  const handleRecarregarNoModal = () => {
+    audioEngine.playChipBet();
+    socket.emit('recarregar_fichas', { valor: 10000 });
   };
 
   const enviarAcao = (acao) => {
@@ -207,8 +230,9 @@ export default function Mesa({ socket, onVoltarMenu }) {
           className="btn-sair-mesa"
           onClick={handlePedirSaida}
           title="Voltar ao Menu Principal"
+          style={{ position: 'absolute', top: 20, left: 20, zIndex: 100 }}
         >
-          🚪 Sair para o Menu
+          ← Sair para o Menu
         </button>
 
         {/* BOTÃO DE CONTROLE DE ÁUDIO (CANTO SUPERIOR DIREITO) */}
@@ -405,6 +429,121 @@ export default function Mesa({ socket, onVoltarMenu }) {
                   onClick={handleConfirmarSaidaForcada}
                 >
                   Foldar e Sair
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL DE REBUY (QUANDO AS FICHAS NA MESA ACABAM) */}
+      <AnimatePresence>
+        {dadosRebuy && (
+          <div className="modal-overlay" style={{ zIndex: 10000 }}>
+            <motion.div 
+              className="modal-dialog" 
+              style={{ 
+                maxWidth: 520, 
+                background: '#0b1120', 
+                border: '1px solid rgba(234, 179, 8, 0.4)', 
+                boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(234, 179, 8, 0.2)' 
+              }}
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            >
+              <div className="modal-header" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', padding: '18px 24px' }}>
+                <h3 style={{ margin: 0, color: '#fde047', fontSize: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  🪙 Suas Fichas na Mesa Acabaram!
+                </h3>
+              </div>
+              <div className="modal-body" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>
+                  Você zerou seu stack nesta mão de Cash Game. Deseja fazer um <strong>Rebuy</strong> para continuar na mesa ou prefere voltar ao menu?
+                </p>
+
+                {/* Exibição do Bankroll */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.8)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <span style={{ fontSize: '13px', color: '#cbd5e1' }}>Saldo Disponível no Bankroll:</span>
+                  <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#fef08a' }}>
+                    ${dadosRebuy.bankroll.toLocaleString('en-US')}
+                  </span>
+                </div>
+
+                {dadosRebuy.bankroll < dadosRebuy.min_rebuy ? (
+                  <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', padding: '14px', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <span style={{ color: '#fca5a5', fontSize: '13px' }}>
+                      ⚠️ Seu Bankroll (${dadosRebuy.bankroll}) é menor que a entrada mínima da mesa (${dadosRebuy.min_rebuy}). Recarregue fichas para continuar!
+                    </span>
+                    <button 
+                      onClick={handleRecarregarNoModal}
+                      style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px' }}
+                    >
+                      + Recarregar $10.000 no Bankroll
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#cbd5e1' }}>Valor do Rebuy:</span>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                        <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#fde047' }}>
+                          ${valorRebuy.toLocaleString('en-US')}
+                        </span>
+                        <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+                          ({Math.round(valorRebuy / dadosRebuy.big_blind)} BBs)
+                        </span>
+                      </div>
+                    </div>
+
+                    <input 
+                      type="range"
+                      min={dadosRebuy.min_rebuy}
+                      max={Math.min(dadosRebuy.max_rebuy, dadosRebuy.bankroll)}
+                      step={dadosRebuy.big_blind}
+                      value={Math.min(Math.min(dadosRebuy.max_rebuy, dadosRebuy.bankroll), Math.max(dadosRebuy.min_rebuy, valorRebuy))}
+                      onChange={e => setValorRebuy(parseInt(e.target.value))}
+                      style={{ width: '100%', accentColor: '#eab308', cursor: 'pointer' }}
+                    />
+
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => setValorRebuy(dadosRebuy.min_rebuy)}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Mínimo (${dadosRebuy.min_rebuy})
+                      </button>
+                      <button 
+                        onClick={() => setValorRebuy(Math.min(Math.min(dadosRebuy.max_rebuy, dadosRebuy.bankroll), dadosRebuy.big_blind * 100))}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Padrão (100 BB)
+                      </button>
+                      <button 
+                        onClick={() => setValorRebuy(Math.min(dadosRebuy.max_rebuy, dadosRebuy.bankroll))}
+                        style={{ flex: 1, background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', padding: '6px', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      >
+                        Máximo (${Math.min(dadosRebuy.max_rebuy, dadosRebuy.bankroll)})
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '16px 24px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button 
+                  className="btn-secundario" 
+                  onClick={handleRecusarRebuy}
+                  style={{ background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#cbd5e1', padding: '10px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Voltar ao Menu
+                </button>
+                <button 
+                  className="btn-primario-ouro" 
+                  onClick={handleConfirmarRebuy}
+                  disabled={dadosRebuy.bankroll < dadosRebuy.min_rebuy}
+                  style={{ background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', fontSize: '13px', fontWeight: '800', cursor: dadosRebuy.bankroll < dadosRebuy.min_rebuy ? 'not-allowed' : 'pointer' }}
+                >
+                  FAZER REBUY ▶
                 </button>
               </div>
             </motion.div>

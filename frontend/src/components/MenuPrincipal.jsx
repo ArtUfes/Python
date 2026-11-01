@@ -16,7 +16,7 @@ export default function MenuPrincipal({ socket, perfil, metricas, onEntrarMesa }
   const [buyInEscolhido, setBuyInEscolhido] = useState(1000);
   const [mutado, setMutado] = useState(audioEngine.isMuted());
 
-  const bankroll = perfil?.bankroll ?? 10000;
+  const bankroll = typeof perfil?.bankroll === 'number' ? perfil.bankroll : 100000;
   const minBuyIn = mesaSelecionada.bb * 10;
   const maxBuyInPossivel = Math.min(mesaSelecionada.bb * 1000, bankroll);
 
@@ -69,7 +69,6 @@ export default function MenuPrincipal({ socket, perfil, metricas, onEntrarMesa }
             <span className="logo-icon">♠️</span>
             <div>
               <h1 className="logo-text">PYTHON POKER CLUB</h1>
-              <span className="logo-subtitle">HIGH STAKES AI ARENA & SIMULATOR</span>
             </div>
           </div>
           <div className="compliance-badge">

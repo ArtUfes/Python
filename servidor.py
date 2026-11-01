@@ -2,7 +2,7 @@ import sys
 import os
 import json
 import time
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 from flask import Flask, send_file, jsonify
 from flask_socketio import SocketIO, emit
 
@@ -29,6 +29,9 @@ esperando_humano = Event()
 acao_humano = None
 valor_humano = 0
 turno_atual = None
+esperando_rebuy = Event()
+valor_rebuy = 0
+mesa_lock = Lock()
 
 # Configurações ativas da sessão
 config_sessao = {
@@ -36,6 +39,28 @@ config_sessao = {
     "big_blind": 20,
     "buy_in": 1000
 }
+
+def finalizar_sessao_e_devolver_fichas():
+    """
+    Finaliza a sessão de forma atômica e transfere 100% das fichas
+    restantes da mesa de volta ao saldo do perfil do jogador.
+    """
+    global jogo_rodando, humano, mesa
+    with mesa_lock:
+        jogo_rodando = False
+        esperando_humano.set()
+        esperando_rebuy.set()
+
+        if humano and humano.stack > 0:
+            fichas_devolver = humano.stack
+            humano.stack = 0
+            gerenciador_perfil.creditar_bankroll(fichas_devolver, "Você")
+            socketio.emit('mensagem', f"💵 Fichas da mesa (${fichas_devolver:,}) devolvidas ao seu Bankroll!")
+
+        perfil_final = gerenciador_perfil.obter_perfil("Você")
+        socketio.emit('perfil_atualizado', perfil_final)
+        socketio.emit('sessao_encerrada', {'perfil': perfil_final})
+        return perfil_final
 
 @app.route('/api/perfil', methods=['GET'])
 def api_obter_perfil():
@@ -103,6 +128,8 @@ def loop_do_jogo():
     mesa.adiciona_jogador(b2)
     mesa.adiciona_jogador(b3)
 
+    maos_sem_fichas = 0
+
     while jogo_rodando:
         mesa.iniciar_mao()
         emitir_estado()
@@ -128,14 +155,18 @@ def loop_do_jogo():
 
             if len(ativos_livres) == 0:
                 if mesa.estado_atual != "SHOWDOWN":
+                    time.sleep(1.8)
                     mesa.avancar_rodada()
+                    emitir_estado()
                 continue
             elif len(ativos_livres) == 1:
                 unico_livre = ativos_livres[0]
                 falta = mesa.maior_aposta_rodada - mesa.apostas_rodada.get(unico_livre.nome, 0)
                 if falta == 0:
                     if mesa.estado_atual != "SHOWDOWN":
+                        time.sleep(1.8)
                         mesa.avancar_rodada()
+                        emitir_estado()
                     continue
 
             idx_atual = (mesa.posicao_button + (3 if mesa.estado_atual == "PRE_FLOP" else 1)) % len(mesa.jogadores)
@@ -258,6 +289,9 @@ def loop_do_jogo():
                 socketio.emit('mensagem', f"💰 {nome} recolheu ${valor}")
                 socketio.emit('animar_fichas', {'de': 'centro', 'para': nome, 'valor': valor})
 
+        # Pausa dramática para ver o vencedor, as cartas e a divisão do pote
+        time.sleep(3.5)
+
         # Atualiza métricas e histórico no banco SQLite
         gerenciador_perfil.registrar_mao_jogada(venceu=humano_venceu, nome="Você")
 
@@ -299,14 +333,31 @@ def loop_do_jogo():
         # Emite perfil atualizado para manter o HUD/Header sincronizado
         socketio.emit('perfil_atualizado', gerenciador_perfil.obter_perfil("Você"))
 
-        # Checa se o jogador humano faliu na mesa
+        # Checa se o jogador humano faliu na mesa (sem bloquear a partida dos bots)
         if humano and humano.stack <= 0:
-            socketio.emit('jogador_falido', {
+            maos_sem_fichas += 1
+            perfil_atual = gerenciador_perfil.obter_perfil("Você")
+            min_rebuy = bb * 10
+            max_rebuy = bb * 1000
+            default_rebuy = min(max_rebuy, max(min_rebuy, buy_in))
+
+            socketio.emit('jogador_zerou_fichas', {
                 "mensagem": "Suas fichas na mesa acabaram!",
-                "bankroll": gerenciador_perfil.obter_perfil("Você")["bankroll"]
+                "bankroll": perfil_atual["bankroll"],
+                "small_blind": sb,
+                "big_blind": bb,
+                "min_rebuy": min_rebuy,
+                "max_rebuy": max_rebuy,
+                "default_rebuy": default_rebuy
             })
-            jogo_rodando = False
-            break
+
+            # Se passar 10 mãos seguidas sem fichas e sem recomprar, encerra por inatividade
+            if maos_sem_fichas >= 10:
+                socketio.emit('mensagem', "Muitas rodadas sem fichas. Retornando ao menu principal.")
+                jogo_rodando = False
+                break
+        else:
+            maos_sem_fichas = 0
 
         # Limpar bots falidos (Rebuy automático dos bots)
         for j in mesa.jogadores:
@@ -320,15 +371,8 @@ def loop_do_jogo():
                 break
             time.sleep(0.5)
 
-    # Encerramento do loop: Devolve fichas restantes do humano ao bankroll
-    if humano and humano.stack > 0:
-        gerenciador_perfil.creditar_bankroll(humano.stack, "Você")
-        socketio.emit('mensagem', f"Fichas na mesa (${humano.stack}) devolvidas ao seu Bankroll.")
-        humano.stack = 0
-
-    perfil_final = gerenciador_perfil.obter_perfil("Você")
-    socketio.emit('perfil_atualizado', perfil_final)
-    socketio.emit('sessao_encerrada', {'perfil': perfil_final})
+    # Encerramento do loop: Devolve fichas restantes do humano ao bankroll de forma segura
+    finalizar_sessao_e_devolver_fichas()
 
 @socketio.on('connect')
 def handle_connect():
@@ -347,7 +391,7 @@ def handle_obter_perfil():
 def handle_recarregar_fichas(data=None):
     valor = data.get('valor', 10000) if data else 10000
     novo_perfil = gerenciador_perfil.recarregar_fichas(valor, "Você")
-    emit('perfil_atualizado', novo_perfil)
+    socketio.emit('perfil_atualizado', novo_perfil)
     socketio.emit('mensagem', f"💵 Recarga de ${valor:,} creditada no seu Bankroll!")
 
 @socketio.on('iniciar_cash_game')
@@ -372,7 +416,7 @@ def handle_iniciar_cash_game(data):
     config_sessao["big_blind"] = bb
     config_sessao["buy_in"] = buy_in
 
-    emit('perfil_atualizado', gerenciador_perfil.obter_perfil("Você"))
+    socketio.emit('perfil_atualizado', gerenciador_perfil.obter_perfil("Você"))
     emit('entrada_autorizada', {"small_blind": sb, "big_blind": bb, "buy_in": buy_in})
 
     jogo_rodando = True
@@ -383,7 +427,7 @@ def handle_iniciar_cash_game(data):
 
 @socketio.on('sair_da_mesa')
 def handle_sair_da_mesa(data=None):
-    global jogo_rodando, acao_humano, valor_humano
+    global jogo_rodando, acao_humano, valor_humano, mesa
 
     data = data or {}
     forcar = data.get('forcar', False)
@@ -392,7 +436,7 @@ def handle_sair_da_mesa(data=None):
     humano_na_mao = False
     if mesa and mesa.estado_atual != "SHOWDOWN":
         j_humano = next((j for j in mesa.jogadores if j.nome == "Você"), None)
-        if j_humano and j_humano.ativo and not j_humano.is_all_in:
+        if j_humano and (j_humano.ativo or j_humano.is_all_in):
             humano_na_mao = True
 
     if humano_na_mao and not forcar:
@@ -402,26 +446,36 @@ def handle_sair_da_mesa(data=None):
         return
 
     # Se estiver forçando a saída durante uma mão, folda o jogador
-    if humano_na_mao and forcar:
+    if humano_na_mao and forcar and mesa:
         mesa.processar_acao("Você", "FOLD")
         acao_humano = "FOLD"
         valor_humano = 0
         esperando_humano.set()
         socketio.emit('mensagem', "Você desistiu da rodada para sair da mesa.")
 
-    jogo_rodando = False
-    esperando_humano.set() # Libera a trava caso a thread esteja bloqueada aguardando o humano
+    # Devolve fichas restantes e encerra sessão
+    finalizar_sessao_e_devolver_fichas()
 
-    # Imediatamente credita fichas restantes de volta ao Bankroll e encerra no front sem delay
-    if humano and humano.stack > 0:
-        gerenciador_perfil.creditar_bankroll(humano.stack, "Você")
-        socketio.emit('mensagem', f"Fichas na mesa (${humano.stack}) devolvidas ao seu Bankroll.")
-        humano.stack = 0
+@socketio.on('confirmar_rebuy_mesa')
+def handle_confirmar_rebuy_mesa(data):
+    global humano
+    valor = data.get('valor', 0) if data else 0
+    min_rebuy = config_sessao.get('big_blind', 20) * 10
+    if valor >= min_rebuy:
+        if gerenciador_perfil.debitar_bankroll(valor, "Você"):
+            if humano:
+                humano.stack += valor
+            perfil_atual = gerenciador_perfil.obter_perfil("Você")
+            socketio.emit('mensagem', f"💵 Você fez Rebuy de ${valor:,}! Você entrará na próxima rodada.")
+            socketio.emit('perfil_atualizado', perfil_atual)
+            socketio.emit('rebuy_sucesso', {'stack': humano.stack if humano else valor, 'bankroll': perfil_atual['bankroll']})
+            emitir_estado()
+        else:
+            socketio.emit('erro_entrada', {"mensagem": "Saldo insuficiente no Bankroll para este Rebuy!"})
 
-    perfil_final = gerenciador_perfil.obter_perfil("Você")
-    socketio.emit('perfil_atualizado', perfil_final)
-    socketio.emit('sessao_encerrada', {'perfil': perfil_final})
-    socketio.emit('mensagem', "Sessão encerrada pelo jogador.")
+@socketio.on('recusar_rebuy_mesa')
+def handle_recusar_rebuy_mesa():
+    handle_sair_da_mesa()
 
 @socketio.on('enviar_acao')
 def handle_enviar_acao(data):
