@@ -290,4 +290,62 @@ Nesta fase construímos a experiência de entrada do jogo no frontend React e o 
 - `docs/roadmap.md` (Modificado)
 - `CHANGELOG.md` (Modificado)
 
+## [01/11/2026] - Modo Espectador, Economia de Bankroll Unificada, Tempos Dinâmicos e Testes de Borda
+
+Nesta etapa, consolidamos o ciclo completo de experiência do Cash Game e fechamos as últimas funcionalidades para gravação do Vídeo 3 do Devlog: implementação do Modo Espectador com vaga livre interativa, conservação estrita de bankroll, aceleração e calibração dos tempos de resposta dos bots e adição de suíte de testes de borda.
+
+### O que foi feito com detalhes:
+
+1. **Fluxo Econômico Unificado de Bankroll & Saldo Inicial ($100.000):**
+   - **Saldo Inicial de $100.000:** Ajustado o saldo padrão no `GerenciadorPerfil` para $100.000, permitindo testar mesas de micro a high stakes com tranquilidade.
+   - **Conservação Estrita de Fichas:** O bankroll foi removido da visualização durante a partida para manter a mesa limpa e evitar confusão com o stack em jogo. Ao entrar na mesa, o valor do buy-in é debitado atômica e imediatamente da conta do perfil no SQLite (`historico_partidas.db`). Se o jogador vencer ou for All-In acumulando fichas, ao sair da mesa, o stack remanescente na mesa é creditado integralmente no saldo (`Saldo_Final = Saldo_Anterior - BuyIns + Stack_Mesa`).
+   - **Rebuy Pós-Showdown:** Adicionado delay de segurança antes de abrir o modal de rebuy quando o jogador zera as fichas. O jogo aguarda o desfecho do river, exibição das cartas do oponente e recolhimento do pote para que o usuário entenda o que aconteceu antes de decidir recomprar.
+   - **Recusa de Rebuy:** Caso o jogador recuse o rebuy com stack zerado, a aplicação o redireciona diretamente para o Menu Principal.
+
+2. **Mecanismo de Modo Espectador e Ação "Levantar da Mesa":**
+   - **Botão `↑ Levantar`:** Adicionado botão na barra superior da mesa com ícone de seta para cima.
+   - **Desocupação Segura de Assento:** Ao clicar em levantar, se houver mão ativa, é exibido modal de confirmação. Se confirmado, o jogador dá fold seguro e seu stack restante na mesa é devolvido atômica e imediatamente ao saldo no SQLite.
+   - **Assento Livre Interativo:** O lugar do jogador (Assento 0) passa a exibir a vaga livre com seta pulsante para baixo (`⬇`) e texto *"LUGAR LIVRE / Clique para Sentar"*.
+   - **Modal de Sentar na Mesa:** O espectador pode clicar na vaga a qualquer momento para abrir o modal de buy-in com slider e botões rápidos (Mínimo, 50 BB, 100 BB, Máximo) respeitando os limites da mesa e seu saldo.
+   - **Transição Suave de Mão:** Se o jogador sentar no meio de uma rodada em andamento, ele assiste a mão atual e é incluído automaticamente na próxima rodada.
+   - **Correção de Hover:** Eliminado deslocamento horizontal indesejado ao passar o mouse (`hover`) no card de assento livre via isolamento de `transform: translateX(-50%)` no CSS puro.
+
+3. **Configuração e Documentação de Tempos dos Bots (`CONFIG_TEMPOS`):**
+   - Centralização de todos os tempos de espera em um dicionário `CONFIG_TEMPOS` no `servidor.py`, desacoplando regras de atraso da lógica de turnos.
+   - Distribuição probabilística acelerada para dinamizar vídeos e testes:
+     - 83% de respostas rápidas (1 a 3 segundos).
+     - 10% de respostas médias (3 a 6 segundos).
+     - 2% de respostas lentas/tankando (6 a 9 segundos).
+     - 5% de ações instantâneas/snap (0.3 a 0.6 segundos).
+   - Criação da documentação detalhada em `docs/tempos_e_dinamica_de_jogo.md`.
+
+4. **Bateria Abrangente de Testes de Borda (`tests/test_bordas.py`):**
+   - Criação de novos testes unitários e de integração cobrindo cenários extremos:
+     - `test_jogador_espectador_nao_entra_na_mao`: Valida que espectadores não recebem cartas nem pagam blinds.
+     - `test_levantar_mid_hand_folda_e_preserva_conservacao`: Valida fold e preservação matemática de fichas ao levantar no meio da mão.
+     - `test_sentar_limites_invalidos_buyin`: Valida bloqueio de buy-ins fora do intervalo permitido (10 a 1000 BB).
+     - `test_debito_saldo_exato_limite`: Valida limites exatos de débito em conta.
+     - `test_cenario_exato_usuario_100k_buyin_rebuy_allin_saida` (em `tests/test_perfil.py`): Valida a fórmula completa de conservação econômica de saldo.
+     - `test_levantar_e_sentar_modo_espectador` (em `tests/test_servidor_rotas.py`): Valida os eventos de Socket.IO do fluxo de espectador.
+   - Todos os 24 testes automatizados do projeto executando com 100% de sucesso.
+
+5. **Organização da Pasta `youtube/` e Roteiro do Vídeo 3:**
+   - Unificação do material de produção de conteúdo na pasta `youtube/`:
+     - `youtube/roteiros/`: Roteiros dos vídeos 2 e 3 (com roteiro broadcast completo de 8 blocos e checklist de gravação em `video_03_lobby_vip_cash_game_espectador.md`).
+     - `youtube/Thumbs/`: Armazenamento das artes de thumbnails da série.
+
+### Arquivos Afetados/Criados:
+- `core/jogador.py` (Modificado)
+- `servidor.py` (Modificado)
+- `frontend/src/components/Mesa.jsx` (Modificado)
+- `frontend/src/index.css` (Modificado)
+- `docs/tempos_e_dinamica_de_jogo.md` (Adicionado)
+- `youtube/roteiros/video_03_lobby_vip_cash_game_espectador.md` (Adicionado)
+- `youtube/roteiros/README.md` (Modificado)
+- `tests/test_bordas.py` (Adicionado)
+- `tests/test_servidor_rotas.py` (Modificado)
+- `tests/test_perfil.py` (Modificado)
+- `CHANGELOG.md` (Modificado)
+
+
 

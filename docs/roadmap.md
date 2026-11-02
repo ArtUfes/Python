@@ -1,84 +1,203 @@
-# Roadmap do Poker em Python (v2.0 e Futuro)
+# Roadmap Oficial do Poker em Python + React 🃏🚀
 
-Este documento guarda as diretrizes, otimizações e novas funcionalidades que devem ser implementadas no projeto nas futuras atualizações com auxílio de IA.
+Este documento define a visão de produto, os marcos tecnológicos já consolidados e o planejamento estratégico de evolução contínua para o nosso simulador profissional de Texas Hold'em. O projeto alia aprendizado de máquina, desenvolvimento fullstack em tempo real e produção de conteúdo didático (Devlog no YouTube).
 
-## ~~1. Otimização do `AvaliadorDeMaos` (Performance / Monte Carlo)~~
-O avaliador atual possui lógica perfeita para regras e desempates, mas não está otimizado para simulações de milhões de cenários.
+---
 
-**Problema atual:**
-As funções iteram múltiplas vezes pela mesma mão (`O(N)`) e chamam `sorted()` dezenas de vezes para checar as mãos possíveis do maior para o menor.
+## 🏆 Visão Geral dos Marcos e Complexidade
 
-**Solução (Mapas de Frequência):**
-- **Extração única:** A mão de 7 cartas deve ser lida apenas 1 vez (O(N)).
-- **Histograma de Valores (Hash Map):** Criar um dicionário/array que conte a frequência de cartas (ex: `{'A': 2, 'K': 1}`). Isso permite achar quadras, trincas e pares em `O(1)`.
-- **Histograma de Naipes:** Dicionário que conta os naipes, tornando o reconhecimento de Flushes instantâneo em `O(1)`.
-- **Bitmasks / Lookup Tables:** Para simulações ainda mais extremas, migrar para avaliação bit-a-bit (Cactus Kev / TwoPlusTwo).
+| Fase | Tópico | Dificuldade (1-10) | Status | Episódio / Ref |
+| :--- | :--- | :---: | :---: | :---: |
+| **Fase 1** | Avaliador de Mãos Otimizado (Bitwise & Single-Pass) | 7/10 | 🟢 Concluído | Vídeo 1 |
+| **Fase 2** | Motor de Apostas, Turnos e Divisão de Potes (Side Pots) | 8/10 | 🟢 Concluído | Vídeo 1 |
+| **Fase 3** | Primeiro Bot IA com Monte Carlo e Algoritmo Genético | 6/10 | 🟢 Concluído | Vídeo 1 |
+| **Fase 4** | Interface Web Realtime (React + Framer Motion + WebSockets) | 6/10 | 🟢 Concluído | Vídeo 2 |
+| **Fase 5** | Áudio Procedural, Hand History PokerStars e HUD | 4/10 | 🟢 Concluído | Vídeo 2 |
+| **Fase 6.1** | Lobby VIP, Economia de Bankroll ($100k) e Modo Espectador | 5/10 | 🟢 Concluído | Vídeo 3 |
+| **Fase 6.2** | **Torneio Mata-Mata (Sit & Go) com Subida de Blinds e Pódio** | **5/10** | 🟡 **PRÓXIMO PASSO** | **Vídeo 4** |
+| **Fase 7** | Identidade Visual 2.0 & Assets Customizados | 3/10 | ⚪ Planejado | — |
+| **Fase 8** | Feedback de Showdown & Animação das 5 Melhores Cartas | 4/10 | ⚪ Planejado | — |
+| **Fase 9** | Suporte a Mesas Flexíveis de 2 a 9 Jogadores (Full Ring) | 7/10 | ⚪ Planejado | — |
+| **Fase 10** | Audio FX 2.0 & Ambiência Imersiva de Cassino | 3/10 | ⚪ Planejado | — |
+| **Fase 11** | Perfis Comportamentais de Bots & Treinamento Competitivo | 8/10 | ⚪ Planejado | — |
+| **Fase 12** | Modo Multiplayer com Contas de Usuários (Salas para Amigos) | 8/10 | ⚪ Planejado | — |
+| **Fase 13** | Blindagem de Segurança, Anti-Cheat e Hardening de Dados | 6/10 | ⚪ Planejado | — |
+| **Fase 14** | Analisador Didático de EV+ & Mentor de Decisões em Tempo Real | 8/10 | ⚪ Planejado | — |
 
-## ~~2. Sistema de Apostas e Motor do Jogo~~
-Para que o jogo seja completo, precisamos ir além de comparar quem ganha e quem perde, e implementar a "Economia" do jogo.
-- **Estruturas de Apostas:** Lógica para Blind (Small/Big), Call, Raise (com regras matemáticas de tamanho mínimo), Check e Fold.
-- **Gerenciamento do Pote (Pot Management):** Somar fichas e transferir para o ganhador.
-- **Divisão de Potes (Side Pots e Split Pots):** Esse é um dos maiores desafios lógicos! Lidar com empates (Split Pot) e principalmente com cenários de All-In (Side Pots). Por exemplo: Se o jogador A aposta 100, B paga 100, mas C tem apenas 50 e dá All-in. Precisamos criar o "Pote Principal" de 150 (disputado pelos três) e o "Side Pot" de 100 (disputado apenas por A e B).
+---
 
-## ~~3. Construção de um "Bot/AI" Adversário~~
-Implementar um agente inteligente capaz de jogar contra um usuário humano. 
+## ✅ Marcos Consolidados (O que já está pronto)
 
-**Como fazer um bot forte no Poker:**
-Como nosso simulador (`app.py`) já tem suporte a "Simulações de Equidade", o bot usará **Simulação de Monte Carlo** no momento de sua decisão:
-1. O bot olha suas próprias 2 cartas e as cartas da mesa.
-2. Ele projeta 10.000 cenários aleatórios de possíveis cartas para o oponente e para o resto da mesa.
-3. Se a "Equidade" dele (porcentagem de vitória) for alta, ele aposta/aumenta.
-4. Se for média, ele paga (call).
-5. Se for muito baixa, ele foge (fold).
+### ~~1. Otimização do Avaliador de Mãos (Performance Bruta)~~
+* **Dificuldade:** 7/10
+* **Resumo:** Avaliador `AvaliadorDeMaosOtimizado` baseado em contagem de frequência (Histogramas) e operações bitwise, atingindo mais de 200.000 avaliações por segundo. Desempates resolvidos nativamente com Tuplas de Força em tempo constante $O(1)$.
 
-Esse comportamento matemático, alinhado ao conceito de *Expected Value (EV)*, criará um adversário duro na queda e matematicamente correto na maior parte das decisões!
+### ~~2. Motor de Regras, Turnos e Side Pots~~
+* **Dificuldade:** 8/10
+* **Resumo:** Ciclo formal do Texas Hold'em (Pré-Flop, Flop, Turn, River e Showdown). Algoritmo de resolução e divisão de potes principais e paralelos (`GerenciadorDePote`) suportando All-Ins múltiplos e empates (Split Pots).
 
-## ~~4. Interface de Jogo (Front-end Web em Tempo Real)~~
-- Implementada aplicação full-stack monorepo: Servidor Python WebSocket (`servidor.py`) + Client React/Vite (`frontend/`).
-- Física de cartas e fichas de cassino com Framer Motion e design VIP Glassmorphism.
-- Feedback Sonoro Orgânico (Audio Engine) com foley real de estúdio (cartas, fichas, mesa).
-- HUD de indicadores em tempo real.
+### ~~3. Inteligência Artificial Inicial dos Bots~~
+* **Dificuldade:** 6/10
+* **Resumo:** Cálculo de equidade via Simulação iterativa de Monte Carlo em tempo real. Parametrização em genes evolutivos (taxa de blefe, agressividade, call em overbet).
 
-## ~~5. PokerStars Hand History & Coleta de Dados~~
-- Criado o módulo `core/gravador_historico.py` com persistência em SQLite (`historico_partidas.db`).
-- Geração automática da transcrição textual canônica oficial do PokerStars.
-- Exportação direta para softwares de análise (PokerTracker, HM3) e Hand Replayers online.
-- Cálculo de métricas $O(1)$ de VPIP, PFR, AF, WTSD, W$SD, C-Bet e BB/100.
+### ~~4. Interface Web Realtime com Física Visual~~
+* **Dificuldade:** 6/10
+* **Resumo:** Monorepo com Flask-SocketIO e React 18 + Vite. Física visual de cartas e pilhas de fichas com Framer Motion e layout Glassmorphism.
 
-> [!IMPORTANT]
-> **Diretriz Estratégica Atual (Foco em Game Dev & Experiência):**
-> O foco do projeto agora está **100% concentrado no desenvolvimento do jogo em si** (Criação de Modos de Jogo, Lobby/Menu Inicial, Regras de Torneio vs Cash Game, UX/UI e integração com Hand Replayer), **ao invés de focar no treinamento avançado de bots por enquanto**. Os bots atuais (Monte Carlo + DNA Darwin v1) já são oponentes funcionais excelentes para alimentar a dinâmica e validar a economia das partidas.
+### ~~5. Hand History Oficial e Indicadores de Carreira~~
+* **Dificuldade:** 4/10
+* **Resumo:** Gravação de partidas no padrão canônico do PokerStars, exportável para PokerTracker e Hand Replayers online. Cálculo em tempo real de estatísticas de jogo: VPIP, PFR, AF, C-Bet e Taxa de Vitória.
 
-## 6. Menu Inicial (Lobby), Modos de Jogo e Experiência do Jogador (EM PROGRESSO - ETAPA 1 CONCLUÍDA)
-- **Tela de Lobby Inicial (✅ Concluída):**
-  - Entrada visual premium no frontend React com estética VIP Casino (Opção 1 aprovada).
-  - Header com logo *"Python Poker Club"*, avatar, exibição do Bankroll e recarga rápida (+$10k para testes).
-  - Cards centrais com destaque visual para **Cash Game** e **Torneio** (Selo "Em Breve").
-  - Rodapé de utilidades: Modal de Estatísticas de Carreira & HUD (VPIP, PFR, AF, mãos), download direto de `historico_pokerstars.txt` e regras do jogo.
-- **Seleção de Modos de Jogo:**
-  - **Modo 1: Cash Game Estilo RallyAces (✅ Concluído):**
-    - 4 mesas dinâmicas: Micro ($5/$10), Médio ($10/$20), High ($25/$50) e VIP ($50/$100).
-    - Slider interativo de Buy-In (10 BB a 1000 BB) respeitando o saldo do Bankroll.
-    - Saída instantânea da mesa com devolução automática do saldo restante para o Bankroll e confirmação caso haja mão em andamento.
-  - **Modo 2: Torneio Mata-Mata Sit & Go (PRÓXIMO PASSO):**
-    - Buy-in fixo e stack inicial igual para todos os 4 jogadores.
-    - **Sem rebuy:** Eliminação direta ao zerar as fichas.
-    - **Aumento progressivo dos Blinds (Blind Levels):** A cada $N$ mãos (ex: a cada 5 mãos), os blinds sobem, forçando a ação.
-    - **Disputa por Pódio:** Premiação para 1º lugar (Troféu) e 2º lugar.
+### ~~6.1. Lobby VIP, Cash Game Completo e Modo Espectador~~
+* **Dificuldade:** 5/10
+* **Resumo:** 
+  - **Lobby VIP (Menu Principal):** Seleção de stakes (Micro $5/$10 a VIP $50/$100), saldo persistente em SQLite ($100.000 padrão) e slider de buy-in flexível (10 a 1.000 BBs).
+  - **Conservação Estrita de Fichas:** Débito atômico de buy-in e crédito integral ao sair da mesa.
+  - **Modo Espectador & Botão `↑ Levantar`:** Desocupação de assento a qualquer momento com fold seguro, vaga livre pulsante (`⬇ Sentar`), retorno em mãos futuras e rebuy com delay inteligente pós-showdown.
+  - **Dinâmica Acelerada dos Bots:** Centralização no dicionário `CONFIG_TEMPOS` (83% de respostas entre 1-3s).
+  - **Bateria de Testes:** 24 testes unitários e de borda aprovados com 100% de sucesso.
 
-## 7. Organização e Limpeza da Estrutura do Repositório (Refatoração)
-- Limpeza da raiz do projeto para isolar arquivos transitórios e gerados:
-  - Mover arquivos de dados (`historico_partidas.db`, logs de treinamento, exportações `.txt`) para uma pasta estruturada `/data` ou `/storage`.
-  - Mover scripts avulsos da raiz para pastas semânticas (`scripts/` ou `benchmarks/`).
-  - Configurar `.gitignore` robusto para não commitar bancos locais ou arquivos de exportação desnecessários.
+---
 
-## 8. Bateria de Testes Automatizados e Política Anti-Regressão
-- Implementar suite de testes automatizados com `pytest`:
-  - **Testes Unitários:** Avaliador de mãos, desempates, cálculo de pot odds, split pots e side pots.
-  - **Testes de Regras e Economia:** Garantir que o stack nunca fique negativo, que raises acima do all-in sejam bloqueados e que jogadores sem fichas sejam eliminados ou façam rebuy.
-  - **Política Anti-Regressão:** Para cada novo bug descoberto e corrigido, criar obrigatoriamente um teste unitário correspondente antes de fechar a tarefa, garantindo que o bug nunca volte em versões futuras.
+## 🎯 Próximo Passo Imediato (Foco do Vídeo 4)
 
-## 9. Mentor de Poker com LLM (Integração de IA Generativa)
-- Enviar o sumário da análise matemática do Monte Carlo + o histórico da mão para uma API de IA (como o Gemini) com um prompt de sistema configurado para atuar como um **Professor Profissional de Poker**.
-- A IA vai explicar em linguagem natural por que uma jogada foi ruim ou boa.
-- Criar relatórios de sessão ("Aulas") textuais focadas nas maiores fraquezas detectadas matematicamente na sessão do jogador.
+### 🏆 Fase 6.2: Modo Torneio Mata-Mata (Sit & Go)
+* **Dificuldade:** 5/10
+* **Detalhamento:**
+  - **Estrutura de Inscrição:** Buy-In fixo com stack inicial idêntico para todos os competidores (ex: $1.500 fichas para 4 jogadores).
+  - **Sem Rebuy (Eliminação Direta):** Jogador que zera o stack é permanentemente eliminado da mesa.
+  - **Subida Periódica de Blinds (Blind Levels):**
+    - Temporizador de nível (Blind Clock) ou subida a cada $N$ mãos (ex: Nível 1: $10/$20, Nível 2: $20/$40, Nível 3: $30/$60, Nível 4: $50/$100...).
+    - Notificação visual dramática na mesa quando os blinds aumentam, forçando a agressividade.
+  - **Transição de Mesa:** Ajuste dinâmico quando jogadores são eliminados (de 4 para 3 jogadores, e Heads-Up final 1 vs 1).
+  - **Tela de Vitória e Premiação:**
+    - Animação festiva de pódio com entrega do Troféu Dourado para o 1º Lugar.
+    - Divisão da premiação do pote acumulado (ex: 70% para o campeão e 30% para o vice).
+
+---
+
+## 🔮 Fases Futuras do Roadmap (Visão Estratégica)
+
+### 🎨 Fase 7: Identidade Visual 2.0 & Assets Customizados
+* **Dificuldade:** 3/10
+* **Detalhamento:**
+  - **Salto Visual do Jogo:** Substituir elementos genéricos por um pacote coeso e autoral de assets estilizados.
+  - **Baralho e Cartas:** Ilustrações vetorizadas exclusivas para figuras (J, Q, K, A) e opções de estampas elegantes para o verso das cartas.
+  - **Fichas 3D:** Texturas detalhadas para fichas de diferentes denominações ($5, $25, $100, $500, $1.000, $5.000).
+  - **Feltro e Mesas:** Opções de cores e texturas de mesa (Verde Clássico, Azul Noite, Vermelho Borgonha, Preto VIP Carbono).
+
+### 🃏 Fase 8: Feedback de Showdown & Destaque das 5 Melhores Cartas
+* **Dificuldade:** 4/10
+* **Detalhamento:**
+  - **Clareza no Desfecho:** Ao final da mão, iluminar e destacar exatamente quais 5 cartas (entre as 2 da mão e as 5 da mesa) formaram o jogo de cada jogador que disputou o showdown.
+  - **Identificação do Vencedor:** Cartões destacados mostrando o nome da mão vencedora (ex: *"Sequência de 9 ao Rei"* ou *"Dois Pares: Áses e Damas"*).
+  - **Física dos Potes:** Animação de fichas deslizando de forma precisa e sem engasgos para o vencedor (ou dividindo suavemente entre os empatados em Split Pots).
+
+### 🪑 Fase 9: Mesas Dinâmicas de 2 a 9 Jogadores (Full Ring)
+* **Dificuldade:** 7/10
+* **Detalhamento:**
+  - **Flexibilidade Total:** Superar a limitação atual de 4 jogadores fixos, permitindo partidas com qualquer quantidade entre 2 e 9 participantes.
+  - **Redesenho Oval da Mesa:** Arquitetura geométrica para dispor os assentos em elipse de forma harmônica e responsiva para mobile e desktop.
+  - **Posicionamento Polar:** Algoritmo dinâmico de distribuição de coordenadas para Heads-Up (2p), 3-Max, 4-Max, 6-Max e Full Ring (9p).
+  - **Lógica de Dealer & Blinds:** Ajuste estrito da rotação das posições oficiais (Button, Small Blind, Big Blind, UTG, Middle Position, Hijack, Cutoff).
+
+### 🎵 Fase 10: Audio FX 2.0 & Ambiência Imersiva
+* **Dificuldade:** 3/10
+* **Detalhamento:**
+  - **Design Sonoro Completo:** Refinamento dos efeitos sintetizados na Web Audio API com sonoridades ricas e orgânicas.
+  - **Efeitos Dramáticos:**
+    - Som de embaralhar e corte de baralho no início da rodada.
+    - Efeito sonoro de batimentos cardíacos nos últimos segundos da barra de tempo do jogador (Timer Countdown).
+    - Som metálico pesado ao anunciar All-In.
+    - Fanfarra/comemoração sutil ao puxar um grande pote.
+
+### 🧠 Fase 11: Perfis Comportamentais de Bots & Treinamento Competitivo
+* **Dificuldade:** 8/10
+* **Detalhamento:**
+  - **Arquétipos de Jogadores Reais:** Criação de bots com estilos de jogo distintos e reconhecíveis:
+    - *O Rocha (Tight-Passive):* Só aposta com mãos pré-flop premium; desiste fácil para agressão.
+    - *O Pagador (Calling Station):* Paga apostas até o river com qualquer par ou draw, quase nunca aplica raises.
+    - *O Maníaco (Loose-Aggressive / LAG):* Alta frequência de open-raises, overbets e blefes agressivos pós-flop.
+    - *O Estrategista (Tight-Aggressive / TAG):* Joga poucas mãos, mas com agressividade cirúrgica baseada em posição e equidade.
+  - **Treino Competitivo Robusto:** Treinamento em massa via simulações com reforço genético para criar bots avançados capazes de derrotar jogadores médios e experientes.
+
+### 👥 Fase 12: Modo Multiplayer com Contas de Usuários (Lobby com Amigos)
+* **Dificuldade:** 8/10
+* **Detalhamento:**
+  - **Sistema de Autenticação:** Criação de contas seguras (Registro, Login, Recuperação de Senha) para que familiares e amigos joguem juntos.
+  - **Mesas Privadas & Públicas:** Possibilidade de criar uma mesa de Cash Game ou torneio com código de convite para jogar contra pessoas reais em tempo real.
+  - **Sincronização Multi-Client Resiliente:** Arquitetura WebSocket com reconexão automática e gerenciamento de desconexões (auto-check/fold após tempo limite).
+
+### 🛡️ Fase 13: Blindagem de Segurança, Anti-Cheat e Hardening de Dados
+* **Dificuldade:** 6/10
+* **Detalhamento:**
+  - **Autoridade Estrita no Servidor (Server-Authoritative):** O cliente React atua apenas como visor visual. Cartas ocultas dos oponentes, lógica de baralho, cálculo de potes e saldo residem 100% no servidor Python, impossibilitando inspeção de cartas via DevTools do navegador.
+  - **Proteção de Dados Sensíveis:** Isolamento completo de variáveis de ambiente (`.env`), hash seguro de senhas (bcrypt/argon2) e restrição total de acesso a arquivos de banco SQLite.
+  - **Anti-Abuso & Rate Limiting:** Proteção contra spam de requisições, injeção de dados ou tentativas de exploração de endpoints da API.
+
+### 📊 Fase 14: Analisador Didático de EV+ & Mentor de Decisões em Tempo Real
+* **Dificuldade:** 8/10
+* **Detalhamento:**
+  - **Fusão Jogo + Software de Estudo (Poker Coach):** Modo especial de treino onde a tela exibe um painel lateral de análise estratégica avançada:
+    - **Cálculo de EV (Expected Value):** Indicação se o movimento (Fold, Call, Raise) é matematicamente EV+ (lucrativo a longo prazo) ou EV- (prejudicial).
+    - **Frequências de Decisão:** Exibição da distribuição recomendada para aquela situação (ex: *70% Raise / 30% Check*).
+    - **Explicação Conceitual Didática:** Porcentagem exata de vitória contra o range provável dos adversários, pot odds necessárias e lições táticas em tempo real para o jogador evoluir e entender a lógica por trás de cada jogada.
+
+---
+
+## 💡 Sugestões da IA para Você (Ideias Extras para Enriquecer o Jogo e seu Portfólio)
+
+Analisando a arquitetura do projeto e o potencial para o seu canal do YouTube, aqui estão **8 ideias de alto impacto** com suas respectivas notas de complexidade (1-10):
+
+### 1. Replayer de Mão Nativo no Próprio Jogo (Native Hand Replayer Modal)
+* **Dificuldade:** 5/10
+* **Conceito:** Em vez de depender de copiar o texto e colar em sites externos (como PokerStars Replayer), criar um botão `"⏮ Rever Última Mão"` diretamente na mesa ou no lobby.
+* **Implementação:** Um modal interativo com uma barra deslizante (*scrubber*) e botões de `Play / Pause / Passo a Passo` que anima novamente a rodada completa, mostrando a ação exata street por street.
+* **Impacto no Portfólio:** Demonstra domínio avançado de manipulação de estado cronológico e animações orientadas a eventos no React.
+
+### 2. Ações Antecipadas estilo PokerStars (Pre-Action Checkboxes)
+* **Dificuldade:** 3/10
+* **Conceito:** Enquanto os adversários ou bots estão pensando, permitir que o jogador marque opções antes de chegar a sua vez: `[ ] Check/Fold`, `[ ] Check`, `[ ] Call Any`, `[ ] Auto-Fold`.
+* **Implementação:** Assim que a ação chega na vez do jogador humano, o frontend dispara a jogada imediatamente sem travar o jogo nem esperar o timer.
+* **Impacto no Jogo:** Acelera exponencialmente o ritmo da mesa e dá a autêntica sensação dos maiores clientes profissionais de poker online do mundo.
+
+### 3. Baralho de 4 Cores (Four-Color Deck) e Personalização de Skins
+* **Dificuldade:** 2/10
+* **Conceito:** No poker profissional online, o padrão da indústria é o baralho de 4 cores: **Espadas (Preto ♠)**, **Copas (Vermelho ♥)**, **Ouros (Azul ♦)** e **Paus (Verde ♣)**.
+* **Implementação:** Um seletor de tema nas configurações do menu que permite alternar entre Baralho Clássico (2 cores) e Baralho Pro (4 cores), além de escolher temas para o feltro (Verde Cassino, Azul Cyber, Vermelho Royal).
+* **Impacto no Canal:** Cria conteúdo visual excelente mostrando opções de acessibilidade e design de interface centrado no usuário.
+
+### 4. Sistema de Conquistas & Missões Diárias (Gamificação com Badges)
+* **Dificuldade:** 4/10
+* **Conceito:** Desafios gamificados para engajar o jogador, tais como:
+  * *"Caçador de Trincas"*: Acerte uma trinca no Flop.
+  * *"Blefe de Mestre"*: Ganhe uma mão no River tendo apenas Carta Alta após aplicar uma overbet.
+  * *"Rei do Sit & Go"*: Vença seu primeiro torneio mata-mata em 1º lugar.
+* **Implementação:** Uma tabela `conquistas` no SQLite. Sempre que o servidor detecta o evento no final da mão, registra a conquista e dispara um banner comemorativo no React.
+* **Impacto no Portfólio:** Mostra capacidade de arquitetar sistemas completos de gamificação e regras de negócio complexas.
+
+### 5. Chat com Reações de Emojis e Provocações dos Bots (Table Banter)
+* **Dificuldade:** 3/10
+* **Conceito:** Permitir que o jogador envie emojis flutuantes sobre seu avatar (😎, 🤬, 🍿, 🏆) e fazer os bots "falarem" frases curtas no log de ações baseadas no seu perfil.
+* **Implementação:** O bot *Maníaco* pode mandar um texto *"Pagou pra ver o ferro!"*, enquanto o *Rocha* diz *"Essa eu não largo..."*.
+* **Impacto no Jogo:** Dá muita personalidade e humor aos vídeos do YouTube, tornando a partida divertida de assistir além do aspecto puramente matemático.
+
+### 6. Gráfico de Evolução de Bankroll e Lucro Esperado (SharkScope / PokerTracker)
+* **Dificuldade:** 5/10
+* **Conceito:** No modal de estatísticas do jogador, exibir um gráfico dinâmico de linha (utilizando Chart.js ou Recharts) mostrando a curva de fichas ao longo das mãos jogadas.
+* **Implementação:** O gráfico traça duas linhas clássicas do poker:
+  * **Linha Verde (Lucro Real):** Quanto dinheiro o jogador realmente ganhou/perdeu.
+  * **Linha Amarela (All-In EV):** Quanto dinheiro ele *deveria* ter ganho matematicamente baseado na equidade no momento dos All-Ins (medindo se o jogador está com sorte ou azar).
+* **Impacto no Portfólio:** Extremamente valorizado por recrutadores e empresas de dados/fintechs/gaming por demonstrar computação estatística avançada.
+
+### 7. Calculadora de Equidade Integrada (Mini-Equilab no Menu)
+* **Dificuldade:** 4/10
+* **Conceito:** Uma aba utilitária no lobby onde o usuário pode selecionar manualmente 2 cartas para ele, 2 cartas para um vilão, e 0 a 5 cartas comunitárias para calcular as probabilidades exatas.
+* **Implementação:** Interface visual interativa de seleção de cartas que roda 50.000 simulações no backend em Python em menos de 0.2 segundos e devolve a fatia de vitória de cada mão.
+* **Impacto Didático:** Transforma o projeto em uma ferramenta completa de estudo de poker que espectadores do canal podem baixar e usar no dia a dia.
+
+### 8. Suporte a Progressive Web App (PWA / Modo Mobile)
+* **Dificuldade:** 5/10
+* **Conceito:** Adaptar a mesa e o menu para formatos verticais responsivos, permitindo que o jogo seja instalado direto no smartphone como um aplicativo nativo (sem precisar de Play Store).
+* **Implementação:** Configuração de `manifest.json`, Service Workers para cache de assets e media queries CSS adaptando a disposição dos assentos em formato portrait.
+* **Impacto no Portfólio:** Prova sólida de competência em desenvolvimento frontend responsivo moderno e arquitetura PWA.
